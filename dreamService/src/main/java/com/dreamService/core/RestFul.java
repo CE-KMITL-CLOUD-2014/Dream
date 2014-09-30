@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/service/hello")
+@RequestMapping("/hello")
 public class RestFul {
-	@RequestMapping(value = "/{name}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{name}", method = RequestMethod.GET,headers="Accept=application/json")
 	public String getGreeting(@PathVariable String name) {
 		String result = "Hello " + name;
 		return result;
