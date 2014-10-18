@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ImportResource;
 
 @Configuration
 @ImportResource({ "classpath:MemberConfig.xml" })
-@ComponentScan("com.dream.dao.impl")
+@ComponentScan("com.dream.dao")
 public class SpringMemberConfig {
 	public SpringMemberConfig() {
 		super();

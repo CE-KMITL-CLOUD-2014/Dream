@@ -12,23 +12,24 @@ import com.dream.jdbc.MemberRowMapper;
 import com.dream.model.Member;
 
 public class JdbcMemberDAO implements MemberDAO {
-	private DataSource	dataSource;
+	DataSource		dataSource;
+	JdbcTemplate	jdbcTemplate;
 
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
+		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
 	@Override
 	public int insert(Member member) {
-		int nunRow;
-		String sql = "INSERT INTO users (username, password, email, fname,lname,age,phone,nickname,sex,enabled)"
-				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		nunRow = jdbcTemplate.update(sql, member.getUsername(),
+		int numRow;
+		String sql = "INSERT INTO users (username, password, email, fname,lname,age,phone,nickname,enabled)"
+				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		numRow = jdbcTemplate.update(sql, member.getUsername(),
 				member.getPassword(), member.getEmail(), member.getFname(),
 				member.getLname(), member.getAge(), member.getPhone(),
-				member.getNickname(), member.isEnable());
-		return nunRow;
+				member.getNickname(), (int) (member.isEnable() ? 1 : 0));
+		return numRow;
 	}
 
 	@Override
@@ -41,7 +42,6 @@ public class JdbcMemberDAO implements MemberDAO {
 	public List<Member> list() {
 		List userList = new ArrayList();
 		String sql = "select * from users";
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		userList = jdbcTemplate.query(sql, new MemberRowMapper());
 		return userList;
 	}
@@ -58,7 +58,6 @@ public class JdbcMemberDAO implements MemberDAO {
 		int nunRow;
 		String sql = "UPDATE users SET email, fname,lname,age,phone,nickname,sex"
 				+ "WHERE username=?";
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		nunRow = jdbcTemplate.update(sql, member.getUsername(),
 				member.getPassword(), member.getEmail(), member.getFname(),
 				member.getLname(), member.getAge(), member.getPhone(),
