@@ -9,9 +9,9 @@ public interface MemberDAO {
 
 	public int update(Member member);
 
-	public Member find(String Username);
+	public Member findFromUsername(String username);
 
 	public List<Member> list();
 
-	public boolean delete(String Username);
+	public int delete(String username);
 }

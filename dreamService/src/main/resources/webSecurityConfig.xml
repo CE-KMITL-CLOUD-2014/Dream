@@ -17,10 +17,9 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
 	<!-- Rest authentication entry point configuration -->
 	<http use-expressions="true" entry-point-ref="restAuthenticationEntryPoint">
-		<intercept-url pattern="/debt/**" />
+		<intercept-url pattern="/user/update" />
 		<sec:form-login authentication-success-handler-ref="mySuccessHandler"
 			authentication-failure-handler-ref="myFailureHandler" />
-
 		<logout />
 	</http>
 

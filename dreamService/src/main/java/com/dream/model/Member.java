@@ -1,15 +1,22 @@
 package com.dream.model;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class Member {
-	private String	username;
-	private String	password;
-	private String	email;
-	private String	phone;
-	private String	fname;
-	private String	lname;
-	private int		age;
-	private String	nickname;
-	private boolean	enable;
+	private String		username;
+	private String		password;
+	private String		email;
+	private String		phone;
+	private String		fname;
+	private String		lname;
+	private Date		birth;
+	private String		nickname;
+	private boolean		enable;
+	private Timestamp	regis_date;
+	SimpleDateFormat	format	= new SimpleDateFormat("yyyy-MM-dd");
 
 	public String getUsername() {
 		return username;
@@ -59,14 +66,6 @@ public class Member {
 		this.lname = lname;
 	}
 
-	public int getAge() {
-		return age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
-	}
-
 	public String getNickname() {
 		return nickname;
 	}
@@ -84,15 +83,70 @@ public class Member {
 	}
 
 	public Member(String username, String password, String email, String phone,
-			String fname, String lname, int age, String nickname) {
+			String fname, String lname, String nickname, String birth,
+			boolean enable) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.phone = phone;
 		this.fname = fname;
 		this.lname = lname;
-		this.age = age;
+		this.birth = getCurrentDate(birth);
 		this.nickname = nickname;
-		enable = true;
+		this.enable = enable;
+		this.regis_date = new Timestamp(System.currentTimeMillis());
+	}
+
+	public Member(String username, String password, String email, String phone,
+			String fname, String lname, String nickname, String birth,
+			boolean enable, Timestamp regis_date) {
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.phone = phone;
+		this.fname = fname;
+		this.lname = lname;
+		this.birth = getCurrentDate(birth);
+		this.nickname = nickname;
+		this.enable = enable;
+		this.regis_date = regis_date;
+	}
+
+	public Member(String username, String email, String phone, String fname,
+			String lname, String birth, String nickname) {
+		this.username = username;
+		this.email = email;
+		this.phone = phone;
+		this.fname = fname;
+		this.lname = lname;
+		this.birth = getCurrentDate(birth);
+		this.nickname = nickname;
+	}
+
+	public Date getBirth() {
+		return birth;
+	}
+
+	public void setBirth(Date birth) {
+		this.birth = birth;
+	}
+
+	public Date getCurrentDate(String birth) {
+		Date date = null;
+		try {
+			date = new Date(format.parse(birth).getTime());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return date;
+	}
+
+	public Timestamp getRegis_date() {
+		return regis_date;
+	}
+
+	public void setRegis_date(Timestamp regis_date) {
+		this.regis_date = regis_date;
 	}
 }
