@@ -5,4 +5,6 @@ import java.sql.SQLException;
 
 public interface ConnectDB {
 	public Connection connect() throws SQLException;
+
+	public boolean disconnect(Connection conn);
 }

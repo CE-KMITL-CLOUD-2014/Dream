@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dream.calc.DebtCalc;
-import com.dream.model.Debt;
+import com.dream.debt.Debt;
 
 @RestController
 @RequestMapping("/debt/cal")
@@ -35,8 +35,8 @@ public class DebtController {
 			@RequestParam(value = "debtRate", required = true) double debtRate,
 			@RequestParam(value = "time", required = true) double time) {
 		Debt debt = new Debt(moneyLoan, debtRate, time);
-		int ret = (int) debt.calculate();
-		ret = ((ret + 99) / 100) * 100;
+		double ret = debt.calculate();
+		ret = Math.round(ret);
 		return new DebtCalc(ret);
 	}
 }

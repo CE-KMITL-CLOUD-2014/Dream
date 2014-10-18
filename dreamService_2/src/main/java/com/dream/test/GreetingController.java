@@ -15,6 +15,7 @@
  */
 package com.dream.test;
 
+import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.dream.database.JDBC_QueryUser;
+import com.dream.user.User;
 
 @RestController
 @RequestMapping("/greeting")
@@ -34,7 +38,15 @@ public class GreetingController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public Greeting greeting(
-			@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
+			@RequestParam(value = "name", required = false, defaultValue = "World") String name)
+			throws SQLException {
+
+		// ///
+		User user = new User();
+		user.setUsername("admin");
+		JDBC_QueryUser query = new JDBC_QueryUser();
+		query.queryUser(user);
+
 		return new Greeting(counter.incrementAndGet(), String.format(template,
 				name));
 	}

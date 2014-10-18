@@ -16,13 +16,13 @@
 package com.dream.calc;
 
 public class DebtCalc {
-	private int	moneyMonth;
+	private double	moneyMonth;
 
-	public DebtCalc(int moneyMonth) {
+	public DebtCalc(double moneyMonth) {
 		this.moneyMonth = moneyMonth;
 	}
 
-	public int getMoneyMonth() {
+	public double getMoneyMonth() {
 		return moneyMonth;
 	}
 
