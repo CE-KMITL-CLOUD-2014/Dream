@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
-    xmlns:sec="http://www.springframework.org/schema/security"
-    xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
  
 http://www.springframework.org/schema/security
  
@@ -14,34 +14,42 @@ http://www.springframework.org/schema/beans
  
  
 http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
- 
-    <!-- Rest authentication entry point configuration -->
-    <http use-expressions="true" entry-point-ref="restAuthenticationEntryPoint">
-        <intercept-url pattern="/api/**" />
-        <sec:form-login authentication-success-handler-ref="mySuccessHandler"
-            authentication-failure-handler-ref="myFailureHandler" />
- 
-        <logout />
-    </http>
- 
-    <!-- Connect the custom authentication success handler -->
-    <beans:bean id="mySuccessHandler"
-        class="com.dreamService.core.security.RestAuthenticationSuccessHandler" />
-    <!-- Using default failure handler -->
-    <beans:bean id="myFailureHandler"
-        class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" />
- 
-    <!-- Authentication manager -->
-    <authentication-manager alias="authenticationManager">
-        <authentication-provider>
-            <user-service>
-                <user name="temporary" password="temporary" authorities="ROLE_ADMIN" />
-                <user name="user" password="userPass" authorities="ROLE_USER" />
-            </user-service>
-        </authentication-provider>
-    </authentication-manager>
- 
-    <!-- Enable the annotations for defining the secure role -->
-    <global-method-security secured-annotations="enabled" />
- 
+
+	<!-- Rest authentication entry point configuration -->
+	<http use-expressions="true" entry-point-ref="restAuthenticationEntryPoint">
+		<intercept-url pattern="/debt/**" />
+		<sec:form-login authentication-success-handler-ref="mySuccessHandler"
+			authentication-failure-handler-ref="myFailureHandler" />
+
+		<logout />
+	</http>
+
+	<!-- Connect the custom authentication success handler -->
+	<beans:bean id="mySuccessHandler"
+		class="com.dream.security.RestAuthenticationSuccessHandler" />
+	<!-- Using default failure handler -->
+	<beans:bean id="myFailureHandler"
+		class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" />
+
+	<!-- Authentication manager -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider>
+			<jdbc-user-service data-source-ref="dataSource"
+				users-by-username-query="select username,password, enabled from users where username=?"
+				authorities-by-username-query="select username, role from user_roles where username =?  " />
+		</authentication-provider>
+	</authentication-manager>
+
+	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<beans:property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />
+		<beans:property name="url"
+			value="jdbc:jtds:sqlserver://localhost/dream" />
+		<beans:property name="username" value="root" />
+		<beans:property name="password" value="bell2535" />
+	</beans:bean>
+
+	<!-- Enable the annotations for defining the secure role -->
+	<global-method-security secured-annotations="enabled" />
+
 </beans:beans>
