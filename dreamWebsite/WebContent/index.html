@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Dream Web Site : Welcome</title>
+<link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+<link rel="stylesheet" href="css/main_index.css">
+
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/hammerjs/hammer.js"></script>
+<script src="bower_components/angular-material/angular-material.js"></script>
+<script src="bower_components/angular-aria/angular-aria.js"></script>
+<script src="control/main_index.js"></script>
+<script src="control/debt_content.js"></script>
+
+</head>
+<body>
+		<div ng-controller="AppCtrl" class="mainHeight">
+		<md-card style="min-height: 100%">
+		    <md-tabs selected="selectedIndex">
+		        <md-tab ng-repeat="tab in tabs"
+		                on-select="onTabSelected(tab)"
+		                on-deselect="announceDeselected(tab)"
+		                ng-disabled="tab.disabled"
+		                label="{{tab.title}}">
+	            	<div ng-class="tab.style">
+	                	<div ng-include="tab.url"></div>
+	            	</div>
+        		</md-tab>
+    		</md-tabs>
+		</div>
+    		<md-toolbar class="md-theme-light">
+      			<h2 class="md-toolbar-tools">
+        			<span>Footer Later Edit</span>
+      			</h2>
+    		</md-toolbar>
+    	</md-card>
+		</div>
+</body>
+</html>

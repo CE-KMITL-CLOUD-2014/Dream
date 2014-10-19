@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <!-- 1. Load platform support before any code that touches the DOM. -->
+     <script src="bower_components/platform/platform.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <!-- 2. Load the component using an HTML Import -->
+    <!-- <link rel="import" href="bower_components/core-ajax/core-ajax.html">  -->
+    <link rel="import" href="elements/my-header.html">
+    <link rel="import" href="elements/my-debt.html">
+    <link rel="import" href="elements/my-footer.html">
+  </head>
+  <body style="margin:0">
+    <!-- 3. Declare the element by its tag. -->
+
+    <my-header></my-header>
+    <my-debt></my-debt> 
+    <my-footer></my-footer> 
+  	<script>
+  		alert("aaa");
+  	</script>
+    <!--    
+    <core-ajax url="http://dreamservice.azurewebsites.net/debt?moneyLoan=500000&debtRate=11.5&time=240" auto response="{{resp}}"> </core-ajax>
+    <textarea value="{{resp}}"></textarea>
+   -->
+  </body>
+</html>

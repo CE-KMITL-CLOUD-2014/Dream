@@ -1,0 +1,15 @@
+<div layout-align="start start">
+	<md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
+		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
+	</md-button>
+</div>
+<form>
+	<md-text-float label="Type of debt"       ng-model="debtLoan.type" class="labelText" disabled > </md-text-float>
+	<div layout-sm="horizontal" layout-align="center">
+		<md-text-float label="Principle Money" 	ng-model="debtLoan.totalMoney" inline-block-sm inline-block> </md-text-float>
+		<md-text-float label="debt Rate"  		ng-model="debtLoan.debtRate" inline-block-sm inline-block></md-text-float>
+	</div>
+	<md-text-float label="Time"       			ng-model="debtLoan.time"    ></md-text-float>
+		<md-button class="md-button-raised md-button-colored" ng-click="getDebtLoan(debtLoan.totalMoney, debtLoan.debtRate, debtLoan.time)">Calculate</md-button>
+</form>
+<md-text-float label="Money Per Month" 			ng-model="debtLoan.payMonth" disabled></md-text-float>
