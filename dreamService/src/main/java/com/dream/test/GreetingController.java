@@ -16,7 +16,6 @@
 package com.dream.test;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dream.dao.impl.JdbcMemberDAO;
-import com.dream.model.Member;
 
 @RestController
 @RequestMapping("/greeting")
@@ -40,11 +38,10 @@ public class GreetingController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public List<Member> greeting(
+	public Greeting greeting(
 			@RequestParam(value = "name", required = false, defaultValue = "World") String name)
 			throws SQLException {
-
-		// ///
-		return jdbcMemberDao.list();
+		return new Greeting(counter.incrementAndGet(), String.format(template,
+				name));
 	}
 }
