@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 /****************************************************************************
  * Copyright Peerawit Praphanwittaya & Apirat Puttaraksa                    * 
  *                                                                          * 
@@ -15,8 +14,6 @@
  * limitations under the License.                                           * 
  */
 
-=======
->>>>>>> Stashed changes
 package com.dream.model;
 
 import java.sql.Timestamp;
