@@ -63,12 +63,12 @@ public class JdbcMemberDAO implements MemberDAO {
 	@Override
 	public int update(Member member) {
 		// TODO Auto-generated method stub
-		int nunRow;
+		int numRow;
 		String sql = "UPDATE users SET email=?, fname=?,lname=?,birth=?,phone=?,nickname=?"
 				+ " WHERE username=?";
-		nunRow = jdbcTemplate.update(sql, member.getEmail(), member.getFname(),
+		numRow = jdbcTemplate.update(sql, member.getEmail(), member.getFname(),
 				member.getLname(), member.getBirth(), member.getPhone(),
 				member.getNickname(), member.getUsername());
-		return nunRow;
+		return numRow;
 	}
 }

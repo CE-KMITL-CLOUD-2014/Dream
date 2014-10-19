@@ -84,9 +84,9 @@ public class MemberController {
 		return jdbcMemberDao.delete(userDetails.getUsername());
 	}
 
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	@Secured("ROLE_ADMIN")
+	// @Secured("ROLE_ADMIN")
 	public List<Member> list() {
 		return jdbcMemberDao.list();
 	}

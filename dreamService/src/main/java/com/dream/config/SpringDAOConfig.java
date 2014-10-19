@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 @Configuration
-@ImportResource({ "classpath:MemberConfig.xml" })
+@ImportResource({ "classpath:DAOConfig.xml" })
 @ComponentScan("com.dream.dao")
-public class SpringMemberConfig {
-	public SpringMemberConfig() {
+public class SpringDAOConfig {
+	public SpringDAOConfig() {
 		super();
 	}
 }
