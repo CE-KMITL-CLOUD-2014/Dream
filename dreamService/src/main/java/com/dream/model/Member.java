@@ -6,17 +6,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class Member {
-	private String		username;
-	private String		password;
-	private String		email;
-	private String		phone;
-	private String		fname;
-	private String		lname;
-	private Date		birth;
-	private String		nickname;
-	private boolean		enable;
-	private Timestamp	regis_date;
-	SimpleDateFormat	format	= new SimpleDateFormat("yyyy-MM-dd");
+	private String				username;
+	private String				password;
+	private String				email;
+	private String				phone;
+	private String				fname;
+	private String				lname;
+	private Date				birth;
+	private String				nickname;
+	private boolean				enable;
+	private Timestamp			regis_date;
+	private SimpleDateFormat	format	= new SimpleDateFormat("yyyy-MM-dd");
 
 	public String getUsername() {
 		return username;
@@ -131,10 +131,10 @@ public class Member {
 		this.birth = birth;
 	}
 
-	public Date getCurrentDate(String birth) {
+	private Date getCurrentDate(String time) {
 		Date date = null;
 		try {
-			date = new Date(format.parse(birth).getTime());
+			date = new Date(format.parse(time).getTime());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
