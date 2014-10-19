@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 /****************************************************************************
  * Copyright Peerawit Praphanwittaya & Apirat Puttaraksa                    * 
  *                                                                          * 
@@ -14,6 +15,8 @@
  * limitations under the License.                                           * 
  */
 
+=======
+>>>>>>> Stashed changes
 package com.dream.dao;
 
 import com.dream.model.Finance;
