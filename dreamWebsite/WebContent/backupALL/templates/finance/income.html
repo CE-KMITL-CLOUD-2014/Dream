@@ -1,0 +1,20 @@
+<div layout-align="start start">
+	<md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
+		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
+	</md-button>
+</div>
+<form>
+	<md-text-float label="Type"       ng-model="income.type" class="labelText" disabled > </md-text-float>
+	<md-button class="md-button-colored" ng-click="showGridBottomSheet($event)">
+      Show as Grid
+    </md-button>
+	<div layout-sm="horizontal" layout-align="center">
+		<md-text-float label="Principle Money" 	ng-model="income.totalMoney" inline-block-sm inline-block> </md-text-float>
+		<md-text-float label="debt Rate"  		ng-model="income.debtRate" inline-block-sm inline-block></md-text-float>
+	</div>
+	<md-text-float label="Time"       			ng-model="income.time"    ></md-text-float>
+		<md-button class="md-button-raised md-button-colored" ng-click="getDebtLoan(income.totalMoney, income.debtRate, income.time)">Calculate</md-button>
+</form>
+<md-text-float label="Money From Debt Per Month" 			ng-model="income.moneyDebt" disabled></md-text-float>
+
+

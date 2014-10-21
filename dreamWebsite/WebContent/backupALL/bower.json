@@ -1,0 +1,21 @@
+{
+  "name": "dream",
+  "version": "0.0.1",
+  "authors": [
+    "CEmocca <champ_alone_always@hotmail.com>"
+  ],
+  "description": "init and test polymer",
+  "license": "Apache License 2.0",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_component",
+    "test",
+    "tests",
+    "bower_components"
+  ],
+  "dependencies": {
+    "angular-material": "~0.4.1"
+  }
+}

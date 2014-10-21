@@ -1,33 +1,25 @@
 <!DOCTYPE html>
 <html ng-app="mainApp">
 <head>
-<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Dream Web Site : Welcome</title>
 <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
-<link rel="import" href="elements/my-debt.html">
-
-	<style>    
-      #md_tabs {
-        background-color: rgb(0, 188, 212);
-        color: rgb(255, 255, 255);
-        box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.2);
-        min-height: 100%;
-      }
-	</style>
+<link rel="stylesheet" href="css/main_index.css">
 
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-animate/angular-animate.js"></script>
 <script src="bower_components/hammerjs/hammer.js"></script>
 <script src="bower_components/angular-material/angular-material.js"></script>
 <script src="bower_components/angular-aria/angular-aria.js"></script>
-<script src="js/controller.js"></script>
+<script src="control/main_index.js"></script>
+<script src="control/debt_content.js"></script>
 
 </head>
 <body>
-	<div ng-controller="AppCtrl" layout-sm="vertical" style="min-height: 100vh">
-	<md-content>
+		<div ng-controller="AppCtrl" class="mainHeight">
+		<md-card style="min-height: 100%">
 		    <md-tabs selected="selectedIndex">
-		        <md-tab ng-repeat="tab in tabs" id="md_tabs"
+		        <md-tab ng-repeat="tab in tabs"
 		                on-select="onTabSelected(tab)"
 		                on-deselect="announceDeselected(tab)"
 		                ng-disabled="tab.disabled"
@@ -37,13 +29,13 @@
 	            	</div>
         		</md-tab>
     		</md-tabs>
-
-    <md-toolbar class="md-theme-light">
+		</div>
+    		<md-toolbar class="md-theme-light">
       			<h2 class="md-toolbar-tools">
         			<span>Footer Later Edit</span>
       			</h2>
-    </md-toolbar>
-    </md-content>
-	</div>
+    		</md-toolbar>
+    	</md-card>
+		</div>
 </body>
 </html>
