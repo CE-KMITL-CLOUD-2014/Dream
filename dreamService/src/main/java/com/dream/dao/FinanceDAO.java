@@ -15,6 +15,8 @@
 
 package com.dream.dao;
 
+import java.util.List;
+
 import com.dream.model.Finance;
 
 public interface FinanceDAO {
@@ -22,7 +24,7 @@ public interface FinanceDAO {
 
 	public int update(Finance finance);
 
-	public Finance findFromUsername(String username);
+	public List<Finance> findFromUsername(String username);
 
 	public boolean delete(String username);
 }

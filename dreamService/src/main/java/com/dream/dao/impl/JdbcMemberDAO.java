@@ -16,7 +16,6 @@
 
 package com.dream.dao.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -24,7 +23,6 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.dream.dao.MemberDAO;
-import com.dream.jdbc.MemberExtractor;
 import com.dream.jdbc.MemberRowMapper;
 import com.dream.model.Member;
 

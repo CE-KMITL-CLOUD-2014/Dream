@@ -16,11 +16,14 @@
 
 package com.dream.dao.impl;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.dream.dao.FinanceDAO;
+import com.dream.jdbc.FinanaceRowMapper;
 import com.dream.model.Finance;
 
 public class JdbcFinanceDAO implements FinanceDAO {
@@ -35,36 +38,39 @@ public class JdbcFinanceDAO implements FinanceDAO {
 	@Override
 	public int insert(Finance finance) {
 		int numRow;
-		String sql = "INSERT INTO finance (username, #finance_type, date_time, amount, description, #budget, #save)"
-				+ " VALUES (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO finance (username, #finance_type, date_time, amount, description, #budget, #save, #event)"
+				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		numRow = jdbcTemplate.update(sql, finance.getUsername(),
 				finance.getSaveId(), finance.getDateTime(),
 				finance.getAmount(), finance.getDescription(),
-				finance.getBudgetId(), finance.getSaveId());
+				finance.getBudgetId(), finance.getSaveId(),
+				finance.getEventId());
 		return numRow;
 	}
 
 	@Override
 	public int update(Finance finance) {
 		int numRow;
-		String sql = "UPDATE finance SET amount=?,description=?,#budget=?, #save=?, #finance_type=?"
+		String sql = "UPDATE finance SET amount=?,description=?,#budget=?, #save=?, #finance_type=?, #event=?"
 				+ " WHERE username=? and date_time=?";
 		numRow = jdbcTemplate.update(sql, finance.getUsername(),
 				finance.getFinanceId(), finance.getDateTime(),
 				finance.getAmount(), finance.getDescription(),
-				finance.getBudgetId(), finance.getSaveId());
+				finance.getBudgetId(), finance.getSaveId(),
+				finance.getEventId());
 		return numRow;
 	}
 
 	@Override
-	public Finance findFromUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Finance> findFromUsername(String username) {
+		String sql = "SELECT * FROM finance WHERE username=?";
+		return (List<Finance>) jdbcTemplate.query(sql,
+				new Object[] { username },
+				new FinanaceRowMapper());
 	}
 
 	@Override
 	public boolean delete(String username) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

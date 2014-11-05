@@ -26,9 +26,11 @@ public class Finance {
 	private String		username;
 	private int			budgetId;
 	private int			saveId;
+	private int			eventId;
 
 	public Finance(int financeId, double amount, String description,
-			Timestamp dateTime, String username, int budgetId, int saveId) {
+			Timestamp dateTime, String username, int budgetId, int saveId,
+			int eventId) {
 		this.financeId = financeId;
 		this.amount = amount;
 		this.description = description;
@@ -36,6 +38,7 @@ public class Finance {
 		this.username = username;
 		this.budgetId = budgetId;
 		this.saveId = saveId;
+		this.eventId = eventId;
 	}
 
 	public int getFinanceId() {
@@ -92,6 +95,14 @@ public class Finance {
 
 	public void setSaveId(int saveId) {
 		this.saveId = saveId;
+	}
+
+	public int getEventId() {
+		return eventId;
+	}
+
+	public void setEventId(int eventId) {
+		this.eventId = eventId;
 	}
 
 }

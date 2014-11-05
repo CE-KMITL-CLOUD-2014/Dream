@@ -32,7 +32,6 @@ import com.dream.dao.impl.JdbcMemberDAO;
 public class GreetingController {
 	@Autowired
 	JdbcMemberDAO				jdbcMemberDao;
-	// aadssadasdasdasdasdadasasd
 	private static final String	template	= "Hello, %s!";
 	private final AtomicLong	counter		= new AtomicLong();
 

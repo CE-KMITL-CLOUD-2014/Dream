@@ -18,6 +18,7 @@ package com.dream.controller;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -45,8 +46,9 @@ public class FinanceController {
 			@RequestParam(value = "financeId", required = true) int financeId,
 			@RequestParam(value = "amount", required = true) double amount,
 			@RequestParam(value = "description", required = false) String description,
-			@RequestParam(value = "saveId", required = true) int saveId,
-			@RequestParam(value = "budgetId", required = true) int budgetId) {
+			@RequestParam(value = "saveId", required = false) Integer saveId,
+			@RequestParam(value = "budgetId", required = false) Integer budgetId,
+			@RequestParam(value = "eventId", required = false) Integer eventId) {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
 		UserDetails userDetails;
@@ -59,8 +61,14 @@ public class FinanceController {
 		}
 		Timestamp timeStamp = new Timestamp(Calendar.getInstance().getTime()
 				.getTime());
+		if (saveId == null)
+			saveId = 1;
+		if (budgetId == null)
+			budgetId = 1;
+		if (eventId == null)
+			eventId = 1;
 		Finance finance = new Finance(financeId, amount, description,
-				timeStamp, userDetails.getUsername(), budgetId, saveId);
+				timeStamp, userDetails.getUsername(), budgetId, saveId, eventId);
 		return jdbcFinanceDAO.insert(finance);
 	}
 
@@ -68,10 +76,11 @@ public class FinanceController {
 	@ResponseBody
 	public int financeUpdate(
 			@RequestParam(value = "financeId", required = true) int financeId,
-			@RequestParam(value = "amount", required = true) double amount,
-			@RequestParam(value = "description", required = false) String description,
-			@RequestParam(value = "saveId", required = true) int saveId,
-			@RequestParam(value = "budgetId", required = true) int budgetId,
+			@RequestParam(value = "amount", required = true) String amount,
+			@RequestParam(value = "description", required = true) String description,
+			@RequestParam(value = "saveId", required = false) Integer saveId,
+			@RequestParam(value = "budgetId", required = false) Integer budgetId,
+			@RequestParam(value = "eventId", required = false) Integer eventId,
 			@RequestParam(value = "dateTime", required = true) String tempTimeStamp) {
 
 		SecurityContext securityContext = SecurityContextHolder.getContext();
@@ -84,11 +93,35 @@ public class FinanceController {
 		} else {
 			return -1;
 		}
-		Timestamp timeStamp = null; // = tempTimeStamp wait format from
-									// front-end
+		if (saveId == null)
+			saveId = 1;
+		if (budgetId == null)
+			budgetId = 1;
+		if (eventId == null)
+			eventId = 1;
 
-		Finance finance = new Finance(financeId, amount, description,
-				timeStamp, userDetails.getUsername(), budgetId, saveId);
-		return jdbcFinanceDAO.insert(finance);
+		Timestamp timeStamp = new Timestamp(Long.parseLong(tempTimeStamp));
+
+		Finance finance = new Finance(financeId, Double.parseDouble(amount),
+				description, timeStamp, userDetails.getUsername(), budgetId,
+				saveId, eventId);
+		return jdbcFinanceDAO.update(finance);
+	}
+	
+	@RequestMapping(value = "/find", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Finance> financeByUser() {
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		Authentication authentication = securityContext.getAuthentication();
+		UserDetails userDetails;
+		if (authentication != null) {
+			Object principal = authentication.getPrincipal();
+			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
+					: null);
+		} else {
+			return null;
+		}
+		return jdbcFinanceDAO.findFromUsername(userDetails
+				.getUsername());
 	}
 }
