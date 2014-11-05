@@ -121,6 +121,10 @@ public class MemberController {
 		} else {
 			return null;
 		}
-		return jdbcMemberDao.findFromUsername(userDetails.getUsername());
+		List<Member> members = jdbcMemberDao.findFromUsername(userDetails.getUsername());
+		for(Member m : members){
+			m.setPassword("");
+		}
+		return members;
 	}
 }
