@@ -110,7 +110,7 @@ public class MemberController {
 	@RequestMapping(value = "/findformuser", method = RequestMethod.POST)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public Member findFormUser() {
+	public List<Member> findFormUser() {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
 		UserDetails userDetails;

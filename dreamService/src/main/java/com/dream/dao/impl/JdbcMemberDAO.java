@@ -54,18 +54,16 @@ public class JdbcMemberDAO implements MemberDAO {
 	}
 
 	@Override
-	public Member findFromUsername(String username) {
+	public List<Member> findFromUsername(String username) {
 		// TODO Auto-generated method stub
-		String sql = "SELECT * FROM users WHERE user=" + username;
-		return jdbcTemplate.query(sql, new MemberExtractor());
+		String sql = "SELECT * FROM users WHERE username=?";
+		return jdbcTemplate.query(sql,new Object[] {username}, new MemberRowMapper());
 	}
 
 	@Override
 	public List<Member> list() {
-		List userList = new ArrayList();
 		String sql = "select * from users";
-		userList = jdbcTemplate.query(sql, new MemberRowMapper());
-		return userList;
+		return jdbcTemplate.query(sql, new MemberRowMapper());
 	}
 
 	@Override
