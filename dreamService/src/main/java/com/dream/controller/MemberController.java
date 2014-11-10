@@ -104,7 +104,11 @@ public class MemberController {
 	@ResponseBody
 	// @Secured("ROLE_ADMIN")
 	public List<Member> list() {
-		return jdbcMemberDao.list();
+		List<Member> members = jdbcMemberDao.list();
+		for(Member m : members){
+			m.setPassword("");
+		}
+		return members;
 	}
 
 	@RequestMapping(value = "/findformuser", method = RequestMethod.POST)
