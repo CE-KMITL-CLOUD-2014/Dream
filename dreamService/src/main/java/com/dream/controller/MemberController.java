@@ -38,7 +38,7 @@ import com.dream.model.Member;
 @RequestMapping("/member")
 public class MemberController {
 	@Autowired
-	JdbcMemberDAO	jdbcMemberDao;
+	JdbcMemberDAO jdbcMemberDao;
 
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	@ResponseBody
@@ -54,7 +54,7 @@ public class MemberController {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hashedPassword = passwordEncoder.encode(password);
 		Member member = new Member(username, hashedPassword, email, phone,
-				fname, lname, nickname, birth, true);
+				fname, lname, nickname, birth,"ROLE_USER", true);
 		return jdbcMemberDao.insert(member);
 	}
 
@@ -105,7 +105,7 @@ public class MemberController {
 	// @Secured("ROLE_ADMIN")
 	public List<Member> list() {
 		List<Member> members = jdbcMemberDao.list();
-		for(Member m : members){
+		for (Member m : members) {
 			m.setPassword("");
 		}
 		return members;
@@ -114,7 +114,7 @@ public class MemberController {
 	@RequestMapping(value = "/findformuser", method = RequestMethod.POST)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public List<Member> findFormUser() {
+	public Member findFormUser() {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
 		UserDetails userDetails;
@@ -125,10 +125,9 @@ public class MemberController {
 		} else {
 			return null;
 		}
-		List<Member> members = jdbcMemberDao.findFromUsername(userDetails.getUsername());
-		for(Member m : members){
-			m.setPassword("");
-		}
+		Member members = jdbcMemberDao.findFromUsername(userDetails
+				.getUsername());
+		members.setPassword("");
 		return members;
 	}
 }

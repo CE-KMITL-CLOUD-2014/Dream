@@ -33,6 +33,7 @@ public class Member {
 	private boolean				enable;
 	private Timestamp			regis_date;
 	private SimpleDateFormat	format	= new SimpleDateFormat("yyyy-MM-dd");
+	private String				type;
 
 	public String getUsername() {
 		return username;
@@ -99,7 +100,7 @@ public class Member {
 	}
 
 	public Member(String username, String password, String email, String phone,
-			String fname, String lname, String nickname, String birth,
+			String fname, String lname, String nickname, String birth,String type,
 			boolean enable) {
 		this.username = username;
 		this.password = password;
@@ -115,7 +116,7 @@ public class Member {
 
 	public Member(String username, String password, String email, String phone,
 			String fname, String lname, String nickname, String birth,
-			boolean enable, Timestamp regis_date) {
+			boolean enable,String type, Timestamp regis_date) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
@@ -125,6 +126,7 @@ public class Member {
 		this.birth = getCurrentDate(birth);
 		this.nickname = nickname;
 		this.enable = enable;
+		this.type = type;
 		this.regis_date = regis_date;
 	}
 
@@ -164,5 +166,13 @@ public class Member {
 
 	public void setRegis_date(Timestamp regis_date) {
 		this.regis_date = regis_date;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

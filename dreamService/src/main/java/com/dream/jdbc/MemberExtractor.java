@@ -34,7 +34,7 @@ public class MemberExtractor implements ResultSetExtractor<Member> {
 				resultSet.getString(4), resultSet.getString(5),
 				resultSet.getString(6), resultSet.getString(7),
 				resultSet.getString(8), resultSet.getBoolean(9),
-				resultSet.getTimestamp(10));
+				resultSet.getString(12), resultSet.getTimestamp(10));
 		return member;
 	}
 

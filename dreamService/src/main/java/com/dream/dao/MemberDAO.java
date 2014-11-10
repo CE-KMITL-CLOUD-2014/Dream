@@ -25,7 +25,7 @@ public interface MemberDAO {
 
 	public int update(Member member);
 
-	public List<Member> findFromUsername(String username);
+	public Member findFromUsername(String username);
 
 	public List<Member> list();
 
