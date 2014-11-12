@@ -1,0 +1,15 @@
+	<div ng-controller="loginCtrl" layout="vertical" layout-sm="horizontal" style="height: 88vh">
+
+			<md-card layout="vertical" layout-fill layout-align="center center">
+				<div style="padding: 20px;">
+					<form>
+						<md-text-float label="Login" ng-model="login.login" class="labelText" disabled > </md-text-float>
+						<div layout-sm="horizontal" layout-align="center">
+							<md-text-float label="Username" 	ng-model="login.username" inline-block-sm inline-block> </md-text-float>
+							<md-text-float label="Password" type="password" 	ng-model="login.password" inline-block-sm inline-block></md-text-float>
+						</div>
+							<md-button class="md-button-raised md-button-colored" ng-click="loginFunc(login.username, login.password)">Logins</md-button>
+					</form>
+				</div>
+			</md-card>
+	</div>

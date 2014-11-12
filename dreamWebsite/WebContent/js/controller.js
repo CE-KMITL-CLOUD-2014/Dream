@@ -1,6 +1,11 @@
 
 // ng-polymer-elements
-var mainApp = angular.module('mainApp',['ngMaterial']);
+var mainApp = angular.module('mainApp',['ngCookies', 'ngMaterial']);
+
+mainApp.config(['$httpProvider', function ($httpProvider) {
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    $httpProvider.defaults.useXDomain = true;
+}]);
 
 	mainApp.controller('AppCtrl', function ($scope, $interpolate) {
 		var tabs = mainTabSelect($scope, $interpolate);
@@ -27,7 +32,6 @@ var mainApp = angular.module('mainApp',['ngMaterial']);
 			$http.get("http://dreamservice.azurewebsites.net/debt/cal?moneyLoan="+totalMoney+"&debtRate="+debtRate+"&time="+time).
 			success(function(data,status){
 				$scope.debtLoan.payMonth = data.moneyMonth;
-				$scope
 			}).
 			error(function(data,status){
 				alert("error");
@@ -53,7 +57,7 @@ var mainApp = angular.module('mainApp',['ngMaterial']);
 		};
 	})
 
-	.controller('financeCtrl', function($scope, $http, $mdSidenav, $mdBottomSheet) {
+	mainApp.controller('financeCtrl', function($scope, $http, $mdSidenav, $mdBottomSheet) {
 		$scope.income = {
 			type: "income",
 			id_string: null,
@@ -73,7 +77,7 @@ var mainApp = angular.module('mainApp',['ngMaterial']);
 		};
 	})
 
-	.controller('incomeCtrl', function($scope, $mdBottomSheet) {
+	mainApp.controller('incomeCtrl', function($scope, $mdBottomSheet) {
 		$scope.items = [
 		                { name: 'Stock', icon: "images/income_icon/stock_48.png" },
 		                { name: 'Gift', icon: "images/income_icon/gift_48.png" },
@@ -96,10 +100,38 @@ var mainApp = angular.module('mainApp',['ngMaterial']);
 
 	})
 
+	mainApp.controller('loginCtrl', function($scope, $http, $cookies) {
+		$scope.login = {
+			login: "Login",
+			username: null,
+			password: null,
+			sessionId: null
+		}
+
+
+		$scope.loginFunc = function(username, password, $cookies) {
+			$http({
+				   withCredentials: true,
+			       method: 'post',
+			       url: "http://localhost:8080/dreamService/j_spring_security_check?j_username="+username+"&j_password="+password,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, $cookies) {
+				alert("aaa");
+				alert("bbb");
+			}).
+			error(function(data, status, $cookies) {
+				alert("bbbsss");
+				var abc = $cookies.JSESSIONID;
+				alert(abc);
+			});
+		};
+	})
+
 	function mainTabSelect ($scope, $interpolate) {
 		var tabs = [
 	      { title: 'Home', active: true, url: "templates/angular_index.html", style:"tab1"},
-	      { title: 'Member', active: false, url: "templates/debt.html", style:"tab2" },
+	      { title: 'Member', active: false, url: "templates/login.html", style:"tab2" },
 	      { title: 'Debt Calulator', active: false, url: "templates/debt.html", style:"tab3" },
 	      { title: 'Finance', active: false, disabled: false, url: "templates/finance.html",style:"tab4" }
 	    ];
@@ -107,7 +139,7 @@ var mainApp = angular.module('mainApp',['ngMaterial']);
 	    $scope.tabs = tabs;
 	    $scope.predicate = "title";
 	    $scope.reversed = true;
-	    $scope.selectedIndex = 2;
+	    $scope.selectedIndex = 1;
 	    $scope.allowDisable = true;
 
 	    $scope.onTabSelected = onTabSelected;
