@@ -34,6 +34,21 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 	<beans:bean id="myFailureHandler"
 		class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" />
 
+	<!-- Persistent Remember Me Service -->
+	<beans:bean id="rememberMeAuthenticationProvider"
+		class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
+		<beans:property name="key" value="myAppKey" />
+		<beans:property name="tokenRepository" ref="jdbcTokenRepository" />
+		<beans:property name="userDetailsService" ref="myUserDetailsService" />
+	</beans:bean>
+
+	<!-- Uses a database table to maintain a set of persistent login data -->
+	<beans:bean id="jdbcTokenRepository"
+		class="org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl">
+		<beans:property name="createTableOnStartup" value="false" />
+		<beans:property name="dataSource" ref="dataSource" />
+	</beans:bean>
+
 	<!-- Authentication manager -->
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider user-service-ref="myUserDetailsService">
@@ -51,7 +66,7 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 		<beans:property name="driverClassName"
 			value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 		<beans:property name="url"
-			value="jdbc:sqlserver://rnhyrbrn6o.database.windows.net:1433;database=dream_db;user=dreamService@rnhyrbrn6o;password=CEkmitl702;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;" />
+			value="jdbc:sqlserver://rnhyrbrn6o.database.windows.net:1433;database=dream_db;user=dreamService@rnhyrbrn6o;password=xxxxEIEIxxxx;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;" />
 	</beans:bean>
 
 	<!-- Enable the annotations for defining the secure role -->
