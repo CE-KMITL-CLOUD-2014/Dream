@@ -17,30 +17,46 @@
 package com.dream.model;
 
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
-import org.joda.money.Money;
+import com.dream.util.DreamUtil;
 
 public class Budget {
 	private int					budgetId;
 	private int					type_id;
 	private Date				startTime;
 	private Date				endTime;
-	private Money				goal;
+	private double				goal;
 	private String				username;
-	private Money				amount;
-	private SimpleDateFormat	format	= new SimpleDateFormat("yyyy-MM-dd");
+	private double				amount;
 
-	public Budget(int budgetId, int type_id, String startTime, String endTime,
-			Money goal, String username, Money amount) {
+	public Budget(int budgetId, int type_id, Date startTime, Date endTime,
+			double goal, String username, double amount) {
 		this.budgetId = budgetId;
 		this.type_id = type_id;
-		this.startTime = getCurrentDate(startTime);
-		this.endTime = getCurrentDate(endTime);
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.goal = goal;
 		this.username = username;
 		this.amount = amount;
+	}
+	
+	public Budget(int budgetId, int type_id, String startTime, String endTime,
+			double goal, String username) {
+		this.budgetId = budgetId;
+		this.type_id = type_id;
+		this.startTime = DreamUtil.getCurrentDate(startTime);
+		this.endTime = DreamUtil.getCurrentDate(endTime);
+		this.goal = goal;
+		this.username = username;
+	}
+	
+	public Budget(int type_id, String startTime, String endTime,
+			double goal, String username) {
+		this.type_id = type_id;
+		this.startTime = DreamUtil.getCurrentDate(startTime);
+		this.endTime = DreamUtil.getCurrentDate(endTime);
+		this.goal = goal;
+		this.username = username;
 	}
 
 	public int getBudgetId() {
@@ -75,11 +91,11 @@ public class Budget {
 		this.endTime = endTime;
 	}
 
-	public Money getGoal() {
+	public double getGoal() {
 		return goal;
 	}
 
-	public void setGoal(Money goal) {
+	public void setGoal(double goal) {
 		this.goal = goal;
 	}
 
@@ -91,30 +107,12 @@ public class Budget {
 		this.username = username;
 	}
 
-	public Money getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Money amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 
-	public SimpleDateFormat getFormat() {
-		return format;
-	}
-
-	public void setFormat(SimpleDateFormat format) {
-		this.format = format;
-	}
-
-	private Date getCurrentDate(String time) {
-		Date date = null;
-		try {
-			date = new Date(format.parse(time).getTime());
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return date;
-	}
 }

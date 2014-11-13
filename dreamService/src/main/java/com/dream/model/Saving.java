@@ -18,33 +18,32 @@
 package com.dream.model;
 
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
+import com.dream.util.DreamUtil;
 
 public class Saving {
 	private int saveID;
 	private String username;
-	private int goal;
-	private int startAmount;
+	private double goal;
+	private double startAmount;
 	private Date end;
 	private String description;
-	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-	public Saving(String username, int goal, int strartAmount, String end,
+	public Saving(String username, double goal, double strartAmount, String end,
 			String description) {
 		this.username = username;
 		this.goal = goal;
 		this.startAmount = strartAmount;
-		this.end = getCurrentDate(end);
+		this.end = DreamUtil.getCurrentDate(end);
 		this.description = description;
 	}
-	public Saving(int saveID,String username, int goal, int strartAmount, String end,
+	public Saving(int saveID,String username, double goal, double strartAmount, String end,
 			String description) {
 		this.saveID = saveID;
 		this.username = username;
 		this.goal = goal;
 		this.startAmount = strartAmount;
-		this.end = getCurrentDate(end);
+		this.end = DreamUtil.getCurrentDate(end);
 		this.description = description;
 	}
 
@@ -64,7 +63,7 @@ public class Saving {
 		this.username = username;
 	}
 
-	public int getGoal() {
+	public double getGoal() {
 		return goal;
 	}
 
@@ -72,7 +71,7 @@ public class Saving {
 		this.goal = goal;
 	}
 
-	public int getStartAmount() {
+	public double getStartAmount() {
 		return startAmount;
 	}
 
@@ -94,20 +93,5 @@ public class Saving {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	private Date getCurrentDate(String time) {
-		if(time!=null){
-			Date date = null;
-			try {
-				date = new Date(format.parse(time).getTime());
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			return date;
-		}else{
-			return null;
-		}
-		
 	}
 }

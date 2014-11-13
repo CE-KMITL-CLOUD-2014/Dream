@@ -14,7 +14,6 @@
  * limitations under the License.                                           * 
  */
 
-
 package com.dream.dao.impl;
 
 import java.sql.Types;
@@ -25,6 +24,8 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.dream.dao.PlanningDAO;
+import com.dream.jdbc.BudgetRowMapper;
+import com.dream.jdbc.EventRowMapper;
 import com.dream.jdbc.SavingRowMapper;
 import com.dream.model.Budget;
 import com.dream.model.Event;
@@ -41,8 +42,7 @@ public class JdbcPlaningDAO implements PlanningDAO {
 
 	@Override
 	public int insertSaving(Saving saving) {
-		String sql = "INSERT INTO savings (username, goal, start_amount, end_time, description)"
-				+ " VALUES (?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO savings (username, goal, start_amount, end_time, description) VALUES (?, ?, ?, ?, ?)";
 		return jdbcTemplate.update(sql, saving.getUsername(), saving.getGoal(),
 				saving.getStartAmount(), saving.getEnd(),
 				saving.getDescription());
@@ -77,50 +77,76 @@ public class JdbcPlaningDAO implements PlanningDAO {
 
 	@Override
 	public int insertEvent(Event event) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "insert into events (description,end_time,username) VALUES (?, ?, ?)";
+		Object[] params = new Object[] { event.getDescription(),
+				event.getEnd_time(), event.getUsername() };
+		int[] types = new int[] { Types.VARCHAR, Types.DATE, Types.VARCHAR };
+		return jdbcTemplate.update(sql, params, types);
 	}
 
 	@Override
 	public int deleteEvent(int eventID, String username) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql1 = "update finance set #save = NULL where #event = ? and username = ?";
+		String sql2 = "DELETE from events where #event = ? and username = ?";
+		Object[] params = new Object[] { eventID, username };
+		int[] types = new int[] { Types.INTEGER, Types.VARCHAR };
+		jdbcTemplate.update(sql1, params, types);
+		return jdbcTemplate.update(sql2, params, types);
 	}
 
 	@Override
 	public int updateEvent(Event event) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "update events set end_time = ?,description = ? where username = ? and #event = ?";
+		Object[] params = new Object[] { event.getEnd_time(),
+				event.getDescription(), event.getUsername(), event.getEventID() };
+		int[] types = new int[] { Types.DATE, Types.VARCHAR, Types.VARCHAR,
+				Types.INTEGER };
+		return jdbcTemplate.update(sql, params, types);
 	}
 
 	@Override
 	public List<Event> listEventFromUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "select * from events where username = ?";
+		return jdbcTemplate.query(sql, new Object[] { username },
+				new EventRowMapper());
 	}
 
 	@Override
 	public int insertBudget(Budget budget) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "insert into budgets (goal,start_time,end_time,amount,username,#finance_type) VALUES (?, ?, ?,?, ?, ?)";
+		Object[] params = new Object[] { budget.getGoal(),
+				budget.getStartTime(), budget.getEndTime(), budget.getAmount(),
+				budget.getUsername(), budget.getType_id() };
+		int[] types = new int[] { Types.REAL, Types.DATE, Types.DATE,
+				Types.REAL, Types.VARCHAR, Types.INTEGER };
+		return jdbcTemplate.update(sql, params, types);
 	}
 
 	@Override
 	public int deleteBudget(int eventID, String username) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql1 = "update finance set #budget = NULL where #budget = ? and username = ?";
+		String sql2 = "DELETE from budgets where #budget = ? and username = ?";
+		Object[] params = new Object[] { eventID, username };
+		int[] types = new int[] { Types.INTEGER, Types.VARCHAR };
+		jdbcTemplate.update(sql1, params, types);
+		return jdbcTemplate.update(sql2, params, types);
 	}
 
 	@Override
 	public int updateBudget(Budget budget) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "update budgets set goal = ?,start_time = ?,end_time = ?,#finance_type = ?";
+		Object[] params = new Object[] { budget.getGoal(),
+				budget.getStartTime(), budget.getEndTime(), budget.getType_id() };
+		int[] types = new int[] { Types.REAL, Types.DATE, Types.DATE,
+				Types.INTEGER };
+		return jdbcTemplate.update(sql, params, types);
 	}
 
 	@Override
 	public List<Budget> listBudgetFromUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "select * from budgets where username = ?";
+		return jdbcTemplate.query(sql, new Object[] { username },
+				new BudgetRowMapper());
 	}
 
 }
