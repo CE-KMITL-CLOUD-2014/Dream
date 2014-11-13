@@ -14,36 +14,9 @@
  * limitations under the License.                                           * 
  */
 
-package com.dream.dao;
 
-import java.util.List;
+package com.dream.model;
 
-import com.dream.model.Budget;
-import com.dream.model.Event;
-import com.dream.model.Saving;
+public class Event {
 
-public interface PlanningDAO {
-	public int insertSaving(Saving saving);
-
-	public List<Saving> listSavingFromUsername(String username);
-
-	public int deleteSaving(int SaveID, String username);
-
-	public int updateSaving(Saving saving);
-
-	public int insertEvent(Event event);
-
-	public int deleteEvent(int eventID, String username);
-
-	public int updateEvent(Event event);
-
-	public List<Event> listEventFromUsername(String username);
-
-	public int insertBudget(Budget budget);
-
-	public int deleteBudget(int eventID, String username);
-
-	public int updateBudget(Budget budget);
-
-	public List<Budget> listBudgetFromUsername(String username);
 }

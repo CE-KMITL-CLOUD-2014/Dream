@@ -21,12 +21,8 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.dream.dao.MemberDAO;
-import com.dream.jdbc.MemberExtractor;
 import com.dream.jdbc.MemberRowMapper;
 import com.dream.model.Member;
 
@@ -57,7 +53,6 @@ public class JdbcMemberDAO implements MemberDAO {
 
 	@Override
 	public Member findFromUsername(String username) {
-		// TODO Auto-generated method stub
 		String sql = "SELECT users.*,authorities.authority FROM users,authorities WHERE users.username=? AND users.username = authorities.username";
 		return jdbcTemplate.queryForObject(sql,new Object[] {username}, new MemberRowMapper());
 	}

@@ -14,36 +14,25 @@
  * limitations under the License.                                           * 
  */
 
-package com.dream.dao;
+package com.dream.jdbc;
 
-import java.util.List;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import com.dream.model.Budget;
-import com.dream.model.Event;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
+
 import com.dream.model.Saving;
 
-public interface PlanningDAO {
-	public int insertSaving(Saving saving);
+public class SavingExtractor implements ResultSetExtractor<Saving> {
 
-	public List<Saving> listSavingFromUsername(String username);
+	@Override
+	public Saving extractData(ResultSet resultSet) throws SQLException,
+			DataAccessException {
+		Saving saving = new Saving(resultSet.getInt(1),resultSet.getString(6), resultSet.getInt(2),
+				resultSet.getInt(3), resultSet.getString(4),
+				resultSet.getString(5));
+		return saving;
+	}
 
-	public int deleteSaving(int SaveID, String username);
-
-	public int updateSaving(Saving saving);
-
-	public int insertEvent(Event event);
-
-	public int deleteEvent(int eventID, String username);
-
-	public int updateEvent(Event event);
-
-	public List<Event> listEventFromUsername(String username);
-
-	public int insertBudget(Budget budget);
-
-	public int deleteBudget(int eventID, String username);
-
-	public int updateBudget(Budget budget);
-
-	public List<Budget> listBudgetFromUsername(String username);
 }

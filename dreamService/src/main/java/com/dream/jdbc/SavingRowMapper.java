@@ -14,36 +14,21 @@
  * limitations under the License.                                           * 
  */
 
-package com.dream.dao;
+package com.dream.jdbc;
 
-import java.util.List;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import com.dream.model.Budget;
-import com.dream.model.Event;
+import org.springframework.jdbc.core.RowMapper;
+
 import com.dream.model.Saving;
 
-public interface PlanningDAO {
-	public int insertSaving(Saving saving);
+public class SavingRowMapper implements RowMapper<Saving>{
 
-	public List<Saving> listSavingFromUsername(String username);
+	@Override
+	public Saving mapRow(ResultSet resultSet, int line) throws SQLException {
+		SavingExtractor savingExtractor = new SavingExtractor();
+		return savingExtractor.extractData(resultSet);
+	}
 
-	public int deleteSaving(int SaveID, String username);
-
-	public int updateSaving(Saving saving);
-
-	public int insertEvent(Event event);
-
-	public int deleteEvent(int eventID, String username);
-
-	public int updateEvent(Event event);
-
-	public List<Event> listEventFromUsername(String username);
-
-	public int insertBudget(Budget budget);
-
-	public int deleteBudget(int eventID, String username);
-
-	public int updateBudget(Budget budget);
-
-	public List<Budget> listBudgetFromUsername(String username);
 }

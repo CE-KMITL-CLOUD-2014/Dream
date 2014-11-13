@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 
 import org.joda.money.Money;
 
-public class Budgets {
+public class Budget {
 	private int					budgetId;
 	private int					type_id;
 	private Date				startTime;
@@ -32,7 +32,7 @@ public class Budgets {
 	private Money				amount;
 	private SimpleDateFormat	format	= new SimpleDateFormat("yyyy-MM-dd");
 
-	public Budgets(int budgetId, int type_id, String startTime, String endTime,
+	public Budget(int budgetId, int type_id, String startTime, String endTime,
 			Money goal, String username, Money amount) {
 		this.budgetId = budgetId;
 		this.type_id = type_id;

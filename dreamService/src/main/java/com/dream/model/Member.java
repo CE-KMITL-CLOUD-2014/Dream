@@ -154,7 +154,6 @@ public class Member {
 		try {
 			date = new Date(format.parse(time).getTime());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return date;
