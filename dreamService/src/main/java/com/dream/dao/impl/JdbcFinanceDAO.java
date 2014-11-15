@@ -16,6 +16,8 @@
 
 package com.dream.dao.impl;
 
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -27,8 +29,8 @@ import com.dream.jdbc.FinanaceRowMapper;
 import com.dream.model.Finance;
 
 public class JdbcFinanceDAO implements FinanceDAO {
-	DataSource		dataSource;
-	JdbcTemplate	jdbcTemplate;
+	DataSource dataSource;
+	JdbcTemplate jdbcTemplate;
 
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
@@ -62,15 +64,27 @@ public class JdbcFinanceDAO implements FinanceDAO {
 	}
 
 	@Override
-	public List<Finance> findFromUsername(String username) {
-		String sql = "SELECT * FROM finance WHERE username=?";
+	public List<Finance> list(String username) {
+		String sql = "SELECT * FROM finance,finance_type WHERE username=? and finance.#finance_type = finance_type.#finance_type";
 		return (List<Finance>) jdbcTemplate.query(sql,
-				new Object[] { username },
-				new FinanaceRowMapper());
+				new Object[] { username }, new FinanaceRowMapper());
 	}
 
 	@Override
-	public boolean delete(String username) {
-		return false;
+	public int delete(String username, Timestamp dateTime) {
+		String sql = "delete from finance where username = ? and date_time = ?";
+		Object[] params = new Object[] { username, dateTime };
+		int[] types = new int[] { Types.VARCHAR, Types.TIMESTAMP };
+		return jdbcTemplate.update(sql, params, types);
 	}
+
+	@Override
+	public List<Finance> listFromDateToDate(String username, Timestamp start,
+			Timestamp end) {
+		String sql = "SELECT * FROM finance,finance_type WHERE date_time BETWEEN ? AND ? and username = ? and finance.#finance_type = finance_type.#finance_type";
+		Object[] params = new Object[] { start, end ,username};
+		int[] types = new int[] { Types.TIMESTAMP, Types.TIMESTAMP ,Types.VARCHAR};
+		return jdbcTemplate.query(sql, params, types, new FinanaceRowMapper());
+	}
+
 }

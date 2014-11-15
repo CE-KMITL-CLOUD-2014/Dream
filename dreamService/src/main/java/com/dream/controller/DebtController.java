@@ -34,9 +34,13 @@ public class DebtController {
 			@RequestParam(value = "moneyLoan", required = true) double moneyLoan,
 			@RequestParam(value = "debtRate", required = true) double debtRate,
 			@RequestParam(value = "time", required = true) double time) {
-		Debt debt = new Debt(moneyLoan, debtRate, time);
-		double ret = debt.calculate();
-		ret = Math.round(ret);
-		return new DebtCalc(ret);
+		if (moneyLoan != 0 && debtRate != 0 && time != 0) {
+			Debt debt = new Debt(moneyLoan, debtRate, time);
+			double ret = debt.calculate();
+			ret = Math.round(ret);
+			return new DebtCalc(ret);
+		}else{
+			return new DebtCalc(0);
+		}
 	}
 }

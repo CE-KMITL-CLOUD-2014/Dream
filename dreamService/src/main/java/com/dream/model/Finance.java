@@ -27,6 +27,8 @@ public class Finance {
 	private int			budgetId;
 	private int			saveId;
 	private int			eventId;
+	private int			type;
+	private String		type_description;
 
 	public Finance(int financeId, double amount, String description,
 			Timestamp dateTime, String username, int budgetId, int saveId,
@@ -39,6 +41,21 @@ public class Finance {
 		this.budgetId = budgetId;
 		this.saveId = saveId;
 		this.eventId = eventId;
+	}
+	
+	public Finance(int financeId, double amount, String description,
+			Timestamp dateTime, String username, int budgetId, int saveId,
+			int eventId,int type,String type_description) {
+		this.financeId = financeId;
+		this.amount = amount;
+		this.description = description;
+		this.dateTime = dateTime;
+		this.username = username;
+		this.budgetId = budgetId;
+		this.saveId = saveId;
+		this.eventId = eventId;
+		this.type = type;
+		this.type_description = type_description;
 	}
 
 	public int getFinanceId() {
@@ -103,6 +120,22 @@ public class Finance {
 
 	public void setEventId(int eventId) {
 		this.eventId = eventId;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public String getType_description() {
+		return type_description;
+	}
+
+	public void setType_description(String type_description) {
+		this.type_description = type_description;
 	}
 
 }

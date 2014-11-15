@@ -15,6 +15,7 @@
 
 package com.dream.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.dream.model.Finance;
@@ -24,7 +25,10 @@ public interface FinanceDAO {
 
 	public int update(Finance finance);
 
-	public List<Finance> findFromUsername(String username);
+	public List<Finance> list(String username);
 
-	public boolean delete(String username);
+	public List<Finance> listFromDateToDate(String username, Timestamp start,
+			Timestamp end);
+
+	public int delete(String username, Timestamp dateTime);
 }

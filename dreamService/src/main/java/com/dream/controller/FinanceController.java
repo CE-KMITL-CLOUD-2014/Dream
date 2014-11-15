@@ -17,10 +17,13 @@
 package com.dream.controller;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,9 +41,10 @@ import com.dream.model.Finance;
 @RequestMapping("/finance")
 public class FinanceController {
 	@Autowired
-	JdbcFinanceDAO	jdbcFinanceDAO;
+	JdbcFinanceDAO jdbcFinanceDAO;
 
-	@RequestMapping(value = "/insert", method = RequestMethod.GET)
+	@RequestMapping(value = "/insert", method = RequestMethod.POST)
+	@Secured("ROLE_USER")
 	@ResponseBody
 	public int financeInsert(
 			@RequestParam(value = "financeId", required = true) int financeId,
@@ -72,7 +76,8 @@ public class FinanceController {
 		return jdbcFinanceDAO.insert(finance);
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.GET)
+	@RequestMapping(value = "/update", method = RequestMethod.PUT)
+	@Secured("ROLE_USER")
 	@ResponseBody
 	public int financeUpdate(
 			@RequestParam(value = "financeId", required = true) int financeId,
@@ -107,8 +112,9 @@ public class FinanceController {
 				saveId, eventId);
 		return jdbcFinanceDAO.update(finance);
 	}
-	
-	@RequestMapping(value = "/find", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@Secured("ROLE_USER")
 	@ResponseBody
 	public List<Finance> financeByUser() {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
@@ -121,7 +127,53 @@ public class FinanceController {
 		} else {
 			return null;
 		}
-		return jdbcFinanceDAO.findFromUsername(userDetails
-				.getUsername());
+		return jdbcFinanceDAO.list(userDetails.getUsername());
+	}
+
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+	@Secured("ROLE_USER")
+	@ResponseBody
+	public int deleteFinance(
+			@RequestParam(value = "date_time", required = true) String date_time) {
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		Authentication authentication = securityContext.getAuthentication();
+		UserDetails userDetails;
+		if (authentication != null) {
+			Object principal = authentication.getPrincipal();
+			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
+					: null);
+		} else {
+			return -1;
+		}
+		return jdbcFinanceDAO.delete(userDetails.getUsername(),
+				Timestamp.valueOf(date_time));
+	}
+
+	@RequestMapping(value = "/listdatetodate", method = RequestMethod.GET)
+	@Secured("ROLE_USER")
+	@ResponseBody
+	public List<Finance> listDatetoDate(
+			@RequestParam(value = "start", required = true) String start,
+			@RequestParam(value = "end", required = true) String end) {
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		Authentication authentication = securityContext.getAuthentication();
+		UserDetails userDetails;
+		if (authentication != null) {
+			Object principal = authentication.getPrincipal();
+			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
+					: null);
+		} else {
+			return null;
+		}
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",java.util.Locale.US);
+		Timestamp start_date = null,end_date = null;
+		try {
+			start_date = new Timestamp(formatter.parse(start).getTime());
+			end_date = new Timestamp(formatter.parse(end).getTime());
+		} catch (ParseException e) {
+			return null;
+		}
+		return jdbcFinanceDAO.listFromDateToDate(userDetails.getUsername(),
+				start_date, end_date);
 	}
 }
