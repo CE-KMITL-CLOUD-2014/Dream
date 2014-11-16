@@ -21,11 +21,16 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 		<intercept-url pattern="/user/update" />
 		<sec:form-login authentication-success-handler-ref="mySuccessHandler"
 			authentication-failure-handler-ref="myFailureHandler" />
-		<logout delete-cookies="JSESSIONID" />
+		<sec:logout delete-cookies="JSESSIONID" success-handler-ref="httpLogoutSuccessHandler" />
+		<sec:custom-filter ref="corsAwareAuthenticationFilter" before="LOGOUT_FILTER"/>
 
 		<remember-me data-source-ref="dataSource"
 			token-validity-seconds="86400" />
 	</http>
+	
+	<!-- Bean CORS filter logout -->
+	<beans:bean id="corsAwareAuthenticationFilter" class="com.dream.controller.CORSFilter" />
+	<beans:bean id="httpLogoutSuccessHandler" class="com.dream.security.HttpLogoutSuccessHandler" />  
 
 	<!-- Connect the custom authentication success handler -->
 	<beans:bean id="mySuccessHandler"
@@ -66,7 +71,7 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 		<beans:property name="driverClassName"
 			value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 		<beans:property name="url"
-			value="jdbc:sqlserver://rnhyrbrn6o.database.windows.net:1433;database=dream_db;user=dreamService@rnhyrbrn6o;password=xxxxEIEIxxxx;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;" />
+			value="jdbc:sqlserver://rnhyrbrn6o.database.windows.net:1433;database=dream_db;user=dreamService@rnhyrbrn6o;password=CEkmitl702;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;" />
 	</beans:bean>
 
 	<!-- Enable the annotations for defining the secure role -->
