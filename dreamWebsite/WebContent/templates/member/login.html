@@ -1,0 +1,9 @@
+
+
+<form name="loginForm" ng-submit="loginFunc(member.username, member.password)" novalidate ng-if="hasLogin == false">
+	<div layout-sm="horizontal" layout-align="center">
+		<md-text-float label="Username" 	ng-model="member.username" inline-block-sm inline-block required> </md-text-float>
+		<md-text-float label="Password" type="password" 	ng-model="member.password" inline-block-sm inline-block required></md-text-float>
+	</div>
+<md-button class="md-button-raised md-button-colored" ng-show="loginForm.$valid">Login</md-button>
+</form>

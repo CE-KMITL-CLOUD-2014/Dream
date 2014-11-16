@@ -1,15 +1,25 @@
-	<div ng-controller="registerCtrl" layout="vertical" layout-sm="horizontal" style="height: 88vh">
+<div layout-sm="horizontal" layout-align="center" ng-controller="registerCtrl" style="min-height: 90vh;">
+	<form name="regisForm" ng-submit="regisFunc(member.username, member.password, member.confirmPass, member.fname, member.lname, member.nickname, member.email, member.phone, member.birth)">
+		<md-text-float label="Username" name="username"								ng-model="member.username" required> </md-text-float>
+		<md-text-float label="Password" type="password" name="password" 			ng-model="member.password" required></md-text-float>
+		<md-text-float label="Confirm Password" type="password" name="confirmPass"	ng-model="member.confirmPass" required></md-text-float>
+		<div layout-sm="horizontal" layout-align="center">
+			<md-text-float label="First Name" 	required name="fname"				ng-model="member.fname" inline-block-sm inline-block> </md-text-float>
+			<md-text-float label="Last Name" 	required name="lname"				ng-model="member.lname" inline-block-sm inline-block> </md-text-float>
+		</div>
+		<md-text-float label="Nickname" 		required name="nickname"			ng-model="member.nickname"> </md-text-float>
+		<md-text-float label="Email" 	type="email" required name="email"			ng-model="member.email"> </md-text-float>
+		
+		<md-text-float label="Phone" 			required name="phone"				ng-model="member.phone"> </md-text-float><br>
 
-			<md-card layout="vertical" layout-fill layout-align="center center">
-				<div style="padding: 20px;">
-					<form>
-						<md-text-float label="Login" ng-model="login.login" class="labelText" disabled > </md-text-float>
-						<div layout-sm="horizontal" layout-align="center">
-							<md-text-float label="Username" 	ng-model="login.username" inline-block-sm inline-block> </md-text-float>
-							<md-text-float label="Password" type="password" 	ng-model="login.password" inline-block-sm inline-block></md-text-float>
-						</div>
-							<md-button class="md-button-raised md-button-colored" ng-click="loginFunc(login.username, login.password)">Logins</md-button>
-					</form>
-				</div>
-			</md-card>
-	</div>
+	    <div class="form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
+		    <div class="col-sm-8" style="padding:0px;">
+	        <input ng-model="member.birth" type="text" class="form-control" ng-model="selectedDate" name="date" bs-datepicker placeholder="Birth Date" required name="birth">
+	     	</div>
+     	</div>
+	    <br>
+	    <br>
+		<md-button class="md-button-raised md-button-colored" ng-show="regisForm.$valid">Register</md-button>
+	</form>
+	
+</div>

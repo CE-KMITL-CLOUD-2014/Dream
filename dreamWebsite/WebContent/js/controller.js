@@ -1,6 +1,5 @@
 
-// ng-polymer-elements
-var mainApp = angular.module('mainApp',['ngCookies', 'ngMaterial']);
+var mainApp = angular.module('mainApp',['ngCookies', 'ngRoute', 'mgcrea.ngStrap', 'ngMaterial']);
 
 mainApp.config(['$httpProvider', function ($httpProvider) {
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
@@ -99,39 +98,137 @@ mainApp.config(['$httpProvider', function ($httpProvider) {
 		};
 
 	})
-
-	mainApp.controller('loginCtrl', function($scope, $http, $cookies) {
-		$scope.login = {
-			login: "Login",
+	
+	mainApp.controller('registerCtrl', function($cookieStore, $scope, $http, $filter, $window) {
+		$scope.member = {
 			username: null,
 			password: null,
-			sessionId: null
-		}
+			confirmPass: null,
+			email: null,
+			phone: null,
+			fname: null,
+			lname: null,
+			nickname: null,
+			birth: null
+		};
 
-
-		$scope.loginFunc = function(username, password, $cookies) {
+		$scope.regisFunc = function(username, password, confirmPass, fname, lname, nickname, email, phone, birth) {
+			if(password != confirmPass) {
+				alert("Password != Confirm Password")
+				return;
+			}
+			
+			var birthDate = $filter('date')(new Date(birth), "yyyy-MM-dd");
 			$http({
 				   withCredentials: true,
 			       method: 'post',
-			       url: "http://localhost:8080/dreamService/j_spring_security_check?j_username="+username+"&j_password="+password,
+			       url: "http://dreamservice.azurewebsites.net/member/insert?username="+username+"&password="+password+
+			       "&fname="+fname+"&lname="+lname+"&nickname="+nickname+"&email="+email+"&phone="+phone+"&birth="+birthDate,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
-			success(function(data, status, $cookies) {
-				alert("aaa");
-				alert("bbb");
+			success(function(data, status, headers, config) {
+				alert("Registration Complete");
+				$window.location.reload();
 			}).
-			error(function(data, status, $cookies) {
-				alert("bbbsss");
-				var abc = $cookies.JSESSIONID;
-				alert(abc);
+			error(function(data, status) {
+				alert("Timeout Server not Responsding. Please try again");
 			});
 		};
 	})
 
+	mainApp.controller('loginCtrl', function($cookieStore, $scope, $http) {
+		$scope.member;
+		$scope.hasLogin = false;
+		$scope.template;
+		$scope.checkLogin = function() {
+			$scope.member = $cookieStore.get('member');
+			$scope.hasLogin = $cookieStore.get('hasLogin');
+			if($scope.hasLogin == false) {
+				$scope.template = "templates/member/login.html";
+			}
+			else if($scope.hasLogin == true) {
+				$scope.template = "templates/member/userDetail.html";
+			} 
+			else {
+				$scope.hasLogin = false;
+				$scope.hasLogin = $cookieStore.put('hasLogin', $scope.hasLogin);
+			}
+		}
+		
+		$scope.logoutFunc = function() {
+			logout($scope,$http, $cookieStore);
+		}
+
+		$scope.loginFunc = function(username, password) {
+			$http({
+				   withCredentials: true,
+			       method: 'post',
+			       url: "http://dreamservice.azurewebsites.net/j_spring_security_check?j_username="+username+"&j_password="+password,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				if(status == 200) {
+					getUsername($scope, $http, $cookieStore);
+				}
+			}).
+			error(function(data, status) {
+				alert("Timeout Server not Responsding. Please try again");
+			});
+		};
+		
+//		$scope.toggleLeft = function() {
+//		    $mdSidenav('left').toggle();
+//		};
+//		
+//		$scope.close = function() {
+//		    $mdSidenav('left').close();
+//		};
+	})
+	
+	function logout($scope, $http, $cookieStore) {
+		$http({
+			   withCredentials: true,
+		       method: 'post',
+		       url: "http://dreamservice.azurewebsites.net/j_spring_security_logout",
+		       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+		 }).
+		success(function(data, status, headers, config) {
+			alert("Logout Complete")
+			$cookieStore.put('member', null);
+			$cookieStore.put('hasLogin', false);
+			$scope.checkLogin();
+			$scope.template = "templates/member/login.html";
+		}).
+		error(function(data, status) {
+			alert("Logout Incomplete");
+		});
+	}
+	
+	function getUsername($scope, $http, $cookieStore) {
+		$http({
+			   withCredentials: true,
+		       method: 'post',
+		       url: "http://dreamservice.azurewebsites.net/member/findfromuser",
+		       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+		 }).
+		success(function(data, status, headers, config) {
+			$scope.hasLogin = true;
+			$scope.member = data;
+			$cookieStore.put("hasLogin", $scope.hasLogin);
+			$cookieStore.put("member", $scope.member);
+			$scope.template = "templates/member/userDetail.html";
+		}).
+		error(function(data, status) {
+			alert("invalid login");
+			$scope.hasLogin = false;
+			$cookieStore.put("hasLogin", hasLogin);
+		});
+	}
+
 	function mainTabSelect ($scope, $interpolate) {
 		var tabs = [
 	      { title: 'Home', active: true, url: "templates/angular_index.html", style:"tab1"},
-	      { title: 'Member', active: false, url: "templates/login.html", style:"tab2" },
+	      { title: 'Member', active: false, url: "templates/member.html", style:"tab2" },
 	      { title: 'Debt Calulator', active: false, url: "templates/debt.html", style:"tab3" },
 	      { title: 'Finance', active: false, disabled: false, url: "templates/finance.html",style:"tab4" }
 	    ];

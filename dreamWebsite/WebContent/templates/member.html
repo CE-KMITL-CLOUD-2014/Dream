@@ -1,0 +1,39 @@
+	<div ng-controller="loginCtrl" layout="vertical" layout-sm="horizontal" style="height: 88vh" ng-init="checkLogin();">
+			<section style="min-width:15%">
+				<md-sidenav class="md-sidenav-left md-whiteframe-z5" component-id="left" is-locked-open="$media('md')">
+					<md-toolbar class="md-theme-indigo">
+					 <div layout="horizontal">
+			        	<h1 class="md-toolbar-tools" layout-align="center">Member Menu</h1>
+			        	<md-button ng-click="close()" class="md-button-fab" aria-label="close" hide-md>
+				        	<div layout-align="end start">
+				        		<md-icon icon="images/close_32.png" style="width: 32px; height: 32px;"></md-icon>
+				        	</div>
+			        	</md-button>
+			        </div>
+			     	</md-toolbar>
+			     	<md-content layout="vertical" >
+			     		<md-button class="md-button-raised md-button-colored" ng-click="close(); $parent.template='templates/member/login.html'" ng-model="template" ng-if="hasLogin == false">
+			        		Login
+			        	</md-button>
+			        	<md-button class="md-button-raised md-button-colored" ng-click="close(); $parent.template='templates/member/register.html'" ng-model="template" ng-if="hasLogin == false">
+			        		Registration
+			        	</md-button>
+			        	<md-button class="md-button-raised md-button-colored" ng-click="close(); $parent.template='templates/member/userDetail.html'" ng-if="hasLogin == true">
+			        		{{ member.username }} Detail
+			        	</md-button>
+			        	<md-divider></md-divider>
+			          	<md-button class="md-button-raised md-button-colored" ng-click="close(); logoutFunc()" ng-if="hasLogin == true">
+			          		Logout
+			          		</md-button>
+			          	<md-divider></md-divider>
+			     	</md-content>
+			    </md-sidenav>
+			</section>
+			
+			<md-content class="md-content-padding" style="height: 88vh; width: 100%; padding: 1px;" >
+				<md-card layout="vertical" layout-fill layout-align="center center" style="min-height: 90vh;">
+					<div ng-include src="template"></div>
+				</md-card>	
+			</md-content>
+
+	</div>
