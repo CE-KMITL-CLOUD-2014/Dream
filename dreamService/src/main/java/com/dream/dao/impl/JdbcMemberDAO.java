@@ -59,7 +59,7 @@ public class JdbcMemberDAO implements MemberDAO {
 
 	@Override
 	public List<Member> list() {
-		String sql = "select * from users";
+		String sql = "select * from users,authorities WHERE users.username = authorities.username";
 		return jdbcTemplate.query(sql, new MemberRowMapper());
 	}
 

@@ -111,7 +111,7 @@ public class MemberController {
 		return members;
 	}
 
-	@RequestMapping(value = "/findfromuser", method = RequestMethod.POST)
+	@RequestMapping(value = "/findfromuser", method = RequestMethod.GET)
 	@ResponseBody
 	@Secured("ROLE_USER")
 	public Member findFormUser() {

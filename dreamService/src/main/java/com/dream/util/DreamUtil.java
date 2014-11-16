@@ -19,9 +19,10 @@ package com.dream.util;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class DreamUtil {
-	private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
 
 	public static Date getCurrentDate(String time) {
 		if (time != null) {
