@@ -38,8 +38,9 @@ public class RestAuthenticationSuccessHandler extends
 			final HttpServletResponse response,
 			final Authentication authentication) throws ServletException,
 			IOException {
+		String clientOrigin = request.getHeader("origin");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
-		response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+		response.setHeader("Access-Control-Allow-Origin", clientOrigin);
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		response.setHeader("Access-Control-Max-Age", "3600");
 		response.setHeader("Access-Control-Allow-Headers", "x-requested-with, accept, content-type");
