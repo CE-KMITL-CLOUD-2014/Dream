@@ -46,6 +46,7 @@ public class Member {
 		this.birth = DreamUtil.getCurrentDate(birth);
 		this.nickname = nickname;
 		this.enable = enable;
+		this.type = "ROLE_USER";
 		this.regis_date = new Timestamp(System.currentTimeMillis());
 	}
 
