@@ -36,6 +36,7 @@ import com.dream.dao.impl.JdbcPlaningDAO;
 import com.dream.model.Budget;
 import com.dream.model.Event;
 import com.dream.model.FinanceType;
+import com.dream.model.Row;
 import com.dream.model.Saving;
 
 @RestController
@@ -49,7 +50,7 @@ public class PlaningController {
 	@RequestMapping(value = "/saving/insert", method = RequestMethod.POST)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public int insertSaving(
+	public Row insertSaving(
 			@RequestParam(value = "goal", required = true) String goal,
 			@RequestParam(value = "start_amount", required = true) String start_amount,
 			@RequestParam(value = "end_time", required = false) String end_time,
@@ -62,12 +63,12 @@ public class PlaningController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return 0;
+			return new Row(-1);
 		}
 		Saving saving = new Saving(userDetails.getUsername(),
 				Integer.parseInt(goal), Integer.parseInt(start_amount),
 				end_time, description);
-		return jdbcPlaningDao.insertSaving(saving);
+		return new Row(jdbcPlaningDao.insertSaving(saving));
 	}
 
 	@RequestMapping(value = "/saving/list", method = RequestMethod.GET)
@@ -90,7 +91,7 @@ public class PlaningController {
 	@RequestMapping(value = "/saving/delete/{saveid}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public int deleteSaving(@PathVariable("saveid") String saveid) {
+	public Row deleteSaving(@PathVariable("saveid") String saveid) {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
 		UserDetails userDetails;
@@ -99,17 +100,17 @@ public class PlaningController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return 0;
+			return new Row(-1);
 		}
-		return jdbcPlaningDao.deleteSaving(Integer.parseInt(saveid),
-				userDetails.getUsername());
+		return new Row(jdbcPlaningDao.deleteSaving(Integer.parseInt(saveid),
+				userDetails.getUsername()));
 
 	}
 
 	@RequestMapping(value = "/saving/edit/{saveid}", method = RequestMethod.PUT)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public int editSaving(
+	public Row editSaving(
 			@PathVariable("saveid") String saveid,
 			@RequestParam(value = "goal", required = true) String goal,
 			@RequestParam(value = "start_amount", required = true) String start_amount,
@@ -123,18 +124,18 @@ public class PlaningController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return 0;
+			return new Row(-1);
 		}
 		Saving saving = new Saving(Integer.parseInt(saveid),
 				userDetails.getUsername(), Integer.parseInt(goal),
 				Integer.parseInt(start_amount), end_time, description);
-		return jdbcPlaningDao.updateSaving(saving);
+		return new Row(jdbcPlaningDao.updateSaving(saving));
 	}
 
 	@RequestMapping(value = "/event/insert", method = RequestMethod.POST)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public int insertEvent(
+	public Row insertEvent(
 			@RequestParam(value = "end_time", required = false) String end_time,
 			@RequestParam(value = "description", required = true) String description) {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
@@ -145,11 +146,11 @@ public class PlaningController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return 0;
+			return new Row(-1);
 		}
 		Event event = new Event(userDetails.getUsername(), description,
 				end_time);
-		return jdbcPlaningDao.insertEvent(event);
+		return new Row(jdbcPlaningDao.insertEvent(event));
 	}
 
 	@RequestMapping(value = "/event/list", method = RequestMethod.GET)
@@ -172,7 +173,7 @@ public class PlaningController {
 	@RequestMapping(value = "/event/delete/{saveid}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public int deleteEvent(@PathVariable("saveid") String saveid) {
+	public Row deleteEvent(@PathVariable("saveid") String saveid) {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
 		UserDetails userDetails;
@@ -181,17 +182,17 @@ public class PlaningController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return 0;
+			return new Row(-1);
 		}
-		return jdbcPlaningDao.deleteEvent(Integer.parseInt(saveid),
-				userDetails.getUsername());
+		return new Row(jdbcPlaningDao.deleteEvent(Integer.parseInt(saveid),
+				userDetails.getUsername()));
 
 	}
 
 	@RequestMapping(value = "/event/edit/{eventid}", method = RequestMethod.PUT)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public int editEvent(
+	public Row editEvent(
 			@PathVariable("eventid") String eventid,
 			@RequestParam(value = "end_time", required = false) String end_time,
 			@RequestParam(value = "description", required = true) String description) {
@@ -203,17 +204,17 @@ public class PlaningController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return 0;
+			return new Row(-1);
 		}
 		Event event = new Event(Integer.parseInt(eventid),
 				userDetails.getUsername(), description, end_time);
-		return jdbcPlaningDao.updateEvent(event);
+		return new Row(jdbcPlaningDao.updateEvent(event));
 	}
 
 	@RequestMapping(value = "/budget/insert", method = RequestMethod.POST)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public int insertBudget(
+	public Row insertBudget(
 			@RequestParam(value = "type_id", required = true) String type_id,
 			@RequestParam(value = "startTime", required = true) String startTime,
 			@RequestParam(value = "endTime", required = true) String endTime,
@@ -226,14 +227,14 @@ public class PlaningController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return 0;
+			return new Row(-1);
 		}
 
 		FinanceType financeType = jdbcFinanceDAO.findFinanceType(type_id);
 
 		Budget budget = new Budget(financeType.getId(), startTime,
 				endTime, Double.parseDouble(goal), userDetails.getUsername());
-		return jdbcPlaningDao.insertBudget(budget);
+		return new Row(jdbcPlaningDao.insertBudget(budget));
 	}
 
 	@RequestMapping(value = "/budget/list", method = RequestMethod.GET)
@@ -256,7 +257,7 @@ public class PlaningController {
 	@RequestMapping(value = "/budget/delete/{budgetid}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public int deleteBudget(@PathVariable("budgetid") String budgetid) {
+	public Row deleteBudget(@PathVariable("budgetid") String budgetid) {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
 		UserDetails userDetails;
@@ -265,17 +266,17 @@ public class PlaningController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return 0;
+			return new Row(-1);
 		}
-		return jdbcPlaningDao.deleteBudget(Integer.parseInt(budgetid),
-				userDetails.getUsername());
+		return new Row(jdbcPlaningDao.deleteBudget(Integer.parseInt(budgetid),
+				userDetails.getUsername()));
 
 	}
 
 	@RequestMapping(value = "/budget/edit/{budgetid}", method = RequestMethod.PUT)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public int editBudget(
+	public Row editBudget(
 			@PathVariable("budgetid") String budgetid,
 			@RequestParam(value = "type_id", required = true) String type_id,
 			@RequestParam(value = "startTime", required = true) String startTime,
@@ -289,11 +290,11 @@ public class PlaningController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return 0;
+			return new Row(-1);
 		}
 		Budget budget = new Budget(Integer.parseInt(budgetid),
 				Integer.parseInt(type_id), startTime, endTime,
 				Double.parseDouble(goal), userDetails.getUsername());
-		return jdbcPlaningDao.updateBudget(budget);
+		return new Row(jdbcPlaningDao.updateBudget(budget));
 	}
 }

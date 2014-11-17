@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and      * 
  * limitations under the License.                                           * 
  */
-package com.dream.util;
+package com.dream.model;
 
 public class DebtCalc {
 	private double	moneyMonth;

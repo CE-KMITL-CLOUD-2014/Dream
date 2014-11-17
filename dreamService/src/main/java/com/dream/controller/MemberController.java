@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dream.dao.impl.JdbcMemberDAO;
 import com.dream.model.Member;
+import com.dream.model.Row;
 
 @RestController
 @RequestMapping("/member")
@@ -42,7 +43,7 @@ public class MemberController {
 
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	@ResponseBody
-	public int insertMember(
+	public Row insertMember(
 			@RequestParam(value = "username", required = true) String username,
 			@RequestParam(value = "password", required = true) String password,
 			@RequestParam(value = "email", required = true) String email,
@@ -55,13 +56,13 @@ public class MemberController {
 		String hashedPassword = passwordEncoder.encode(password);
 		Member member = new Member(username, hashedPassword, email, phone,
 				fname, lname, nickname, birth,"ROLE_USER", true);
-		return jdbcMemberDao.insert(member);
+		return new Row(jdbcMemberDao.insert(member));
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public int update(
+	public Row update(
 			@RequestParam(value = "email", required = true) String email,
 			@RequestParam(value = "phone", required = true) String phone,
 			@RequestParam(value = "fname", required = true) String fname,
@@ -76,17 +77,17 @@ public class MemberController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return -1;
+			return new Row(-1);
 		}
 		Member member = new Member(userDetails.getUsername(), email, phone,
 				fname, lname, birth, nickname);
-		return jdbcMemberDao.update(member);
+		return new Row(jdbcMemberDao.update(member));
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public int delete() {
+	public Row delete() {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
 		UserDetails userDetails;
@@ -95,10 +96,10 @@ public class MemberController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return -1;
+			return new Row(-1);
 		}
 		securityContext.setAuthentication(null);
-		return jdbcMemberDao.delete(userDetails.getUsername());
+		return new Row(jdbcMemberDao.delete(userDetails.getUsername()));
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
