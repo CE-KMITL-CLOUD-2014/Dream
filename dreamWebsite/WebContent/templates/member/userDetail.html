@@ -1,3 +1,34 @@
 
-Welcome {{ member.username }}
-				
+	<md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
+		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
+	</md-button>
+	<br>
+	Welcome {{ member.username }}
+	<md-divider></md-divider>
+	<md-list>
+		<md-item>
+		 	<md-item-content>
+				Full Name : {{ member.fname }}  {{ member.lname }} <br>
+			</md-item-content>
+		</md-item>
+		<md-item>
+		 	<md-item-content>
+				Nickname  : {{ member.nickname }} <br>
+			</md-item-content>
+		</md-item>
+		<md-item>
+		 	<md-item-content>
+				Email	  : {{ member.email }} <br>
+			</md-item-content>
+		</md-item>
+		<md-item>
+		 	<md-item-content>
+				Phone     : {{ member.phone }} <br>
+			</md-item-content>
+		</md-item>
+		<md-item>
+		 	<md-item-content>
+				Birth     : {{ member.birth }} <br>
+			</md-item-content>
+		</md-item>
+	</md-list>

@@ -1,1 +1,19 @@
-aaaass
+<div layout-align="start start">
+	<md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
+		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
+	</md-button>
+</div>
+<form>
+	<md-text-float label="Type"       ng-model="outcome.type" class="labelText" disabled > </md-text-float>
+	<md-button class="md-button-colored" ng-click="showGridOutcome($event)">
+      Select Type
+    </md-button>
+    <md-text-float label="Finance Type"       			ng-model="outcome.finance"    disabled></md-text-float>
+	<div layout-sm="horizontal" layout-align="center">
+		<md-text-float label="Amount" 	ng-model="outcome.amount" inline-block-sm inline-block> </md-text-float>
+	</div>
+	<md-text-float label="Detail"       			ng-model="outcome.description"    ></md-text-float>
+		<md-button class="md-button-raised md-button-colored" ng-click="addFinanceOutcome(outcome.finance, outcome.amount, outcome.description)">Add</md-button>
+</form>
+
+

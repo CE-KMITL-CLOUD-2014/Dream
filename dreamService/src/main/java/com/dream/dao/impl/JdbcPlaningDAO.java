@@ -86,7 +86,7 @@ public class JdbcPlaningDAO implements PlanningDAO {
 
 	@Override
 	public int deleteEvent(int eventID, String username) {
-		String sql1 = "update finance set #save = NULL where #event = ? and username = ?";
+		String sql1 = "update finance set #event = 1 where #event = ? and username = ?";
 		String sql2 = "DELETE from events where #event = ? and username = ?";
 		Object[] params = new Object[] { eventID, username };
 		int[] types = new int[] { Types.INTEGER, Types.VARCHAR };

@@ -1,0 +1,9 @@
+<md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
+		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
+</md-button>
+<md-text-float label="Type"       ng-model="event.type" class="labelText" disabled ></md-text-float>
+<md-text-float label="Description"       ng-model="event.description" class="labelText"></md-text-float>
+
+		<md-text-float label="Date"  type="date" name="dateField"	ng-model="event.end"  required> </md-text-float>
+
+<md-button class="md-button-raised md-button-colored" ng-click="AddEvent(event.end, event.description)">Add Event</md-button>

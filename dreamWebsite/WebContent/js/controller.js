@@ -6,6 +6,13 @@ mainApp.config(['$httpProvider', function ($httpProvider) {
     $httpProvider.defaults.useXDomain = true;
 }]);
 
+mainApp.config(function($datepickerProvider) {
+	  angular.extend($datepickerProvider.defaults, {
+		    dateFormat: 'dd/MM/yyyy',
+		    startWeek: 1
+		  });
+})
+
 	mainApp.controller('AppCtrl', function ($scope, $interpolate) {
 		var tabs = mainTabSelect($scope, $interpolate);
 	})
@@ -48,31 +55,373 @@ mainApp.config(['$httpProvider', function ($httpProvider) {
 		}
 		
 		$scope.toggleLeft = function() {
-		    $mdSidenav('left').toggle();
+		    $mdSidenav('leftDebt').toggle();
 		};
 		
 		$scope.close = function() {
-		    $mdSidenav('left').close();
+		    $mdSidenav('leftDebt').close();
 		};
 	})
+	
+	mainApp.controller('planCtrl', function ($scope, $http, $mdSidenav, $window, $mdBottomSheet) {
+		$scope.event = {
+			type: "event",
+			end:   null,
+			description: null
+		}
+		
+		$scope.save = {
+			type: "saving",
+			end: null,
+			amount: null,
+			sAmount: null
+		}
+		
+		$scope.budget = {
+			type: "budget",
+			end: null,
+			start: null,
+			amount: null,
+			finance: null
+		}
+		
+		$scope.AddBudget = function(finance, amount, start, end) {
+			if(finance == null) {
+				alert("Please select finance type");
+				return;
+			}
+			if(amount == null || amount == 0) {
+				alert("Amount can't be 0");
+				return;
+			}
+			if(start == null || end == null) {
+				alert("Please select start & end time");
+				return;
+			}
+			
+			$http({
+				   withCredentials: true,
+			       method: 'post',
+			       url: "http://dreamservice.azurewebsites.net/planing/budget/insert?type_id="+finance+"&goal="+amount+"&startTime="+start+"&endTime="+end,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.template = "templates/planing/save.html"
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+			
+		}
+		
+		$scope.showGridBudget = function($event) {
+		    $mdBottomSheet.show({
+		      templateUrl: 'templates/planing/planing_grid.html',
+		      controller: 'planingGridCtrl',
+		      targetEvent: $event
+		    }).then(function(clickedItem) {
+		      $scope.budget.finance = clickedItem.name;
+		    });
+		};
+		
+		$scope.AddSaving = function(amount, sAmount, description, end) {
+			if(amount == null) {
+				amount = 0;
+			}
+			if(sAmount == null) {
+				sAmount = 0;
+			}
+			if(description == null) {
+				description = 0;
+			}
+			if(end == null) {
+				alert("Please Insert Date");
+				return;
+			}
+			
+			$http({
+				   withCredentials: true,
+			       method: 'post',
+			       url: "http://dreamservice.azurewebsites.net/planing/saving/insert?goal="+sAmount+"&description="+description+"&end_time="+end+"&start_amount="+amount,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.template = "templates/planing/save.html"
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+			
+		}
+		
+		$scope.AddEvent = function(endTime, description) {
+			if(endTime == null) {
+				alert("Please Insert Date");
+				return;
+			}
+			if(description == null) {
+				description = "";
+			}
+			$http({
+				   withCredentials: true,
+			       method: 'post',
+			       url: "http://dreamservice.azurewebsites.net/planing/event/insert?end_time="+endTime+"&description="+description,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.template = "templates/planing/save.html"
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+		}
+		
+		$scope.eventList;
+		$scope.hasClick = false;
+		
+		$scope.listEvent = function() {
+			$http({
+				   withCredentials: true,
+			       method: 'get',
+			       url: "http://dreamservice.azurewebsites.net/planing/event/list",
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.eventList = data;
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+		}
+		
+		$scope.deleteEvent = function(eventId) {
+			$http({
+				   withCredentials: true,
+			       method: 'delete',
+			       url: "http://dreamservice.azurewebsites.net/planing/event/delete/eventid="+eventId,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.template = "templates/planing/event.html"
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+		}
+		
+		$scope.editEvent = function(eventId) {
+			
+		}
+		
+		$scope.toggleLeft = function() {
+		    $mdSidenav('leftPlan').toggle();
+		};
+		
+		$scope.close = function() {
+		    $mdSidenav('leftPlan').close();
+		};
+	})
+	
+	mainApp.controller('planingGridCtrl', function($scope, $mdBottomSheet) {
+		$scope.items = [
+		                { name: 'Food', icon: "images/income_icon/stock_48.png" },
+		                { name: 'Travel', icon: "images/income_icon/gift_48.png" },
+		                { name: 'Education', icon: 'images/income_icon/plane_48.png' },
+		                { name: 'Trip', icon: 'images/income_icon/infinity_48.png' },
+		                { name: 'Health', icon: 'images/income_icon/facebook_48.png' },
+		                { name: 'Shopping', icon: 'images/income_icon/twitter_48.png' },
+		                { name: 'Lend', icon: 'images/income_icon/twitter_48.png' },
+		                { name: 'Love', icon: 'images/income_icon/twitter_48.png' }
+		              ];
 
-	mainApp.controller('financeCtrl', function($scope, $http, $mdSidenav, $mdBottomSheet) {
+		$scope.listItemClick = function($index) {
+		    var clickedItem = $scope.items[$index];
+		    $mdBottomSheet.hide(clickedItem);
+		};
+
+	})
+
+	mainApp.controller('financeCtrl', function($scope, $http, $mdSidenav, $mdBottomSheet, $window) {
 		$scope.income = {
 			type: "income",
-			id_string: null,
 			amount: null,
-			descriotion: null,
-			username: null
+			description: null,
+			finance: null,
+			eventId: null,
+			saveId: null,
+			budgetId: null
 		}
+		
+		$scope.outcome = {
+				type: "outcome",
+				amount: null,
+				description: null,
+				finance: null,
+				eventId: null,
+				saveId: null,
+				budgetId: null
+		}
+		
+		$scope.list = {};
+		$scope.hasClick = false;
+		
+		$scope.listFinance = function() {
+			$http({
+				   withCredentials: true,
+			       method: 'get',
+			       url: "http://dreamservice.azurewebsites.net/finance/list",
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.list = data;
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+		}
+		
+		$scope.editFinance = function(finance, dateTime, amount, description) {
+			if(description == null) {
+				description = "";
+			}
+			if(amount == null) {
+				amount = 0;
+			}
+			$http({
+				   withCredentials: true,
+			       method: 'put',
+			       url: "http://dreamservice.azurewebsites.net/finance/update?finance="+finance+"&dateTime="+dateTime+"&amount="+amount+"&description="+description,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.template = "templates/finance/income.html"
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+		}
+		
+		$scope.deleteFinance = function(dateTime) {
+			$http({
+				   withCredentials: true,
+			       method: 'delete',
+			       url: "http://dreamservice.azurewebsites.net/finance/delete?date_time="+dateTime,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.template = "templates/finance/income.html"
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+		}
+		
+		$scope.addFinanceIncome = function(finance, amount, description) {
+			$http({
+				   withCredentials: true,
+			       method: 'post',
+			       url: "http://dreamservice.azurewebsites.net/finance/insert?finance="+finance+"&amount="+amount+"&description="+description,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.template = "templates/finance/activity.html"
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+		};
 
-		$scope.showGridBottomSheet = function($event) {
+		$scope.addFinanceOutcome = function(finance, amount, description) {
+			$http({
+				   withCredentials: true,
+			       method: 'post',
+			       url: "http://dreamservice.azurewebsites.net/finance/insert?finance="+finance+"&amount="+amount+"&description="+description,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.template = "templates/finance/activity.html"
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+		};
+
+		$scope.showGridIncome = function($event) {
 		    $mdBottomSheet.show({
-		      templateUrl: 'templates/finance/income_grid.html',
+		      templateUrl: 'templates/finance/list_grid.html',
 		      controller: 'incomeCtrl',
 		      targetEvent: $event
 		    }).then(function(clickedItem) {
-		      alert("clickedItem.name" + clickedItem.name);
+		      $scope.income.finance = clickedItem.name;
 		    });
+		};
+		
+		$scope.showGridOutcome = function($event) {
+		    $mdBottomSheet.show({
+		      templateUrl: 'templates/finance/list_grid.html',
+		      controller: 'outcomeCtrl',
+		      targetEvent: $event
+		    }).then(function(clickedItem) {
+		      $scope.outcome.finance = clickedItem.name;
+		    });
+		};
+		
+		$scope.toggleLeft = function() {
+		    $mdSidenav('leftFinance').toggle();
+		};
+		
+		$scope.close = function() {
+		    $mdSidenav('leftFinance').close();
 		};
 	})
 
@@ -80,16 +429,29 @@ mainApp.config(['$httpProvider', function ($httpProvider) {
 		$scope.items = [
 		                { name: 'Stock', icon: "images/income_icon/stock_48.png" },
 		                { name: 'Gift', icon: "images/income_icon/gift_48.png" },
-		                { name: 'Plane', icon: 'images/income_icon/plane_48.png' },
-		                { name: 'Infinity', icon: 'images/income_icon/infinity_48.png' },
-		                { name: 'Facebook', icon: 'images/income_icon/facebook_48.png' },
-		                { name: 'Twitter', icon: 'images/income_icon/twitter_48.png' },
-		                { name: 'Skype', icon: 'images/income_icon/skype_48.png' },
-		                { name: 'Tumblur', icon: 'images/income_icon/tumblur_48.png' },
-		                { name: 'Heart', icon: 'images/income_icon/heart_48.png' },
-		                { name: 'Phone', icon: 'images/income_icon/phone_48.png' },
-		                { name: 'Notebook', icon: 'images/income_icon/notebook_48.png' },
-		                { name: 'Hospital', icon: 'images/income_icon/hospital_48.png' }
+		                { name: 'Salary', icon: 'images/income_icon/plane_48.png' },
+		                { name: 'Bonus', icon: 'images/income_icon/infinity_48.png' },
+		                { name: 'Interest', icon: 'images/income_icon/facebook_48.png' },
+		                { name: 'Borrow', icon: 'images/income_icon/twitter_48.png' }
+		              ];
+
+		$scope.listItemClick = function($index) {
+		    var clickedItem = $scope.items[$index];
+		    $mdBottomSheet.hide(clickedItem);
+		};
+
+	})
+	
+	mainApp.controller('outcomeCtrl', function($scope, $mdBottomSheet) {
+		$scope.items = [
+		                { name: 'Food', icon: "images/income_icon/stock_48.png" },
+		                { name: 'Travel', icon: "images/income_icon/gift_48.png" },
+		                { name: 'Education', icon: 'images/income_icon/plane_48.png' },
+		                { name: 'Trip', icon: 'images/income_icon/infinity_48.png' },
+		                { name: 'Health', icon: 'images/income_icon/facebook_48.png' },
+		                { name: 'Shopping', icon: 'images/income_icon/twitter_48.png' },
+		                { name: 'Lend', icon: 'images/income_icon/twitter_48.png' },
+		                { name: 'Love', icon: 'images/income_icon/twitter_48.png' }
 		              ];
 
 		$scope.listItemClick = function($index) {
@@ -136,7 +498,7 @@ mainApp.config(['$httpProvider', function ($httpProvider) {
 		};
 	})
 
-	mainApp.controller('loginCtrl', function($cookieStore, $scope, $http) {
+	mainApp.controller('memberCtrl', function($cookieStore, $scope, $http, $window, $mdSidenav) {
 		$scope.member;
 		$scope.hasLogin = false;
 		$scope.template;
@@ -152,6 +514,7 @@ mainApp.config(['$httpProvider', function ($httpProvider) {
 			else {
 				$scope.hasLogin = false;
 				$scope.hasLogin = $cookieStore.put('hasLogin', $scope.hasLogin);
+				$window.location.reload();
 			}
 		}
 		
@@ -176,13 +539,13 @@ mainApp.config(['$httpProvider', function ($httpProvider) {
 			});
 		};
 		
-//		$scope.toggleLeft = function() {
-//		    $mdSidenav('left').toggle();
-//		};
-//		
-//		$scope.close = function() {
-//		    $mdSidenav('left').close();
-//		};
+		$scope.toggleLeft = function() {
+		    $mdSidenav('leftMem').toggle();
+		};
+		
+		$scope.close = function() {
+		    $mdSidenav('leftMem').close();
+		};
 	})
 	
 	function logout($scope, $http, $cookieStore) {
@@ -207,7 +570,7 @@ mainApp.config(['$httpProvider', function ($httpProvider) {
 	function getUsername($scope, $http, $cookieStore) {
 		$http({
 			   withCredentials: true,
-		       method: 'post',
+		       method: 'get',
 		       url: "http://dreamservice.azurewebsites.net/member/findfromuser",
 		       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 		 }).
@@ -227,16 +590,16 @@ mainApp.config(['$httpProvider', function ($httpProvider) {
 
 	function mainTabSelect ($scope, $interpolate) {
 		var tabs = [
-	      { title: 'Home', active: true, url: "templates/angular_index.html", style:"tab1"},
-	      { title: 'Member', active: false, url: "templates/member.html", style:"tab2" },
-	      { title: 'Debt Calulator', active: false, url: "templates/debt.html", style:"tab3" },
-	      { title: 'Finance', active: false, disabled: false, url: "templates/finance.html",style:"tab4" }
+	      { title: 'Member', active: false, url: "templates/member.html", style:"tab1" },
+	      { title: 'Debt Calulator', active: false, url: "templates/debt.html", style:"tab2" },
+	      { title: 'Finance', active: false, disabled: false, url: "templates/finance.html",style:"tab3" },
+	      { title: 'Planing', active: true, url: "templates/planing.html", style:"tab4"},
 	    ];
 
 	    $scope.tabs = tabs;
 	    $scope.predicate = "title";
 	    $scope.reversed = true;
-	    $scope.selectedIndex = 1;
+	    $scope.selectedIndex = 0;
 	    $scope.allowDisable = true;
 
 	    $scope.onTabSelected = onTabSelected;

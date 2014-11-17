@@ -1,0 +1,14 @@
+<md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
+		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
+</md-button>
+<md-text-float label="Type"       ng-model="budget.type" class="labelText" disabled ></md-text-float>
+<md-button class="md-button-colored" ng-click="showGridBudget($event)">
+      Select Type
+</md-button>
+<md-text-float label="Finance Type"       ng-model="budget.finance" class="labelText" disabled></md-text-float>	
+<md-text-float label="Amount"       ng-model="budget.amount" class="labelText"></md-text-float>		
+		
+		<md-text-float label="Start Date"  type="date"ng-model="budget.start"  required> </md-text-float>
+		<md-text-float label="End Date"  type="date"	ng-model="budget.end"  required> </md-text-float>
+
+<md-button class="md-button-raised md-button-colored" ng-click="AddBudget(budget.finance, budget.amount, budget.start, budget.end)">Add Budget</md-button>

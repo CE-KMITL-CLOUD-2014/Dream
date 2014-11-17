@@ -1,5 +1,7 @@
 
-
+<md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
+		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
+</md-button>
 <form name="loginForm" ng-submit="loginFunc(member.username, member.password)" novalidate ng-if="hasLogin == false">
 	<div layout-sm="horizontal" layout-align="center">
 		<md-text-float label="Username" 	ng-model="member.username" inline-block-sm inline-block required> </md-text-float>

@@ -1,5 +1,5 @@
 	<div ng-controller="financeCtrl" layout="vertical" layout-sm="horizontal">
-		<md-card style="width:15%">
+		<section style="min-width:15%">
 			<md-sidenav class="md-sidenav-left md-whiteframe-z5" component-id="leftFinance" is-locked-open="$media('md')">
 				<md-toolbar class="md-theme-indigo">
 				 <div layout="horizontal">
@@ -17,12 +17,14 @@
 		        		<md-divider></md-divider>
 		          		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/finance/outcome.html'; close()">Outcome</md-button>
 		          		<md-divider></md-divider>
+		          		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/finance/activity.html'; close()">All Activities</md-button>
+		          		<md-divider></md-divider>
 		     	</md-content>
 		    </md-sidenav>
-		</md-card>
+		</section>
 
-		<md-content flex class="md-content-padding">
-			<md-card layout="vertical" layout-fill layout-align="center center">
+		<md-content class="md-content-padding" style="min-height: 88vh; width: 100%; padding: 1px;" >
+			<md-card layout="vertical" layout-fill layout-align="center center" style="min-height: 88vh; width: 100%;">
 			<div style="padding: 20px;">
 				<div ng-include src="template" ng-init="template='templates/finance/income.html'"></div>
 			</div>

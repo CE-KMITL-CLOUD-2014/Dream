@@ -1,0 +1,22 @@
+<md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
+		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
+</md-button>
+<table class="table table-striped" ng-init="listEvent()">
+  <th>End Date</th>
+  <th>Description</th>
+  <tr ng-repeat="item in eventList">
+<!--   <td>{{ item.end_time | date:'yyyy/MM/dd'}}</td> -->
+  <td><input type="date" ng-if="hasClick" ng-model="item.end_time"><span ng-if="hasClick == false">{{ item.end_time }}</span></td>
+  <td><md-text-float ng-if="hasClick" ng-model="item.description"></md-text-float><span ng-if="hasClick == false">{{ item.description }}</span></td>
+  <td>
+  <md-button class="md-button-raised md-button-colored" ng-click="editEvent(item.eventID, item.end_time, item.description)" ng-if="hasClick == true">edit</md-button>
+  </td>
+  <td>
+  <md-button class="md-button-raised md-button-colored" ng-click="deleteEvent(item.eventID)" ng-if="hasClick == true">delete</md-button>
+  </td>
+  </tr>
+  <tr>
+  	<td><md-button class="md-button-raised md-button-colored" ng-click="hasClick=true">Edit</md-button></td>
+  	<td ng-show="hasClick==true"><md-button class="md-button-raised md-button-colored" ng-click="hasClick=false">Cancle</md-button></td>
+  </tr>
+</table>

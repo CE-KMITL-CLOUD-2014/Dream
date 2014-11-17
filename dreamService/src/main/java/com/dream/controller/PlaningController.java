@@ -169,10 +169,10 @@ public class PlaningController {
 		return jdbcPlaningDao.listEventFromUsername(userDetails.getUsername());
 	}
 
-	@RequestMapping(value = "/event/delete/{saveid}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/event/delete/{eventid}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public int deleteEvent(@PathVariable("saveid") String saveid) {
+	public int deleteEvent(@PathVariable("eventid") String saveid) {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
 		UserDetails userDetails;
