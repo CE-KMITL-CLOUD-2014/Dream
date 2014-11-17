@@ -31,9 +31,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dream.dao.impl.JdbcFinanceDAO;
 import com.dream.dao.impl.JdbcPlaningDAO;
 import com.dream.model.Budget;
 import com.dream.model.Event;
+import com.dream.model.FinanceType;
 import com.dream.model.Saving;
 
 @RestController
@@ -41,8 +43,10 @@ import com.dream.model.Saving;
 public class PlaningController {
 	@Autowired
 	JdbcPlaningDAO jdbcPlaningDao;
+	@Autowired
+	JdbcFinanceDAO	jdbcFinanceDAO;
 
-	@RequestMapping(value = "/saving/insert", method = RequestMethod.POST)
+	@RequestMapping(value = "/saving/insert", method = RequestMethod.GET)
 	@ResponseBody
 	@Secured("ROLE_USER")
 	public int insertSaving(
@@ -127,7 +131,7 @@ public class PlaningController {
 		return jdbcPlaningDao.updateSaving(saving);
 	}
 
-	@RequestMapping(value = "/event/insert", method = RequestMethod.POST)
+	@RequestMapping(value = "/event/insert", method = RequestMethod.GET)
 	@ResponseBody
 	@Secured("ROLE_USER")
 	public int insertEvent(
@@ -206,7 +210,7 @@ public class PlaningController {
 		return jdbcPlaningDao.updateEvent(event);
 	}
 
-	@RequestMapping(value = "/budget/insert", method = RequestMethod.POST)
+	@RequestMapping(value = "/budget/insert", method = RequestMethod.GET)
 	@ResponseBody
 	@Secured("ROLE_USER")
 	public int insertBudget(
@@ -224,7 +228,10 @@ public class PlaningController {
 		} else {
 			return 0;
 		}
-		Budget budget = new Budget(Integer.parseInt(type_id), startTime,
+
+		FinanceType financeType = jdbcFinanceDAO.findFinanceType(type_id);
+
+		Budget budget = new Budget(financeType.getId(), startTime,
 				endTime, Double.parseDouble(goal), userDetails.getUsername());
 		return jdbcPlaningDao.insertBudget(budget);
 	}

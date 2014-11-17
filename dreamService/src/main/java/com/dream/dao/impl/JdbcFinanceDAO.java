@@ -26,7 +26,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.dream.dao.FinanceDAO;
 import com.dream.jdbc.FinanaceRowMapper;
+import com.dream.jdbc.FinanceTypeRowMapper;
 import com.dream.model.Finance;
+import com.dream.model.FinanceType;
 
 public class JdbcFinanceDAO implements FinanceDAO {
 	DataSource dataSource;
@@ -43,7 +45,7 @@ public class JdbcFinanceDAO implements FinanceDAO {
 		String sql = "INSERT INTO finance (username, #finance_type, date_time, amount, description, #budget, #save, #event)"
 				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		numRow = jdbcTemplate.update(sql, finance.getUsername(),
-				finance.getSaveId(), finance.getDateTime(),
+				finance.getFinanceId(), finance.getDateTime(),
 				finance.getAmount(), finance.getDescription(),
 				finance.getBudgetId(), finance.getSaveId(),
 				finance.getEventId());
@@ -55,11 +57,11 @@ public class JdbcFinanceDAO implements FinanceDAO {
 		int numRow;
 		String sql = "UPDATE finance SET amount=?,description=?,#budget=?, #save=?, #finance_type=?, #event=?"
 				+ " WHERE username=? and date_time=?";
-		numRow = jdbcTemplate.update(sql, finance.getUsername(),
-				finance.getFinanceId(), finance.getDateTime(),
-				finance.getAmount(), finance.getDescription(),
-				finance.getBudgetId(), finance.getSaveId(),
-				finance.getEventId());
+		numRow = jdbcTemplate.update(sql, finance.getAmount(),
+				finance.getDescription(), finance.getBudgetId(),
+				finance.getSaveId(), finance.getFinanceId(),
+				finance.getEventId(), finance.getUsername(),
+				finance.getDateTime());
 		return numRow;
 	}
 
@@ -87,4 +89,9 @@ public class JdbcFinanceDAO implements FinanceDAO {
 		return jdbcTemplate.query(sql, params, types, new FinanaceRowMapper());
 	}
 
+	public FinanceType findFinanceType(String description) {
+		String sql = "SELECT * FROM finance_type WHERE description= ?";
+		return jdbcTemplate.queryForObject(sql, new Object[] { description },
+				new FinanceTypeRowMapper());
+	}
 }
