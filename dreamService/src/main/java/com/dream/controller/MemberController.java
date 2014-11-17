@@ -58,7 +58,7 @@ public class MemberController {
 		return jdbcMemberDao.insert(member);
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	@ResponseBody
 	@Secured("ROLE_USER")
 	public int update(
@@ -83,7 +83,7 @@ public class MemberController {
 		return jdbcMemberDao.update(member);
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	@ResponseBody
 	@Secured("ROLE_USER")
 	public int delete() {
@@ -97,6 +97,7 @@ public class MemberController {
 		} else {
 			return -1;
 		}
+		securityContext.setAuthentication(null);
 		return jdbcMemberDao.delete(userDetails.getUsername());
 	}
 

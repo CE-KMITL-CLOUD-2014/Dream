@@ -46,7 +46,7 @@ public class PlaningController {
 	@Autowired
 	JdbcFinanceDAO	jdbcFinanceDAO;
 
-	@RequestMapping(value = "/saving/insert", method = RequestMethod.GET)
+	@RequestMapping(value = "/saving/insert", method = RequestMethod.POST)
 	@ResponseBody
 	@Secured("ROLE_USER")
 	public int insertSaving(
@@ -131,7 +131,7 @@ public class PlaningController {
 		return jdbcPlaningDao.updateSaving(saving);
 	}
 
-	@RequestMapping(value = "/event/insert", method = RequestMethod.GET)
+	@RequestMapping(value = "/event/insert", method = RequestMethod.POST)
 	@ResponseBody
 	@Secured("ROLE_USER")
 	public int insertEvent(
@@ -210,7 +210,7 @@ public class PlaningController {
 		return jdbcPlaningDao.updateEvent(event);
 	}
 
-	@RequestMapping(value = "/budget/insert", method = RequestMethod.GET)
+	@RequestMapping(value = "/budget/insert", method = RequestMethod.POST)
 	@ResponseBody
 	@Secured("ROLE_USER")
 	public int insertBudget(

@@ -44,7 +44,7 @@ public class FinanceController {
 	@Autowired
 	JdbcFinanceDAO jdbcFinanceDAO;
 
-	@RequestMapping(value = "/insert", method = RequestMethod.GET)
+	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	@Secured("ROLE_USER")
 	@ResponseBody
 	public int financeInsert(
@@ -80,7 +80,7 @@ public class FinanceController {
 		return jdbcFinanceDAO.insert(finance);
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.GET)
+	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	@Secured("ROLE_USER")
 	@ResponseBody
 	public int financeUpdate(
@@ -137,7 +137,7 @@ public class FinanceController {
 		return jdbcFinanceDAO.list(userDetails.getUsername());
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	@Secured("ROLE_USER")
 	@ResponseBody
 	public int deleteFinance(
