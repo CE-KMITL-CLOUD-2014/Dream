@@ -85,7 +85,7 @@ public class FinanceHealthController {
 		return financeHealth.debtRatio(debt, totalAsset);
 	}
 
-	@RequestMapping(value = "/savingration", method = RequestMethod.GET)
+	@RequestMapping(value = "/savingratio", method = RequestMethod.GET)
 	@ResponseBody
 	public double savingRation(
 			@RequestParam(value = "savingPerYear", required = true) double savingPerYear,
