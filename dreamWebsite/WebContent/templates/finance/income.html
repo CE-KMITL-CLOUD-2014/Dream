@@ -5,16 +5,15 @@
 </div>
 <form>
 	<md-text-float label="Type"       ng-model="income.type" class="labelText" disabled > </md-text-float>
-	<md-button class="md-button-colored" ng-click="showGridBottomSheet($event)">
-      Show as Grid
+	<md-button class="md-button-colored" ng-click="showGridIncome($event)">
+      Select Type
     </md-button>
+    <md-text-float label="Finance Type"       			ng-model="income.finance"    disabled></md-text-float>
 	<div layout-sm="horizontal" layout-align="center">
-		<md-text-float label="Principle Money" 	ng-model="income.totalMoney" inline-block-sm inline-block> </md-text-float>
-		<md-text-float label="debt Rate"  		ng-model="income.debtRate" inline-block-sm inline-block></md-text-float>
+		<md-text-float label="Amount" 	ng-model="income.amount" inline-block-sm inline-block> </md-text-float>
 	</div>
-	<md-text-float label="Time"       			ng-model="income.time"    ></md-text-float>
-		<md-button class="md-button-raised md-button-colored" ng-click="getDebtLoan(income.totalMoney, income.debtRate, income.time)">Calculate</md-button>
+	<md-text-float label="Detail"       			ng-model="income.description"    ></md-text-float>
+		<md-button class="md-button-raised md-button-colored" ng-click="addFinanceIncome(income.finance, income.amount, income.description)">Add</md-button>
 </form>
-<md-text-float label="Money From Debt Per Month" 			ng-model="income.moneyDebt" disabled></md-text-float>
 
 

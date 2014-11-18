@@ -1,3 +1,7 @@
+
+<md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
+		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
+</md-button>
 <div layout-sm="horizontal" layout-align="center" ng-controller="registerCtrl" style="min-height: 90vh;">
 	<form name="regisForm" ng-submit="regisFunc(member.username, member.password, member.confirmPass, member.fname, member.lname, member.nickname, member.email, member.phone, member.birth)">
 		<md-text-float label="Username" name="username"								ng-model="member.username" required> </md-text-float>
@@ -14,7 +18,7 @@
 
 	    <div class="form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
 		    <div class="col-sm-8" style="padding:0px;">
-	        <input ng-model="member.birth" type="text" class="form-control" ng-model="selectedDate" name="date" bs-datepicker placeholder="Birth Date" required name="birth">
+	        <md-text-float label="BirthDate"  type="date"	ng-model="member.birth" > </md-text-float>
 	     	</div>
      	</div>
 	    <br>

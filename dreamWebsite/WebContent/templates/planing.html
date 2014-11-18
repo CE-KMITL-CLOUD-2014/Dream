@@ -1,0 +1,35 @@
+	<div ng-controller="planCtrl" layout="vertical" layout-sm="horizontal">
+		<section style="min-width:15%">
+			<md-sidenav class="md-sidenav-left md-whiteframe-z5" component-id="leftPlan" is-locked-open="$media('md')">
+				<md-toolbar class="md-theme-indigo">
+				 <div layout="horizontal">
+		        	<h1 class="md-toolbar-tools" layout-align="center">Planing Menu</h1>
+		        	<md-button ng-click="close()" class="md-button-fab" aria-label="close" hide-md>
+			        	<div layout-align="end start">
+			        		<md-icon icon="images/close_32.png" style="width: 32px; height: 32px;"></md-icon>
+			        	</div>
+		        	</md-button>
+		        </div>
+		     	</md-toolbar>
+		     	<md-content layout="vertical">
+		     			<md-divider></md-divider>
+		        		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/planing/event.html'; close()">Event</md-button>
+		          		<md-divider></md-divider>
+		          		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/planing/save.html'; close()">Save</md-button>
+		          		<md-divider></md-divider>
+		          		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/planing/budget.html'; close()">Budget</md-button>
+		          		<md-divider></md-divider>
+		          		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/planing/event_activity.html'; close()">Event Activities</md-button>
+		          		<md-divider></md-divider>
+		     	</md-content>
+		    </md-sidenav>
+		</section>
+
+		<md-content class="md-content-padding" style="min-height: 88vh; width: 100%; padding: 1px;" >
+			<md-card layout="vertical" layout-fill layout-align="center center" style="min-height: 88vh; width: 100%;">
+			<div style="padding: 20px;">
+				<div ng-include src="template" ng-init="template='templates/planing/event.html'"></div>
+			</div>
+			</md-card>
+		</md-content>
+	</div>
