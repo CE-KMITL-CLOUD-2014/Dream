@@ -4,6 +4,11 @@
 <md-text-float label="Type"       ng-model="event.type" class="labelText" disabled ></md-text-float>
 <md-text-float label="Description"       ng-model="event.description" class="labelText"></md-text-float>
 
-		<md-text-float label="Date"  type="date" name="dateField"	ng-model="event.end"  required> </md-text-float>
+<div class="form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
+	<input type="text" data-min-date="today" data-autoclose="1" ng-model="event.end" name="dateField" bs-datepicker
+	placeholder="End Date">
+</div>
 
 <md-button class="md-button-raised md-button-colored" ng-click="AddEvent(event.end, event.description)">Add Event</md-button>
+
+

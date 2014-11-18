@@ -2,14 +2,21 @@
 		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
 </md-button>
 <table class="table table-striped" ng-init="listEvent()">
+<tr>
   <th>End Date</th>
   <th>Description</th>
+</tr>
   <tr ng-repeat="item in eventList">
 <!--   <td>{{ item.end_time | date:'yyyy/MM/dd'}}</td> -->
-  <td><input type="date" ng-if="hasClick" ng-model="item.end_time"><span ng-if="hasClick == false">{{ item.end_time }}</span></td>
+  	<td><div class="form-group" ng-class="{'has-error': datepickerForm.date.$invalid}" ng-if="hasClick">
+			<input type="text" data-min-date="today" data-autoclose="1" ng-model="item.end_time" name="dateField" bs-datepicker
+			placeholder="End Date">
+		</div>
+		<span ng-if="hasClick == false">{{ item.end_time }}</span>
+	</td>
   <td><md-text-float ng-if="hasClick" ng-model="item.description"></md-text-float><span ng-if="hasClick == false">{{ item.description }}</span></td>
   <td>
-  <md-button class="md-button-raised md-button-colored" ng-click="editEvent(item.eventID, item.end_time, item.description)" ng-if="hasClick == true">edit</md-button>
+  <md-button class="md-button-raised md-button-colored" ng-click="editEvent(item.eventID, item.end_time, item.description); afterClick()" ng-if="hasClick == true">edit</md-button>
   </td>
   <td>
   <md-button class="md-button-raised md-button-colored" ng-click="deleteEvent(item.eventID)" ng-if="hasClick == true">delete</md-button>

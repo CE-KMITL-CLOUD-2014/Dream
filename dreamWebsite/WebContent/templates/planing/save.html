@@ -2,10 +2,14 @@
 		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
 </md-button>
 <md-text-float label="Type"       ng-model="save.type" class="labelText" disabled ></md-text-float>
-<md-text-float label="Start Amount"       ng-model="save.amount" class="labelText"></md-text-float>
-<md-text-float label="Goal Amount"       ng-model="save.sAmount" class="labelText"></md-text-float>
+<md-text-float label="Start Amount"       ng-model="save.sAmount" class="labelText"></md-text-float>
+<md-text-float label="Goal Amount"       ng-model="save.amount" class="labelText"></md-text-float>
 <md-text-float label="Description"       ng-model="save.description" class="labelText"></md-text-float>
 
-		<md-text-float label="Date"  type="date" name="dateField"	ng-model="save.end"  required> </md-text-float>
+<div class="form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
+	<input type="text" data-min-date="today" data-autoclose="1" ng-model="save.end" name="dateField" bs-datepicker
+	placeholder="End Date">
+</div>
+		
 
 <md-button class="md-button-raised md-button-colored" ng-click="AddSaving(save.amount, save.sAmount, save.description, save.end)">Add Saving</md-button>

@@ -8,7 +8,12 @@
 <md-text-float label="Finance Type"       ng-model="budget.finance" class="labelText" disabled></md-text-float>	
 <md-text-float label="Amount"       ng-model="budget.amount" class="labelText"></md-text-float>		
 		
-		<md-text-float label="Start Date"  type="date"ng-model="budget.start"  required> </md-text-float>
-		<md-text-float label="End Date"  type="date"	ng-model="budget.end"  required> </md-text-float>
+
+<div class="form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
+	<input type="text" data-min-date="today" data-autoclose="1" ng-model="budget.start" name="dateField" bs-datepicker
+	placeholder="Start Date">
+	<input type="text" data-min-date="today" data-autoclose="1" ng-model="budget.end" name="dateField" bs-datepicker
+	placeholder="End Date">
+</div>
 
 <md-button class="md-button-raised md-button-colored" ng-click="AddBudget(budget.finance, budget.amount, budget.start, budget.end)">Add Budget</md-button>

@@ -17,10 +17,9 @@
 		<md-text-float label="Phone" 			required name="phone"				ng-model="member.phone"> </md-text-float><br>
 
 	    <div class="form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
-		    <div class="col-sm-8" style="padding:0px;">
-	        <md-text-float label="BirthDate"  type="date"	ng-model="member.birth" > </md-text-float>
-	     	</div>
-     	</div>
+			<input type="text" data-max-date="today" data-autoclose="1" ng-model="member.birth" name="dateField" bs-datepicker
+			placeholder="Birth Date">
+		</div>
 	    <br>
 	    <br>
 		<md-button class="md-button-raised md-button-colored" ng-show="regisForm.$valid">Register</md-button>

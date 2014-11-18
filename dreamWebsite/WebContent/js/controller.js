@@ -35,7 +35,7 @@ mainApp.config(function($datepickerProvider) {
 			}
 		
 		$scope.getDebtLoan = function(totalMoney, debtRate, time) {
-			$http.get("http://dreamservice.azurewebsites.net/debt/cal?moneyLoan="+totalMoney+"&debtRate="+debtRate+"&time="+time).
+			$http.get("http://localhost:8080/dreamService/debt/cal?moneyLoan="+totalMoney+"&debtRate="+debtRate+"&time="+time).
 			success(function(data,status){
 				$scope.debtLoan.payMonth = data.moneyMonth;
 			}).
@@ -45,7 +45,7 @@ mainApp.config(function($datepickerProvider) {
 		}
 		
 		$scope.getDebtSave = function(totalMoney, debtRate, time) {
-			$http.get("http://dreamservice.azurewebsites.net/debt/cal?moneyLoan="+totalMoney+"&debtRate="+debtRate+"&time="+time).
+			$http.get("http://localhost:8080/dreamService/debt/cal?moneyLoan="+totalMoney+"&debtRate="+debtRate+"&time="+time).
 			success(function(data,status){
 				$scope.debtSave.moneyDebt = data.moneyDebt;
 			}).
@@ -63,7 +63,7 @@ mainApp.config(function($datepickerProvider) {
 		};
 	})
 	
-	mainApp.controller('planCtrl', function ($scope, $http, $mdSidenav, $window, $mdBottomSheet) {
+	mainApp.controller('planCtrl', function ($scope, $http, $mdSidenav, $window, $mdBottomSheet, $filter) {
 		$scope.event = {
 			type: "event",
 			end:   null,
@@ -85,6 +85,8 @@ mainApp.config(function($datepickerProvider) {
 			finance: null
 		}
 		
+		$scope.hasClick = false;
+		
 		$scope.AddBudget = function(finance, amount, start, end) {
 			if(finance == null) {
 				alert("Please select finance type");
@@ -98,11 +100,11 @@ mainApp.config(function($datepickerProvider) {
 				alert("Please select start & end time");
 				return;
 			}
-			
+			var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
 			$http({
 				   withCredentials: true,
 			       method: 'post',
-			       url: "http://dreamservice.azurewebsites.net/planing/budget/insert?type_id="+finance+"&goal="+amount+"&startTime="+start+"&endTime="+end,
+			       url: "http://localhost:8080/dreamService/planing/budget/insert?type_id="+finance+"&goal="+amount+"&startTime="+start+"&endTime="+endDate,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
@@ -143,11 +145,71 @@ mainApp.config(function($datepickerProvider) {
 				alert("Please Insert Date");
 				return;
 			}
-			
+			if(amount - sAmount < 0) {
+				alert("Amount is less than start amount !!");
+				return;
+			} else if( amount - sAmount == 0) {
+				alert("Amount is equal with start amount !!");
+				return;
+			}
+			var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
 			$http({
 				   withCredentials: true,
 			       method: 'post',
-			       url: "http://dreamservice.azurewebsites.net/planing/saving/insert?goal="+sAmount+"&description="+description+"&end_time="+end+"&start_amount="+amount,
+			       url: "http://localhost:8080/dreamService/planing/saving/insert?goal="+amount+"&description="+description+"&end_time="+endDate+"&start_amount="+sAmount,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.template = "templates/planing/save_activity.html";
+				$scope.saving.end = null;
+				$scope.saving.amount = null;
+				$scope.saving.sAmount = null;
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+			
+		}
+		
+		$scope.savingList;
+		
+		$scope.listSaving = function() {
+			$http({
+				   withCredentials: true,
+			       method: 'get',
+			       url: "http://localhost:8080/dreamService/planing/saving/list",
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.savingList = data;
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+		}
+		
+		$scope.editSaving = function(saveID, end, amount, goal, description) {
+			if(goal - amount < 0) {
+				alert("Goal is less than amount");
+				return;
+			}else if(goal - amount == 0) {
+				alert("Your Goal Complete. Congratulation !!");
+			}
+			var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
+			$http({
+				   withCredentials: true,
+			       method: 'put',
+			       url: "http://localhost:8080/dreamService/planing/saving/edit/"+saveID+"?goal="+goal+"&start_amount="+amount+"&end_time="+endDate+"&description="+description,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
@@ -161,7 +223,26 @@ mainApp.config(function($datepickerProvider) {
 					alert("Timeout Server not Responsding. Please try again");
 				}
 			});
-			
+		}
+		
+		$scope.deleteSaving = function(saveID) {
+			$http({
+				   withCredentials: true,
+			       method: 'delete',
+			       url: "http://localhost:8080/dreamService/planing/saving/delete/"+saveID,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.template = "templates/planing/save.html"
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
 		}
 		
 		$scope.AddEvent = function(endTime, description) {
@@ -172,14 +253,17 @@ mainApp.config(function($datepickerProvider) {
 			if(description == null) {
 				description = "";
 			}
+			var endDate = $filter('date')(new Date(endTime), "yyyy-MM-dd");
 			$http({
 				   withCredentials: true,
 			       method: 'post',
-			       url: "http://dreamservice.azurewebsites.net/planing/event/insert?end_time="+endTime+"&description="+description,
+			       url: "http://localhost:8080/dreamService/planing/event/insert?end_time="+endDate+"&description="+description,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
-				$scope.template = "templates/planing/save.html"
+				$scope.template = "templates/planing/event_activity.html";
+				$scope.event.end = null;
+				$scope.event.description = null;
 			}).
 			error(function(data, status) {
 				if(status == 401) {
@@ -192,13 +276,12 @@ mainApp.config(function($datepickerProvider) {
 		}
 		
 		$scope.eventList;
-		$scope.hasClick = false;
 		
 		$scope.listEvent = function() {
 			$http({
 				   withCredentials: true,
 			       method: 'get',
-			       url: "http://dreamservice.azurewebsites.net/planing/event/list",
+			       url: "http://localhost:8080/dreamService/planing/event/list",
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
@@ -218,7 +301,7 @@ mainApp.config(function($datepickerProvider) {
 			$http({
 				   withCredentials: true,
 			       method: 'delete',
-			       url: "http://dreamservice.azurewebsites.net/planing/event/delete/eventid="+eventId,
+			       url: "http://localhost:8080/dreamService/planing/event/delete/"+eventId,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
@@ -234,8 +317,25 @@ mainApp.config(function($datepickerProvider) {
 			});
 		}
 		
-		$scope.editEvent = function(eventId) {
-			
+		$scope.editEvent = function(eventId, end, description) {
+			var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
+			$http({
+				   withCredentials: true,
+			       method: 'put',
+			       url: "http://localhost:8080/dreamService/planing/event/edit/"+eventId+"?end_time="+endDate+"&description="+description,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.template = "templates/planing/event.html";
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
 		}
 		
 		$scope.toggleLeft = function() {
@@ -294,7 +394,7 @@ mainApp.config(function($datepickerProvider) {
 			$http({
 				   withCredentials: true,
 			       method: 'get',
-			       url: "http://dreamservice.azurewebsites.net/finance/list",
+			       url: "http://localhost:8080/dreamService/finance/list",
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
@@ -320,7 +420,7 @@ mainApp.config(function($datepickerProvider) {
 			$http({
 				   withCredentials: true,
 			       method: 'put',
-			       url: "http://dreamservice.azurewebsites.net/finance/update?finance="+finance+"&dateTime="+dateTime+"&amount="+amount+"&description="+description,
+			       url: "http://localhost:8080/dreamService/finance/update?finance="+finance+"&dateTime="+dateTime+"&amount="+amount+"&description="+description,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
@@ -340,7 +440,7 @@ mainApp.config(function($datepickerProvider) {
 			$http({
 				   withCredentials: true,
 			       method: 'delete',
-			       url: "http://dreamservice.azurewebsites.net/finance/delete?date_time="+dateTime,
+			       url: "http://localhost:8080/dreamService/finance/delete?date_time="+dateTime,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
@@ -360,7 +460,7 @@ mainApp.config(function($datepickerProvider) {
 			$http({
 				   withCredentials: true,
 			       method: 'post',
-			       url: "http://dreamservice.azurewebsites.net/finance/insert?finance="+finance+"&amount="+amount+"&description="+description,
+			       url: "http://localhost:8080/dreamService/finance/insert?finance="+finance+"&amount="+amount+"&description="+description,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
@@ -380,7 +480,7 @@ mainApp.config(function($datepickerProvider) {
 			$http({
 				   withCredentials: true,
 			       method: 'post',
-			       url: "http://dreamservice.azurewebsites.net/finance/insert?finance="+finance+"&amount="+amount+"&description="+description,
+			       url: "http://localhost:8080/dreamService/finance/insert?finance="+finance+"&amount="+amount+"&description="+description,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
@@ -484,7 +584,7 @@ mainApp.config(function($datepickerProvider) {
 			$http({
 				   withCredentials: true,
 			       method: 'post',
-			       url: "http://dreamservice.azurewebsites.net/member/insert?username="+username+"&password="+password+
+			       url: "http://localhost:8080/dreamService/member/insert?username="+username+"&password="+password+
 			       "&fname="+fname+"&lname="+lname+"&nickname="+nickname+"&email="+email+"&phone="+phone+"&birth="+birthDate,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
@@ -526,7 +626,7 @@ mainApp.config(function($datepickerProvider) {
 			$http({
 				   withCredentials: true,
 			       method: 'post',
-			       url: "http://dreamservice.azurewebsites.net/j_spring_security_check?j_username="+username+"&j_password="+password,
+			       url: "http://localhost:8080/dreamService/j_spring_security_check?j_username="+username+"&j_password="+password,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
@@ -552,7 +652,7 @@ mainApp.config(function($datepickerProvider) {
 		$http({
 			   withCredentials: true,
 		       method: 'post',
-		       url: "http://dreamservice.azurewebsites.net/j_spring_security_logout",
+		       url: "http://localhost:8080/dreamService/j_spring_security_logout",
 		       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 		 }).
 		success(function(data, status, headers, config) {
@@ -571,7 +671,7 @@ mainApp.config(function($datepickerProvider) {
 		$http({
 			   withCredentials: true,
 		       method: 'get',
-		       url: "http://dreamservice.azurewebsites.net/member/findfromuser",
+		       url: "http://localhost:8080/dreamService/member/findfromuser",
 		       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 		 }).
 		success(function(data, status, headers, config) {
