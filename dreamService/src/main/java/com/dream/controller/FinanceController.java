@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dream.dao.impl.JdbcFinanceDAO;
 import com.dream.model.Finance;
 import com.dream.model.FinanceType;
+import com.dream.model.Row;
 
 @RestController
 @RequestMapping("/finance")
@@ -47,7 +48,7 @@ public class FinanceController {
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	@Secured("ROLE_USER")
 	@ResponseBody
-	public int financeInsert(
+	public Row financeInsert(
 			@RequestParam(value = "finance", required = true) String financeStr,
 			@RequestParam(value = "amount", required = true) double amount,
 			@RequestParam(value = "description", required = false) String description,
@@ -62,7 +63,7 @@ public class FinanceController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return -1;
+			return new Row(-1);
 		}
 		Timestamp timeStamp = new Timestamp(Calendar.getInstance().getTime()
 				.getTime());
@@ -77,13 +78,13 @@ public class FinanceController {
 
 		Finance finance = new Finance(financeType.getId(), amount, description,
 				timeStamp, userDetails.getUsername(), budgetId, saveId, eventId);
-		return jdbcFinanceDAO.insert(finance);
+		return new Row(jdbcFinanceDAO.insert(finance));
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	@Secured("ROLE_USER")
 	@ResponseBody
-	public int financeUpdate(
+	public Row financeUpdate(
 			@RequestParam(value = "finance", required = true) String financeStr,
 			@RequestParam(value = "amount", required = true) String amount,
 			@RequestParam(value = "description", required = true) String description,
@@ -100,7 +101,7 @@ public class FinanceController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return -1;
+			return new Row(-1);
 		}
 		if (saveId == null)
 			saveId = 1;
@@ -117,7 +118,7 @@ public class FinanceController {
 				Double.parseDouble(amount),
 				description, timeStamp, userDetails.getUsername(), budgetId,
 				saveId, eventId);
-		return jdbcFinanceDAO.update(finance);
+		return new Row(jdbcFinanceDAO.update(finance));
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -140,7 +141,7 @@ public class FinanceController {
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	@Secured("ROLE_USER")
 	@ResponseBody
-	public int deleteFinance(
+	public Row deleteFinance(
 			@RequestParam(value = "date_time", required = true) String date_time) {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
@@ -150,12 +151,12 @@ public class FinanceController {
 			userDetails = (UserDetails) (authentication.getPrincipal() instanceof UserDetails ? principal
 					: null);
 		} else {
-			return -1;
+			return new Row(-1);
 		}
 
 		Timestamp timeStamp = new Timestamp(Long.parseLong(date_time));
 
-		return jdbcFinanceDAO.delete(userDetails.getUsername(), timeStamp);
+		return new Row(jdbcFinanceDAO.delete(userDetails.getUsername(), timeStamp));
 	}
 
 	@RequestMapping(value = "/listdatetodate", method = RequestMethod.GET)

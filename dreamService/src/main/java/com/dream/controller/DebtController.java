@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dream.debt.Debt;
-import com.dream.util.DebtCalc;
+import com.dream.model.DebtCalc;
 
 @RestController
 @RequestMapping("/debt/cal")

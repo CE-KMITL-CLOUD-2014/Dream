@@ -29,9 +29,9 @@ public class SavingExtractor implements ResultSetExtractor<Saving> {
 	@Override
 	public Saving extractData(ResultSet resultSet) throws SQLException,
 			DataAccessException {
-		Saving saving = new Saving(resultSet.getInt(1),resultSet.getString(6), resultSet.getInt(2),
-				resultSet.getInt(3), resultSet.getString(4),
-				resultSet.getString(5));
+		Saving saving = new Saving(resultSet.getInt("#save"),resultSet.getString("username"), resultSet.getDouble("goal"),
+				resultSet.getDouble("start_amount"), resultSet.getString("end_time"),
+				resultSet.getString("description"));
 		return saving;
 	}
 
