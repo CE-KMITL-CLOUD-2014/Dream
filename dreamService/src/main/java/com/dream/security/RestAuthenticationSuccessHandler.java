@@ -29,9 +29,15 @@ import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.util.StringUtils;
 
+/**
+ * For handler when login success
+ * 
+ * @author Peerawit Praphanwittaya
+ *
+ */
 public class RestAuthenticationSuccessHandler extends
 		SimpleUrlAuthenticationSuccessHandler {
-	private RequestCache	requestCache	= new HttpSessionRequestCache();
+	private RequestCache requestCache = new HttpSessionRequestCache();
 
 	@Override
 	public void onAuthenticationSuccess(final HttpServletRequest request,
@@ -41,9 +47,11 @@ public class RestAuthenticationSuccessHandler extends
 		String clientOrigin = request.getHeader("origin");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Origin", clientOrigin);
-		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		response.setHeader("Access-Control-Allow-Methods",
+				"POST, GET, OPTIONS, DELETE");
 		response.setHeader("Access-Control-Max-Age", "3600");
-		response.setHeader("Access-Control-Allow-Headers", "x-requested-with, accept, content-type");
+		response.setHeader("Access-Control-Allow-Headers",
+				"x-requested-with, accept, content-type");
 		final SavedRequest savedRequest = requestCache.getRequest(request,
 				response);
 		if (savedRequest == null) {

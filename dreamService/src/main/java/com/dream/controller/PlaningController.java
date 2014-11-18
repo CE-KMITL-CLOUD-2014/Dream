@@ -39,14 +39,30 @@ import com.dream.model.FinanceType;
 import com.dream.model.Row;
 import com.dream.model.Saving;
 
+/**
+ * Controller for Planing Service
+ * 
+ * @author Peerawit Praphanwittaya
+ *
+ */
 @RestController
 @RequestMapping("/planing")
 public class PlaningController {
 	@Autowired
 	JdbcPlaningDAO jdbcPlaningDao;
 	@Autowired
-	JdbcFinanceDAO	jdbcFinanceDAO;
+	JdbcFinanceDAO jdbcFinanceDAO;
 
+	/**
+	 * Insert saving in to database (login first)
+	 * 
+	 * @param goal
+	 *            saving goal
+	 * @param start_amount
+	 * @param end_time
+	 * @param description
+	 * @return Number of insert row
+	 */
 	@RequestMapping(value = "/saving/insert", method = RequestMethod.POST)
 	@ResponseBody
 	@Secured("ROLE_USER")
@@ -71,6 +87,12 @@ public class PlaningController {
 		return new Row(jdbcPlaningDao.insertSaving(saving));
 	}
 
+	/**
+	 * List saving from user (login first)
+	 * 
+	 * @return List of saving
+	 */
+
 	@RequestMapping(value = "/saving/list", method = RequestMethod.GET)
 	@ResponseBody
 	@Secured("ROLE_USER")
@@ -87,6 +109,13 @@ public class PlaningController {
 		}
 		return jdbcPlaningDao.listSavingFromUsername(userDetails.getUsername());
 	}
+
+	/**
+	 * Delete saving by saveID (login first)
+	 * 
+	 * @param saveid
+	 * @return Number of delete row
+	 */
 
 	@RequestMapping(value = "/saving/delete/{saveid}", method = RequestMethod.DELETE)
 	@ResponseBody
@@ -106,6 +135,17 @@ public class PlaningController {
 				userDetails.getUsername()));
 
 	}
+
+	/**
+	 * Update saving by saveID
+	 * 
+	 * @param saveid
+	 * @param goal
+	 * @param start_amount
+	 * @param end_time
+	 * @param description
+	 * @return Number of update row
+	 */
 
 	@RequestMapping(value = "/saving/edit/{saveid}", method = RequestMethod.PUT)
 	@ResponseBody
@@ -132,6 +172,14 @@ public class PlaningController {
 		return new Row(jdbcPlaningDao.updateSaving(saving));
 	}
 
+	/**
+	 * Insert event in to database
+	 * 
+	 * @param end_time
+	 * @param description
+	 * @return Number of insert row
+	 */
+
 	@RequestMapping(value = "/event/insert", method = RequestMethod.POST)
 	@ResponseBody
 	@Secured("ROLE_USER")
@@ -153,6 +201,12 @@ public class PlaningController {
 		return new Row(jdbcPlaningDao.insertEvent(event));
 	}
 
+	/**
+	 * List event from user (login first)
+	 * 
+	 * @return List of events
+	 */
+
 	@RequestMapping(value = "/event/list", method = RequestMethod.GET)
 	@ResponseBody
 	@Secured("ROLE_USER")
@@ -170,10 +224,17 @@ public class PlaningController {
 		return jdbcPlaningDao.listEventFromUsername(userDetails.getUsername());
 	}
 
+	/**
+	 * Delete event by saveID (login first)
+	 * 
+	 * @param eventid
+	 * @return Number of delete row
+	 */
+
 	@RequestMapping(value = "/event/delete/{eventid}", method = RequestMethod.DELETE)
 	@ResponseBody
 	@Secured("ROLE_USER")
-	public Row deleteEvent(@PathVariable("eventid") String saveid) {
+	public Row deleteEvent(@PathVariable("eventid") String eventid) {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
 		UserDetails userDetails;
@@ -184,10 +245,19 @@ public class PlaningController {
 		} else {
 			return new Row(-1);
 		}
-		return new Row(jdbcPlaningDao.deleteEvent(Integer.parseInt(saveid),
+		return new Row(jdbcPlaningDao.deleteEvent(Integer.parseInt(eventid),
 				userDetails.getUsername()));
 
 	}
+
+	/**
+	 * Update event by eventID
+	 * 
+	 * @param eventid
+	 * @param end_time
+	 * @param description
+	 * @return Number of update row
+	 */
 
 	@RequestMapping(value = "/event/edit/{eventid}", method = RequestMethod.PUT)
 	@ResponseBody
@@ -211,6 +281,17 @@ public class PlaningController {
 		return new Row(jdbcPlaningDao.updateEvent(event));
 	}
 
+	/**
+	 * Insert budget in to database
+	 * 
+	 * @param type_description
+	 *            finance type description
+	 * @param startTime
+	 * @param endTime
+	 * @param goal
+	 * @return Number of insert row
+	 */
+
 	@RequestMapping(value = "/budget/insert", method = RequestMethod.POST)
 	@ResponseBody
 	@Secured("ROLE_USER")
@@ -230,12 +311,19 @@ public class PlaningController {
 			return new Row(-1);
 		}
 
-		FinanceType financeType = jdbcFinanceDAO.findFinanceType(type_description);
+		FinanceType financeType = jdbcFinanceDAO
+				.findFinanceType(type_description);
 
-		Budget budget = new Budget(financeType.getId(), startTime,
-				endTime, Double.parseDouble(goal), userDetails.getUsername());
+		Budget budget = new Budget(financeType.getId(), startTime, endTime,
+				Double.parseDouble(goal), userDetails.getUsername());
 		return new Row(jdbcPlaningDao.insertBudget(budget));
 	}
+
+	/**
+	 * List budget from user (login first)
+	 * 
+	 * @return List of budgets
+	 */
 
 	@RequestMapping(value = "/budget/list", method = RequestMethod.GET)
 	@ResponseBody
@@ -253,6 +341,13 @@ public class PlaningController {
 		}
 		return jdbcPlaningDao.listBudgetFromUsername(userDetails.getUsername());
 	}
+
+	/**
+	 * Delete budget by budgetID (login first)
+	 * 
+	 * @param budgetid
+	 * @return Number of delete row
+	 */
 
 	@RequestMapping(value = "/budget/delete/{budgetid}", method = RequestMethod.DELETE)
 	@ResponseBody
@@ -273,6 +368,18 @@ public class PlaningController {
 
 	}
 
+	/**
+	 * Update budget by budgetID
+	 * 
+	 * @param budgetid
+	 * @param type_description
+	 *            finance type description
+	 * @param startTime
+	 * @param endTime
+	 * @param goal
+	 * @return Number of update row
+	 */
+
 	@RequestMapping(value = "/budget/edit/{budgetid}", method = RequestMethod.PUT)
 	@ResponseBody
 	@Secured("ROLE_USER")
@@ -292,8 +399,9 @@ public class PlaningController {
 		} else {
 			return new Row(-1);
 		}
-		
-		FinanceType financeType = jdbcFinanceDAO.findFinanceType(type_description);
+
+		FinanceType financeType = jdbcFinanceDAO
+				.findFinanceType(type_description);
 		Budget budget = new Budget(Integer.parseInt(budgetid),
 				financeType.getId(), startTime, endTime,
 				Double.parseDouble(goal), userDetails.getUsername());

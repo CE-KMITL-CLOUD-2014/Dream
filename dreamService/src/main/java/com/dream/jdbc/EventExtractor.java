@@ -23,7 +23,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.dream.model.Event;
-
+/**
+ * For map event data from database to Event Object
+ * @author shadowslight
+ *
+ */
 public class EventExtractor implements ResultSetExtractor<Event> {
 
 	@Override

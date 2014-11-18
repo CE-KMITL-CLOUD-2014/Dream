@@ -8,6 +8,12 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.dream.model.FinanceType;
 
+/**
+ * For map Financetype data from database to FinanceType Object
+ * 
+ * @author shadowslight
+ *
+ */
 public class FinanceTypeExtractor implements ResultSetExtractor<FinanceType> {
 
 	@Override

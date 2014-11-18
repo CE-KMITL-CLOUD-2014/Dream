@@ -20,6 +20,12 @@ import java.util.List;
 
 import com.dream.model.Member;
 
+/**
+ * DAO interface for Member JDBC
+ * 
+ * @author Peerawit Praphanwittaya
+ *
+ */
 public interface MemberDAO {
 	public int insert(Member member);
 

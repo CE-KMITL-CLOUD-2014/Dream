@@ -23,6 +23,12 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.dream.model.Member;
 
+/**
+ * For map Member data from database to row
+ * @author Peerawit Praphanwittaya
+ *
+ */
+
 public class MemberRowMapper implements RowMapper<Member> {
 
 	@Override

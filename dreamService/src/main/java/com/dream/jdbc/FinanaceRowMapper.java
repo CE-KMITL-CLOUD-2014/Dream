@@ -23,6 +23,12 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.dream.model.Finance;
 
+/**
+ * For map Finance data from database to Row
+ * 
+ * @author Peerawit Praphanwittaya
+ *
+ */
 public class FinanaceRowMapper implements RowMapper<Finance> {
 
 	@Override

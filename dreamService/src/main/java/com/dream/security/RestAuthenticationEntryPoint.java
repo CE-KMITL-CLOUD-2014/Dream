@@ -26,6 +26,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+/**
+ * For handler authenticationEntryPoint when not login and call rest api with @secure
+ * 
+ * @author shadowslight
+ *
+ */
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 

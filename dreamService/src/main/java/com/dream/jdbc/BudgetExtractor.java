@@ -24,6 +24,12 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.dream.model.Budget;
 
+/**
+ * For map budget data from database to Budget Object
+ * 
+ * @author shadowslight
+ *
+ */
 public class BudgetExtractor implements ResultSetExtractor<Budget> {
 
 	@Override

@@ -13,12 +13,18 @@
  * See the License for the specific language governing permissions and      * 
  * limitations under the License.                                           * 
  */
-package com.dream.debt;
+package com.dream.util;
 
+/**
+ * For provide Debt Calculator
+ * 
+ * @author shadowslight
+ *
+ */
 public class Debt {
-	private double	moneyLoan;
-	private double	debtRate;
-	private double	time;
+	private double moneyLoan;
+	private double debtRate;
+	private double time;
 
 	public Debt(double moneyLoan, double debtRate, double time) {
 		this.moneyLoan = moneyLoan;
@@ -26,6 +32,11 @@ public class Debt {
 		this.time = time;
 	}
 
+	/**
+	 * Calculate Debt
+	 * 
+	 * @return payPermonth
+	 */
 	public double calculate() {
 		double tempV, tempI, resultV;
 		tempV = (1 / (1 + (this.debtRate / 1200)));

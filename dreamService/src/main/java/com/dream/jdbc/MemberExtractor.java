@@ -24,6 +24,12 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.dream.model.Member;
 
+/**
+ * For map Member data from database to Member Object
+ * 
+ * @author shadowslight
+ *
+ */
 public class MemberExtractor implements ResultSetExtractor<Member> {
 
 	@Override

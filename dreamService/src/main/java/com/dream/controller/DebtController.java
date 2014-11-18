@@ -21,13 +21,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dream.debt.Debt;
 import com.dream.model.DebtCalc;
+import com.dream.util.Debt;
 
+/**
+ * Controller for Debt calculator Service
+ * @author Peerawit Praphanwittaya
+ *
+ */
 @RestController
 @RequestMapping("/debt/cal")
 public class DebtController {
 
+	/**
+	 * Calculate Debt and return moneyPermonth
+	 * 
+	 * @param moneyLoan
+	 * @param debtRate
+	 * @param time
+	 *            Number of Month
+	 * @return moneyPerMont
+	 */
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public DebtCalc debtCal(
@@ -39,7 +53,7 @@ public class DebtController {
 			double ret = debt.calculate();
 			ret = Math.round(ret);
 			return new DebtCalc(ret);
-		}else{
+		} else {
 			return new DebtCalc(0);
 		}
 	}

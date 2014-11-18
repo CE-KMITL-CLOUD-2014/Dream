@@ -23,7 +23,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.dream.model.Saving;
-
+/**
+ * For map saving data form database to Saving Object
+ * @author shadowslight
+ *
+ */
 public class SavingExtractor implements ResultSetExtractor<Saving> {
 
 	@Override

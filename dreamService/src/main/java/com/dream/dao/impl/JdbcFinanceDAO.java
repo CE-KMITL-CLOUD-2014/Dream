@@ -30,6 +30,12 @@ import com.dream.jdbc.FinanceTypeRowMapper;
 import com.dream.model.Finance;
 import com.dream.model.FinanceType;
 
+/**
+ * JDBC for Finance Service
+ * 
+ * @author Peerawit Praphanwittaya
+ *
+ */
 public class JdbcFinanceDAO implements FinanceDAO {
 	DataSource dataSource;
 	JdbcTemplate jdbcTemplate;
@@ -84,8 +90,9 @@ public class JdbcFinanceDAO implements FinanceDAO {
 	public List<Finance> listFromDateToDate(String username, Timestamp start,
 			Timestamp end) {
 		String sql = "SELECT * FROM finance,finance_type WHERE date_time BETWEEN ? AND ? and username = ? and finance.#finance_type = finance_type.#finance_type";
-		Object[] params = new Object[] { start, end ,username};
-		int[] types = new int[] { Types.TIMESTAMP, Types.TIMESTAMP ,Types.VARCHAR};
+		Object[] params = new Object[] { start, end, username };
+		int[] types = new int[] { Types.TIMESTAMP, Types.TIMESTAMP,
+				Types.VARCHAR };
 		return jdbcTemplate.query(sql, params, types, new FinanaceRowMapper());
 	}
 

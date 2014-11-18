@@ -22,7 +22,11 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.dream.model.Budget;
-
+/**
+ * For map budget data from database to row
+ * @author Peerawit Praphanwittaya
+ *
+ */
 public class BudgetRowMapper implements RowMapper<Budget> {
 
 	@Override

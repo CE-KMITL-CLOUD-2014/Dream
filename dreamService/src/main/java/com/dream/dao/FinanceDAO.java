@@ -19,7 +19,11 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import com.dream.model.Finance;
-
+/**
+ * DAO interface for JDBC
+ * @author Peerawit Praphanwittaya
+ *
+ */
 public interface FinanceDAO {
 	public int insert(Finance finance);
 

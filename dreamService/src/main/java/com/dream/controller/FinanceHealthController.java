@@ -1,3 +1,19 @@
+/****************************************************************************
+ * Copyright Peerawit Praphanwittaya & Apirat Puttaraksa                    * 
+ *                                                                          * 
+ * Licensed under the Apache License, Version 2.0 (the "License");          * 
+ * you may not use this file except in compliance with the License.         * 
+ * You may obtain a copy of the License at                                  * 
+ * 																		    * 
+ *     http://www.apache.org/licenses/LICENSE-2.0                           * 
+ * 																		    * 
+ * Unless required by applicable law or agreed to in writing, software	    * 
+ * distributed under the License is distributed on an "AS IS" BASIS,        * 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * 
+ * See the License for the specific language governing permissions and      * 
+ * limitations under the License.                                           * 
+ */
+
 package com.dream.controller;
 
 import java.sql.Timestamp;
@@ -21,6 +37,12 @@ import com.dream.model.Liquidty;
 import com.dream.model.SavingRatio;
 import com.dream.util.FinanceHealth;
 
+/**
+ * Controller for FinanceHealth Service
+ * 
+ * @author Peerawit Praphanwittaya
+ *
+ */
 @RestController
 @RequestMapping("/financehealth")
 public class FinanceHealthController {
@@ -28,6 +50,17 @@ public class FinanceHealthController {
 	@Autowired
 	JdbcFinanceDAO jdbcFinanceDAO;
 
+	/**
+	 * Calculate liquidity if login then get data from database to calculate
+	 * else insert assets and expenses/month. if assets or expenses = 0 then
+	 * return 0.
+	 * 
+	 * @param assets
+	 *            assets
+	 * @param expenses
+	 *            expenses/month
+	 * @return result from calculate
+	 */
 	@RequestMapping(value = "/getliquidity", method = RequestMethod.GET)
 	@ResponseBody
 	public Liquidty getLiquidity(
@@ -84,6 +117,15 @@ public class FinanceHealthController {
 
 	}
 
+	/**
+	 * Calculate debt ratio
+	 * 
+	 * @param debt
+	 *            total debt
+	 * @param totalAsset
+	 *            total asset
+	 * @return debt ratio
+	 */
 	@RequestMapping(value = "/debtratio", method = RequestMethod.GET)
 	@ResponseBody
 	public DebtRatio debtRatio(
@@ -96,6 +138,13 @@ public class FinanceHealthController {
 		}
 	}
 
+	/**
+	 * Calculate saving ratio
+	 * 
+	 * @param savingPerYear
+	 * @param incomePerYear
+	 * @return saving ratio
+	 */
 	@RequestMapping(value = "/savingratio", method = RequestMethod.GET)
 	@ResponseBody
 	public SavingRatio savingRation(

@@ -23,7 +23,13 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.dream.model.Saving;
 
-public class SavingRowMapper implements RowMapper<Saving>{
+/**
+ * For map Saving data from database to row
+ * 
+ * @author shadowslight
+ *
+ */
+public class SavingRowMapper implements RowMapper<Saving> {
 
 	@Override
 	public Saving mapRow(ResultSet resultSet, int line) throws SQLException {

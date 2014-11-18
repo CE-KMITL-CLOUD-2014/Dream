@@ -23,6 +23,12 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.dream.model.Event;
 
+/**
+ * For map Event data from database to row
+ * 
+ * @author Peerawit Praphanwittaya
+ *
+ */
 public class EventRowMapper implements RowMapper<Event> {
 
 	@Override

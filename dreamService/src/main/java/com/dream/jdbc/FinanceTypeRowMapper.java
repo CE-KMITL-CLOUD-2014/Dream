@@ -7,6 +7,12 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.dream.model.FinanceType;
 
+/**
+ * For map Financetype data from database to row
+ * 
+ * @author shadowslight
+ *
+ */
 public class FinanceTypeRowMapper implements RowMapper<FinanceType> {
 
 	@Override

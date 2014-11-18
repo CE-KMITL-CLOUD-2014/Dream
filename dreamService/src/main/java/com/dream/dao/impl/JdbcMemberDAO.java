@@ -26,9 +26,16 @@ import com.dream.dao.MemberDAO;
 import com.dream.jdbc.MemberRowMapper;
 import com.dream.model.Member;
 
+/**
+ * JDBC for Member Service
+ * 
+ * @author Peerawit Praphanwittaya
+ *
+ */
+
 public class JdbcMemberDAO implements MemberDAO {
-	DataSource		dataSource;
-	JdbcTemplate	jdbcTemplate;
+	DataSource dataSource;
+	JdbcTemplate jdbcTemplate;
 
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
@@ -40,7 +47,8 @@ public class JdbcMemberDAO implements MemberDAO {
 		int numRow;
 		String sql = "INSERT INTO users (username, password, email, fname,lname,birth,phone,nickname,enabled,regis_date)"
 				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		String sql2 = "INSERT INTO authorities (username,authority)" + "VALUEs (?,?)";
+		String sql2 = "INSERT INTO authorities (username,authority)"
+				+ "VALUEs (?,?)";
 		member.setEnable(true);
 		numRow = jdbcTemplate.update(sql, member.getUsername(),
 				member.getPassword(), member.getEmail(), member.getFname(),
@@ -54,7 +62,8 @@ public class JdbcMemberDAO implements MemberDAO {
 	@Override
 	public Member findFromUsername(String username) {
 		String sql = "SELECT users.*,authorities.authority FROM users,authorities WHERE users.username=? AND users.username = authorities.username";
-		return jdbcTemplate.queryForObject(sql,new Object[] {username}, new MemberRowMapper());
+		return jdbcTemplate.queryForObject(sql, new Object[] { username },
+				new MemberRowMapper());
 	}
 
 	@Override

@@ -31,6 +31,13 @@ import com.dream.model.Budget;
 import com.dream.model.Event;
 import com.dream.model.Saving;
 
+/**
+ * JDBC for Planing Service
+ * 
+ * @author shadowslight
+ *
+ */
+
 public class JdbcPlaningDAO implements PlanningDAO {
 	DataSource dataSource;
 	JdbcTemplate jdbcTemplate;
@@ -136,9 +143,10 @@ public class JdbcPlaningDAO implements PlanningDAO {
 	public int updateBudget(Budget budget) {
 		String sql = "update budgets set goal = ?,start_time = ?,end_time = ?,#finance_type = ? where username = ? and #budget=?";
 		Object[] params = new Object[] { budget.getGoal(),
-				budget.getStartTime(), budget.getEndTime(), budget.getType_id(),budget.getUsername(),budget.getBudgetId() };
+				budget.getStartTime(), budget.getEndTime(),
+				budget.getType_id(), budget.getUsername(), budget.getBudgetId() };
 		int[] types = new int[] { Types.REAL, Types.DATE, Types.DATE,
-				Types.INTEGER ,Types.VARCHAR,Types.INTEGER};
+				Types.INTEGER, Types.VARCHAR, Types.INTEGER };
 		return jdbcTemplate.update(sql, params, types);
 	}
 

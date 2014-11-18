@@ -21,9 +21,23 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+/**
+ * For change string date in format yyyy-MM-dd to Date object
+ * 
+ * @author shadowslight
+ *
+ */
 public class DreamUtil {
-	private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
+	private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd",
+			Locale.US);
 
+	/**
+	 * Get Date by chang string to Date
+	 * 
+	 * @param time
+	 *            date in formate yyyy-MM-dd
+	 * @return Date object
+	 */
 	public static Date getCurrentDate(String time) {
 		if (time != null) {
 			Date date = null;

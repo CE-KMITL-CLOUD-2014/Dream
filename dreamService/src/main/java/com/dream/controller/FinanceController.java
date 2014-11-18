@@ -39,12 +39,35 @@ import com.dream.model.Finance;
 import com.dream.model.FinanceType;
 import com.dream.model.Row;
 
+/**
+ * Controller for Finance Service
+ * 
+ * @author Peerawit Praphanwittaya
+ *
+ */
 @RestController
 @RequestMapping("/finance")
 public class FinanceController {
 	@Autowired
 	JdbcFinanceDAO jdbcFinanceDAO;
 
+	/**
+	 * Insert finance in to Database
+	 * 
+	 * @param financeStr
+	 *            Finance_type description
+	 * @param amount
+	 *            Money
+	 * @param description
+	 *            Description
+	 * @param saveId
+	 *            Saving ID
+	 * @param budgetId
+	 *            Budget ID
+	 * @param eventId
+	 *            Event ID
+	 * @return Number of row insert
+	 */
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	@Secured("ROLE_USER")
 	@ResponseBody
@@ -81,6 +104,26 @@ public class FinanceController {
 		return new Row(jdbcFinanceDAO.insert(finance));
 	}
 
+	/**
+	 * Update value in Finance
+	 * 
+	 * @param financeStr
+	 *            Finance_type description
+	 * @param amount
+	 *            Money
+	 * @param description
+	 *            Description
+	 * @param saveId
+	 *            Saving ID
+	 * @param budgetId
+	 *            Budget ID
+	 * @param eventId
+	 *            Event ID
+	 * @param tempTimeStamp
+	 *            Timestamp when insert finance
+	 * @return Number of row update
+	 */
+
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	@Secured("ROLE_USER")
 	@ResponseBody
@@ -115,11 +158,16 @@ public class FinanceController {
 		FinanceType financeType = jdbcFinanceDAO.findFinanceType(financeStr);
 
 		Finance finance = new Finance(financeType.getId(),
-				Double.parseDouble(amount),
-				description, timeStamp, userDetails.getUsername(), budgetId,
-				saveId, eventId);
+				Double.parseDouble(amount), description, timeStamp,
+				userDetails.getUsername(), budgetId, saveId, eventId);
 		return new Row(jdbcFinanceDAO.update(finance));
 	}
+
+	/**
+	 * List finances by username
+	 * 
+	 * @return List of finances
+	 */
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@Secured("ROLE_USER")
@@ -137,6 +185,14 @@ public class FinanceController {
 		}
 		return jdbcFinanceDAO.list(userDetails.getUsername());
 	}
+
+	/**
+	 * Delete finance by username and timestamp (login first)
+	 * 
+	 * @param date_time
+	 *            Timestamp
+	 * @return Number of row delete
+	 */
 
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	@Secured("ROLE_USER")
@@ -156,9 +212,19 @@ public class FinanceController {
 
 		Timestamp timeStamp = new Timestamp(Long.parseLong(date_time));
 
-		return new Row(jdbcFinanceDAO.delete(userDetails.getUsername(), timeStamp));
+		return new Row(jdbcFinanceDAO.delete(userDetails.getUsername(),
+				timeStamp));
 	}
 
+	/**
+	 * List finance from date to date
+	 * 
+	 * @param start
+	 *            Start date
+	 * @param end
+	 *            End date
+	 * @return List of finances
+	 */
 	@RequestMapping(value = "/listdatetodate", method = RequestMethod.GET)
 	@Secured("ROLE_USER")
 	@ResponseBody
@@ -175,8 +241,9 @@ public class FinanceController {
 		} else {
 			return null;
 		}
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",java.util.Locale.US);
-		Timestamp start_date = null,end_date = null;
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",
+				java.util.Locale.US);
+		Timestamp start_date = null, end_date = null;
 		try {
 			start_date = new Timestamp(formatter.parse(start).getTime());
 			end_date = new Timestamp(formatter.parse(end).getTime());

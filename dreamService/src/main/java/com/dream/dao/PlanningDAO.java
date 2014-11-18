@@ -22,6 +22,12 @@ import com.dream.model.Budget;
 import com.dream.model.Event;
 import com.dream.model.Saving;
 
+/**
+ * DAO interface for Planing JDBC
+ * 
+ * @author Peerawit Praphanwittaya
+ *
+ */
 public interface PlanningDAO {
 	public int insertSaving(Saving saving);
 

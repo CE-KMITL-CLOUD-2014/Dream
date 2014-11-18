@@ -35,12 +35,31 @@ import com.dream.dao.impl.JdbcMemberDAO;
 import com.dream.model.Member;
 import com.dream.model.Row;
 
+/**
+ * Controller for Member Service
+ * 
+ * @author Peerawit Praphanwittaya
+ *
+ */
 @RestController
 @RequestMapping("/member")
 public class MemberController {
 	@Autowired
 	JdbcMemberDAO jdbcMemberDao;
 
+	/**
+	 * Insert Member to database
+	 * 
+	 * @param username
+	 * @param password
+	 * @param email
+	 * @param phone
+	 * @param birth
+	 * @param fname
+	 * @param lname
+	 * @param nickname
+	 * @return Number of row insert
+	 */
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	@ResponseBody
 	public Row insertMember(
@@ -55,9 +74,21 @@ public class MemberController {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hashedPassword = passwordEncoder.encode(password);
 		Member member = new Member(username, hashedPassword, email, phone,
-				fname, lname, nickname, birth,"ROLE_USER", true);
+				fname, lname, nickname, birth, "ROLE_USER", true);
 		return new Row(jdbcMemberDao.insert(member));
 	}
+
+	/**
+	 * Update Member in database
+	 * 
+	 * @param email
+	 * @param phone
+	 * @param fname
+	 * @param lname
+	 * @param birth
+	 * @param nickname
+	 * @return Number of row update
+	 */
 
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	@ResponseBody
@@ -84,6 +115,11 @@ public class MemberController {
 		return new Row(jdbcMemberDao.update(member));
 	}
 
+	/**
+	 * Delete member form database (login first)
+	 * @return Number of row delete
+	 */
+
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	@ResponseBody
 	@Secured("ROLE_USER")
@@ -102,9 +138,14 @@ public class MemberController {
 		return new Row(jdbcMemberDao.delete(userDetails.getUsername()));
 	}
 
+	/**
+	 * List member form database (ROLE_ADMIN)
+	 * @return List of members
+	 */
+
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	// @Secured("ROLE_ADMIN")
+	@Secured("ROLE_ADMIN")
 	public List<Member> list() {
 		List<Member> members = jdbcMemberDao.list();
 		for (Member m : members) {
@@ -112,6 +153,11 @@ public class MemberController {
 		}
 		return members;
 	}
+
+	/**
+	 * Find user detail by username (login first)
+	 * @return member detail
+	 */
 
 	@RequestMapping(value = "/findfromuser", method = RequestMethod.GET)
 	@ResponseBody
