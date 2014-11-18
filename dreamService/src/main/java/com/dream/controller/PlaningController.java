@@ -215,7 +215,7 @@ public class PlaningController {
 	@ResponseBody
 	@Secured("ROLE_USER")
 	public Row insertBudget(
-			@RequestParam(value = "type_id", required = true) String type_id,
+			@RequestParam(value = "type_description", required = true) String type_description,
 			@RequestParam(value = "startTime", required = true) String startTime,
 			@RequestParam(value = "endTime", required = true) String endTime,
 			@RequestParam(value = "goal", required = true) String goal) {
@@ -230,7 +230,7 @@ public class PlaningController {
 			return new Row(-1);
 		}
 
-		FinanceType financeType = jdbcFinanceDAO.findFinanceType(type_id);
+		FinanceType financeType = jdbcFinanceDAO.findFinanceType(type_description);
 
 		Budget budget = new Budget(financeType.getId(), startTime,
 				endTime, Double.parseDouble(goal), userDetails.getUsername());
@@ -278,7 +278,7 @@ public class PlaningController {
 	@Secured("ROLE_USER")
 	public Row editBudget(
 			@PathVariable("budgetid") String budgetid,
-			@RequestParam(value = "type_id", required = true) String type_id,
+			@RequestParam(value = "type_description", required = true) String type_description,
 			@RequestParam(value = "startTime", required = true) String startTime,
 			@RequestParam(value = "endTime", required = true) String endTime,
 			@RequestParam(value = "goal", required = true) String goal) {
@@ -292,8 +292,10 @@ public class PlaningController {
 		} else {
 			return new Row(-1);
 		}
+		
+		FinanceType financeType = jdbcFinanceDAO.findFinanceType(type_description);
 		Budget budget = new Budget(Integer.parseInt(budgetid),
-				Integer.parseInt(type_id), startTime, endTime,
+				financeType.getId(), startTime, endTime,
 				Double.parseDouble(goal), userDetails.getUsername());
 		return new Row(jdbcPlaningDao.updateBudget(budget));
 	}
