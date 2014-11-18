@@ -18,7 +18,7 @@ package com.dream.model;
 
 import java.sql.Date;
 
-import com.dream.util.DreamUtil;
+import com.dream.util.ParseDate;
 
 public class Event {
 	private int eventID;
@@ -29,7 +29,7 @@ public class Event {
 	public Event(String username, String description, String end_time) {
 		this.username = username;
 		this.description = description;
-		this.end_time = DreamUtil.getCurrentDate(end_time);
+		this.end_time = ParseDate.getCurrentDate(end_time);
 	}
 
 	public Event(int eventID, String username, String description,
@@ -37,7 +37,7 @@ public class Event {
 		this.eventID = eventID;
 		this.username = username;
 		this.description = description;
-		this.end_time = DreamUtil.getCurrentDate(end_time);
+		this.end_time = ParseDate.getCurrentDate(end_time);
 	}
 	
 	public Event(int eventID, String username, String description,

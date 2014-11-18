@@ -19,7 +19,7 @@ package com.dream.model;
 
 import java.sql.Date;
 
-import com.dream.util.DreamUtil;
+import com.dream.util.ParseDate;
 
 public class Saving {
 	private int saveID;
@@ -34,7 +34,7 @@ public class Saving {
 		this.username = username;
 		this.goal = goal;
 		this.startAmount = strartAmount;
-		this.end = DreamUtil.getCurrentDate(end);
+		this.end = ParseDate.getCurrentDate(end);
 		this.description = description;
 	}
 	public Saving(int saveID,String username, double goal, double strartAmount, String end,
@@ -43,7 +43,7 @@ public class Saving {
 		this.username = username;
 		this.goal = goal;
 		this.startAmount = strartAmount;
-		this.end = DreamUtil.getCurrentDate(end);
+		this.end = ParseDate.getCurrentDate(end);
 		this.description = description;
 	}
 

@@ -18,7 +18,7 @@ package com.dream.model;
 
 import java.sql.Date;
 
-import com.dream.util.DreamUtil;
+import com.dream.util.ParseDate;
 
 public class Budget {
 	private int		budgetId;
@@ -57,8 +57,8 @@ public class Budget {
 			double goal, String username) {
 		this.budgetId = budgetId;
 		this.type_id = type_id;
-		this.startTime = DreamUtil.getCurrentDate(startTime);
-		this.endTime = DreamUtil.getCurrentDate(endTime);
+		this.startTime = ParseDate.getCurrentDate(startTime);
+		this.endTime = ParseDate.getCurrentDate(endTime);
 		this.goal = goal;
 		this.username = username;
 	}
@@ -66,8 +66,8 @@ public class Budget {
 	public Budget(int type_id, String startTime, String endTime,
 			double goal, String username) {
 		this.type_id = type_id;
-		this.startTime = DreamUtil.getCurrentDate(startTime);
-		this.endTime = DreamUtil.getCurrentDate(endTime);
+		this.startTime = ParseDate.getCurrentDate(startTime);
+		this.endTime = ParseDate.getCurrentDate(endTime);
 		this.goal = goal;
 		this.username = username;
 	}

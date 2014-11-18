@@ -19,7 +19,7 @@ package com.dream.model;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-import com.dream.util.DreamUtil;
+import com.dream.util.ParseDate;
 
 public class Member {
 	private String username;
@@ -43,7 +43,7 @@ public class Member {
 		this.phone = phone;
 		this.fname = fname;
 		this.lname = lname;
-		this.birth = DreamUtil.getCurrentDate(birth);
+		this.birth = ParseDate.getCurrentDate(birth);
 		this.nickname = nickname;
 		this.enable = enable;
 		this.type = "ROLE_USER";
@@ -59,7 +59,7 @@ public class Member {
 		this.phone = phone;
 		this.fname = fname;
 		this.lname = lname;
-		this.birth = DreamUtil.getCurrentDate(birth);
+		this.birth = ParseDate.getCurrentDate(birth);
 		this.nickname = nickname;
 		this.enable = enable;
 		this.type = type;
@@ -73,7 +73,7 @@ public class Member {
 		this.phone = phone;
 		this.fname = fname;
 		this.lname = lname;
-		this.birth = DreamUtil.getCurrentDate(birth);
+		this.birth = ParseDate.getCurrentDate(birth);
 		this.nickname = nickname;
 	}
 

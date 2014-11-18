@@ -22,17 +22,17 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**
- * For change string date in format yyyy-MM-dd to Date object
+ * For parse string date in format yyyy-MM-dd to Date object
  * 
  * @author shadowslight
  *
  */
-public class DreamUtil {
+public class ParseDate {
 	private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd",
 			Locale.US);
 
 	/**
-	 * Get Date by chang string to Date
+	 * Get Date by parse string to Date
 	 * 
 	 * @param time
 	 *            date in formate yyyy-MM-dd

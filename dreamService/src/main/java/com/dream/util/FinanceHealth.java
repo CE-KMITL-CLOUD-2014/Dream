@@ -8,7 +8,7 @@ public class FinanceHealth {
 	 *            total assets
 	 * @param expenses
 	 *            per month
-	 * @return liquidity result
+	 * @return liquidity result (month)
 	 */
 	public double liquidity(double assets, double expenses) {
 		double liquidityValue;
