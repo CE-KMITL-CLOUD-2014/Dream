@@ -21,13 +21,14 @@ import java.sql.Date;
 import com.dream.util.DreamUtil;
 
 public class Budget {
-	private int					budgetId;
-	private int					type_id;
-	private Date				startTime;
-	private Date				endTime;
-	private double				goal;
-	private String				username;
-	private double				amount;
+	private int		budgetId;
+	private int		type_id;
+	private Date	startTime;
+	private Date	endTime;
+	private double	goal;
+	private String	username;
+	private double	amount;
+	private String	type_description;
 
 	public Budget(int budgetId, int type_id, Date startTime, Date endTime,
 			double goal, String username, double amount) {
@@ -40,6 +41,18 @@ public class Budget {
 		this.amount = amount;
 	}
 	
+	public Budget(int budgetId, int type_id, Date startTime, Date endTime,
+			double goal, String username, double amount, String type_description) {
+		this.budgetId = budgetId;
+		this.type_id = type_id;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.goal = goal;
+		this.username = username;
+		this.amount = amount;
+		this.type_description = type_description;
+	}
+
 	public Budget(int budgetId, int type_id, String startTime, String endTime,
 			double goal, String username) {
 		this.budgetId = budgetId;
@@ -113,6 +126,14 @@ public class Budget {
 
 	public void setAmount(double amount) {
 		this.amount = amount;
+	}
+
+	public String getType_description() {
+		return type_description;
+	}
+
+	public void setType_description(String type_description) {
+		this.type_description = type_description;
 	}
 
 }

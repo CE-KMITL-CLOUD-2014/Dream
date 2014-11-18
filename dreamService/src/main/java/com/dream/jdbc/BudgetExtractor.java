@@ -38,7 +38,7 @@ public class BudgetExtractor implements ResultSetExtractor<Budget> {
 		Budget budget = new Budget(resultSet.getInt(1), resultSet.getInt(7),
 				resultSet.getDate(3), resultSet.getDate(4),
 				resultSet.getDouble(2), resultSet.getString(6),
-				resultSet.getDouble(5));
+				resultSet.getDouble(5), resultSet.getString(10));
 		return budget;
 	}
 

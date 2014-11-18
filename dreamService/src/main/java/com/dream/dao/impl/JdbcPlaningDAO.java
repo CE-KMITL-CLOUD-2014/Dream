@@ -152,7 +152,7 @@ public class JdbcPlaningDAO implements PlanningDAO {
 
 	@Override
 	public List<Budget> listBudgetFromUsername(String username) {
-		String sql = "select * from budgets where username = ?";
+		String sql = "select * from budgets,finance_type where username = ?";
 		return jdbcTemplate.query(sql, new Object[] { username },
 				new BudgetRowMapper());
 	}

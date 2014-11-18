@@ -45,7 +45,7 @@ public class CORSFilter implements Filter {
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Origin", clientOrigin);
 		response.setHeader("Access-Control-Allow-Methods",
-				"POST, GET, OPTIONS, DELETE");
+				"POST, GET, OPTIONS, DELETE, PUT");
 		response.setHeader("Access-Control-Max-Age", "3600");
 		response.setHeader("Access-Control-Allow-Headers",
 				"x-requested-with, Content-Type");
