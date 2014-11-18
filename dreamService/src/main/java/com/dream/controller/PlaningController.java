@@ -149,6 +149,7 @@ public class PlaningController {
 		}
 		Event event = new Event(userDetails.getUsername(), description,
 				end_time);
+		System.out.println(event.getEnd_time());
 		return jdbcPlaningDao.insertEvent(event);
 	}
 
