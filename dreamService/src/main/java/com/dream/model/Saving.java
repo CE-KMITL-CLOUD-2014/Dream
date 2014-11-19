@@ -29,6 +29,9 @@ public class Saving {
 	private Date end;
 	private String description;
 
+	public Saving() {
+	}
+
 	public Saving(String username, double goal, double strartAmount, String end,
 			String description) {
 		this.username = username;
@@ -67,7 +70,7 @@ public class Saving {
 		return goal;
 	}
 
-	public void setGoal(int goal) {
+	public void setGoal(double goal) {
 		this.goal = goal;
 	}
 
@@ -75,7 +78,7 @@ public class Saving {
 		return startAmount;
 	}
 
-	public void setStartAmount(int startAmount) {
+	public void setStartAmount(double startAmount) {
 		this.startAmount = startAmount;
 	}
 

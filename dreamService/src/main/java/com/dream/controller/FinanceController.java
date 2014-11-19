@@ -35,9 +35,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dream.dao.impl.JdbcFinanceDAO;
+import com.dream.dao.impl.JdbcPlaningDAO;
+import com.dream.model.Budget;
 import com.dream.model.Finance;
 import com.dream.model.FinanceType;
 import com.dream.model.Row;
+import com.dream.model.Saving;
 
 /**
  * Controller for Finance Service
@@ -49,7 +52,9 @@ import com.dream.model.Row;
 @RequestMapping("/finance")
 public class FinanceController {
 	@Autowired
-	JdbcFinanceDAO jdbcFinanceDAO;
+	JdbcFinanceDAO	jdbcFinanceDAO;
+	@Autowired
+	JdbcPlaningDAO	jdbcPlaningDAO;
 
 	/**
 	 * Insert finance in to Database
@@ -96,12 +101,57 @@ public class FinanceController {
 			budgetId = 1;
 		if (eventId == null)
 			eventId = 1;
-
 		FinanceType financeType = jdbcFinanceDAO.findFinanceType(financeStr);
-
 		Finance finance = new Finance(financeType.getId(), amount, description,
 				timeStamp, userDetails.getUsername(), budgetId, saveId, eventId);
-		return new Row(jdbcFinanceDAO.insert(finance));
+		Row numrow;
+		double oldAmountSaving = 0;
+		double oldAmountBudget = 0;
+		Saving saving = new Saving();
+		Budget budget = new Budget();
+		try {
+
+			for (Saving s : jdbcPlaningDAO.listSavingFromUsername(userDetails
+					.getUsername())) {
+				if (s.getEnd().getTime() > timeStamp.getTime()) {
+					oldAmountSaving = s.getStartAmount();
+					if (financeType.getType() == 1) {
+						s.setStartAmount(amount + s.getStartAmount());
+					} else if (financeType.getType() == 2) {
+						s.setStartAmount(Math.abs(amount - s.getStartAmount()));
+					}
+					saveId = s.getSaveID();
+					saving = s;
+					break;
+				}
+			}
+			for (Budget b : jdbcPlaningDAO.listBudgetFromUsername(userDetails
+					.getUsername())) {
+				if (b.getType_id() == financeType.getId()) {
+					if (b.getEndTime().getTime() > timeStamp.getTime()) {
+						oldAmountBudget = b.getAmount();
+						b.setAmount(amount + b.getAmount());
+						budgetId = b.getBudgetId();
+						budget = b;
+						break;
+					}
+				}
+			}
+			finance.setSaveId(saveId);
+			finance.setBudgetId(budgetId);
+			numrow = new Row(jdbcFinanceDAO.insert(finance));
+			jdbcPlaningDAO.updateSaving(saving);
+			jdbcPlaningDAO.updateBudget(budget);
+			return numrow;
+		} catch (Exception e) {
+			numrow = new Row(jdbcFinanceDAO.delete(finance.getUsername(),
+					finance.getDateTime()));
+			saving.setStartAmount(oldAmountSaving);
+			jdbcPlaningDAO.updateSaving(saving);
+			budget.setAmount(oldAmountBudget);
+			jdbcPlaningDAO.updateBudget(budget);
+			return numrow;
+		}
 	}
 
 	/**
@@ -152,16 +202,70 @@ public class FinanceController {
 			budgetId = 1;
 		if (eventId == null)
 			eventId = 1;
-
+		double amountDouble = Double.parseDouble(amount);
 		Timestamp timeStamp = new Timestamp(Long.parseLong(tempTimeStamp));
+		List<Finance> financeList = jdbcFinanceDAO.list(userDetails
+				.getUsername());
+		Finance finance = new Finance();
+		for (Finance f : financeList) {
+			if (f.getDateTime().getTime() == timeStamp.getTime()) {
+				finance = f;
+				break;
+			}
+		}
+		Row numrow = new Row(0);
+		double oldAmountFinance = 0;
+		double oldAmountSaving = 0;
+		double oldAmountBudget = 0;
+		Saving saving = new Saving();
+		Budget budget = new Budget();
+		try {
+			oldAmountFinance = finance.getAmount();
+			double diffValue = amountDouble - finance.getAmount();
 
-		FinanceType financeType = jdbcFinanceDAO.findFinanceType(financeStr);
-
-		Finance finance = new Finance(financeType.getId(),
-				Double.parseDouble(amount), description, timeStamp,
-				userDetails.getUsername(), budgetId, saveId, eventId);
-		return new Row(jdbcFinanceDAO.update(finance));
+			for (Saving s : jdbcPlaningDAO.listSavingFromUsername(userDetails
+					.getUsername())) {
+				if (s.getSaveID() == finance.getSaveId()) {
+					if (s.getEnd().getTime() > finance.getDateTime().getTime()) {
+						oldAmountSaving = s.getStartAmount();
+						if (finance.getType() == 1) {
+							s.setStartAmount(s.getStartAmount() + diffValue);
+						} else if (finance.getType() == 2) {
+							s.setStartAmount(s.getStartAmount() - diffValue);
+						}
+						saving = s;
+						break;
+					}
+				}
+			}
+			for (Budget b : jdbcPlaningDAO.listBudgetFromUsername(userDetails
+					.getUsername())) {
+				if (b.getBudgetId() == finance.getBudgetId()) {
+					if (b.getEndTime().getTime() > finance.getDateTime()
+							.getTime()) {
+						oldAmountBudget = b.getAmount();
+						b.setAmount(diffValue + b.getAmount());
+						budget = b;
+						break;
+					}
+				}
+			}
+			finance.setAmount(amountDouble);
+			numrow = new Row(jdbcFinanceDAO.update(finance));
+			jdbcPlaningDAO.updateSaving(saving);
+			jdbcPlaningDAO.updateBudget(budget);
+			return numrow;
+		} catch (Exception e) {
+			finance.setAmount(oldAmountFinance);
+			numrow = new Row(jdbcFinanceDAO.update(finance));
+			saving.setStartAmount(oldAmountSaving);
+			jdbcPlaningDAO.updateSaving(saving);
+			budget.setAmount(oldAmountBudget);
+			jdbcPlaningDAO.updateBudget(budget);
+			return numrow;
+		}
 	}
+
 
 	/**
 	 * List finances by username
@@ -212,8 +316,65 @@ public class FinanceController {
 
 		Timestamp timeStamp = new Timestamp(Long.parseLong(date_time));
 
-		return new Row(jdbcFinanceDAO.delete(userDetails.getUsername(),
-				timeStamp));
+		List<Finance> financeList = jdbcFinanceDAO.list(userDetails
+				.getUsername());
+		Finance finance = new Finance();
+		for (Finance f : financeList) {
+			if (f.getDateTime().getTime() == timeStamp.getTime()) {
+				finance = f;
+				break;
+			}
+		}
+		Row numrow = new Row(0);
+		double oldAmountFinance = 0;
+		double oldAmountSaving = 0;
+		double oldAmountBudget = 0;
+		Saving saving = new Saving();
+		Budget budget = new Budget();
+		try {
+			for (Saving s : jdbcPlaningDAO.listSavingFromUsername(userDetails
+					.getUsername())) {
+				if (s.getSaveID() == finance.getSaveId()) {
+					if (s.getEnd().getTime() > finance.getDateTime().getTime()) {
+						oldAmountSaving = s.getStartAmount();
+						if (finance.getType() == 1) {
+							s.setStartAmount(s.getStartAmount()
+									- finance.getAmount());
+						} else if (finance.getType() == 2) {
+							s.setStartAmount(s.getStartAmount()
+									+ finance.getAmount());
+						}
+						saving = s;
+						break;
+					}
+				}
+			}
+			for (Budget b : jdbcPlaningDAO.listBudgetFromUsername(userDetails
+					.getUsername())) {
+				if (b.getBudgetId() == finance.getBudgetId()) {
+					if (b.getEndTime().getTime() > finance.getDateTime()
+							.getTime()) {
+						oldAmountBudget = b.getAmount();
+						b.setAmount(b.getAmount() - finance.getAmount());
+						budget = b;
+						break;
+					}
+				}
+			}
+			numrow = new Row(jdbcFinanceDAO.delete(finance.getUsername(),
+					finance.getDateTime()));
+			jdbcPlaningDAO.updateSaving(saving);
+			jdbcPlaningDAO.updateBudget(budget);
+			return numrow;
+		} catch (Exception e) {
+			finance.setAmount(oldAmountFinance);
+			numrow = new Row(jdbcFinanceDAO.update(finance));
+			saving.setStartAmount(oldAmountSaving);
+			jdbcPlaningDAO.updateSaving(saving);
+			budget.setAmount(oldAmountBudget);
+			jdbcPlaningDAO.updateBudget(budget);
+			return numrow;
+		}
 	}
 
 	/**

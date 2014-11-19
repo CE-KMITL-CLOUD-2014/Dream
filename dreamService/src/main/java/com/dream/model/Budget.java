@@ -30,6 +30,9 @@ public class Budget {
 	private double	amount;
 	private String	type_description;
 
+	public Budget() {
+	}
+
 	public Budget(int budgetId, int type_id, Date startTime, Date endTime,
 			double goal, String username, double amount) {
 		this.budgetId = budgetId;

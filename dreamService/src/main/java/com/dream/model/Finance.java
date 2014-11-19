@@ -30,6 +30,9 @@ public class Finance {
 	private int			type;
 	private String		type_description;
 
+	public Finance() {
+	}
+
 	public Finance(int financeId, double amount, String description,
 			Timestamp dateTime, String username, int budgetId, int saveId,
 			int eventId) {
