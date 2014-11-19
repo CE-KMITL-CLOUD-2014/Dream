@@ -16,9 +16,8 @@
 
 package com.dream.controller;
 
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -41,6 +40,7 @@ import com.dream.model.Finance;
 import com.dream.model.FinanceType;
 import com.dream.model.Row;
 import com.dream.model.Saving;
+import com.dream.util.ParseDate;
 
 /**
  * Controller for Finance Service
@@ -402,16 +402,14 @@ public class FinanceController {
 		} else {
 			return null;
 		}
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",
-				java.util.Locale.US);
-		Timestamp start_date = null, end_date = null;
-		try {
-			start_date = new Timestamp(formatter.parse(start).getTime());
-			end_date = new Timestamp(formatter.parse(end).getTime());
-		} catch (ParseException e) {
-			return null;
-		}
-		return jdbcFinanceDAO.listFromDateToDate(userDetails.getUsername(),
-				start_date, end_date);
+		Date start_date = ParseDate.getCurrentDate(start);
+		Date end_date = ParseDate.getCurrentDate(end);
+		Timestamp startT = new Timestamp(start_date.getTime());
+		Timestamp endT = new Timestamp(end_date.getTime());
+
+		List<Finance> finance = jdbcFinanceDAO.listFromDateToDate(
+				userDetails.getUsername(), startT, endT);
+
+		return finance;
 	}
 }
