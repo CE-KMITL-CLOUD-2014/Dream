@@ -12,14 +12,102 @@
 		<com.fasterxml.jackson.core.version>2.4.2</com.fasterxml.jackson.core.version>
 		<logback.version>1.1.2</logback.version>
 		<jcl-over-slf4j.version>1.7.7</jcl-over-slf4j.version>
+		<powermock.version>1.5.6</powermock.version>
 	</properties>
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<url>http://repo.springsource.org/libs-snapshot/</url>
+		</repository>
+	</repositories>
 	<dependencies>
+
+		<!-- Test dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>4.11</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>hamcrest-core</artifactId>
+					<groupId>org.hamcrest</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>1.3</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>1.10.8</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${org.springframework.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-core</artifactId>
+			<version>${powermock.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>${powermock.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.objenesis</groupId>
+					<artifactId>objenesis</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>${powermock.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>0.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path-assert</artifactId>
+			<version>0.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test-mvc</artifactId>
+			<version>1.0.0.BUILD-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+			<scope>test</scope>
+		</dependency>
+
+
+		<!-- Spring dependencies -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -67,6 +155,13 @@
 			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+
+
+		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>${com.fasterxml.jackson.core.version}</version>
@@ -86,6 +181,8 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+
+		<!-- Spring Security dependencies -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
@@ -111,11 +208,7 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${org.springframework.version}</version>
-		</dependency>
+
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>

@@ -21,16 +21,21 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 		<intercept-url pattern="/user/update" />
 		<sec:form-login authentication-success-handler-ref="mySuccessHandler"
 			authentication-failure-handler-ref="myFailureHandler" />
-		<sec:logout delete-cookies="JSESSIONID" success-handler-ref="httpLogoutSuccessHandler" />
-		<sec:custom-filter ref="corsAwareAuthenticationFilter" before="LOGOUT_FILTER"/>
+		<sec:logout delete-cookies="JSESSIONID"
+			success-handler-ref="httpLogoutSuccessHandler" />
+		<sec:custom-filter ref="corsAwareAuthenticationFilter"
+			before="LOGOUT_FILTER" />
 
 		<remember-me data-source-ref="dataSource"
 			token-validity-seconds="86400" />
+		<session-management>
+			<concurrency-control max-sessions="1" />
+		</session-management>
 	</http>
-	
+
 	<!-- Bean CORS filter logout -->
 	<beans:bean id="corsAwareAuthenticationFilter" class="com.dream.controller.CORSFilter" />
-	<beans:bean id="httpLogoutSuccessHandler" class="com.dream.security.HttpLogoutSuccessHandler" />  
+	<beans:bean id="httpLogoutSuccessHandler" class="com.dream.security.HttpLogoutSuccessHandler" />
 
 	<!-- Connect the custom authentication success handler -->
 	<beans:bean id="mySuccessHandler"
