@@ -1,0 +1,41 @@
+
+	<div layout="vertical" layout-sm="horizontal" style="min-height: 88vh" ng-controller="calcCtrl">
+		<section style="min-width:15%">
+			<md-sidenav class="md-sidenav-left md-whiteframe-z5" component-id="leftDebt" is-locked-open="$media('md')">
+				<md-toolbar class="md-theme-indigo">
+				 <div layout="horizontal">
+		        	<h1 class="md-toolbar-tools" layout-align="center">Calculator Menu</h1>
+		        	<md-button ng-click="close()" class="md-button-fab" aria-label="close" hide-md>
+			        	<div layout-align="end start">
+			        		<md-icon icon="images/close_32.png" style="width: 32px; height: 32px;"></md-icon>
+			        	</div>
+		        	</md-button>
+		        </div>
+		     	</md-toolbar>
+		     	<md-content layout="vertical">
+		        	<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/calc/debt.html'">
+		        		Debt
+		        	</md-button>
+		        	<md-divider></md-divider>
+		        	<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/calc/debtRatio.html'">
+		        		Debt Ratio
+		        	</md-button>
+		        	<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/calc/saveRatio.html'">
+		        		Saving Ratio
+		        	</md-button>
+		        	<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/calc/liquidity.html'">
+		        		Liquidity
+		        	</md-button>
+		        	<md-divider></md-divider>
+		     	</md-content>
+		    </md-sidenav>
+		</section>
+		
+		<md-content class="md-content-padding" style="height: 88vh; width: 100%; padding: 1px;" >
+			<md-card layout="vertical" layout-fill layout-align="center center">
+				<div style="padding: 20px;">
+					<div ng-include src="template" ng-init="template='templates/calc/debt.html'"></div>
+				</div>
+			</md-card>
+		</md-content>
+	</div>

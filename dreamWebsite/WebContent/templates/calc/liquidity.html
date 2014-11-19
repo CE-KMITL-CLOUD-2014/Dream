@@ -1,0 +1,21 @@
+<div layout-align="start start">
+	<md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
+		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
+	</md-button>
+</div>
+<div ng-show="hasLogin==true">
+Member Calculate<br><br>
+<md-button class="md-button-raised md-button-colored" ng-click="getLiquidity(null, null)">Calculate From Finance !!</md-button>
+
+</div>
+<br>
+<br>
+<form name="formLiquidRatio" ng-submit="getLiquidity(liquidity.asset, liquidity.expense)" novalidate>
+	<md-text-float label="Type"       ng-model="liquidity.type" class="labelText" disabled > </md-text-float>
+	<div layout-sm="horizontal" layout-align="center">
+		<md-text-float type="number" label="Assets" 				ng-model="liquidity.asset" inline-block-sm inline-block required> </md-text-float>
+		<md-text-float type="number" label="Expense Per Month"  	ng-model="liquidity.expense" inline-block-sm inline-block required></md-text-float>
+	</div>
+		<md-button class="md-button-raised md-button-colored" ng-show="formLiquidRatio.$valid">Calculate</md-button>
+</form>
+<md-text-float label="Survivor Month" ng-model="liquidity.liquidtyValue" disabled></md-text-float>

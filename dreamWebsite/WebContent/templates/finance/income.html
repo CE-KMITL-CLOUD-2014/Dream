@@ -3,17 +3,23 @@
 		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
 	</md-button>
 </div>
-<form>
+<form name="incomeForm">
 	<md-text-float label="Type"       ng-model="income.type" class="labelText" disabled > </md-text-float>
 	<md-button class="md-button-colored" ng-click="showGridIncome($event)">
       Select Type
     </md-button>
-    <md-text-float label="Finance Type"       			ng-model="income.finance"    disabled></md-text-float>
+    <md-text-float label="Finance Type"       			ng-model="income.finance"    disabled required></md-text-float>
 	<div layout-sm="horizontal" layout-align="center">
-		<md-text-float label="Amount" 	ng-model="income.amount" inline-block-sm inline-block> </md-text-float>
+		<md-text-float type="number" label="Amount" 	ng-model="income.amount" inline-block-sm inline-block required> </md-text-float>
 	</div>
-	<md-text-float label="Detail"       			ng-model="income.description"    ></md-text-float>
-		<md-button class="md-button-raised md-button-colored" ng-click="addFinanceIncome(income.finance, income.amount, income.description)">Add</md-button>
+    <div layout-sm="horizontal" layout-align="center">
+		<md-button class="md-button-raised md-button-colored" ng-click="select = showEventDialog($event)" inline-block-sm inline-block>
+      		With Event
+    	</md-button>
+    </div>
+
+	<md-text-float label="Detail"       			ng-model="income.description"></md-text-float>
+		<md-button class="md-button-raised md-button-colored" ng-show="incomeForm.$valid" ng-click="addFinanceIncome(income.finance, income.amount, income.description, eventID)">Add</md-button>
 </form>
 
 

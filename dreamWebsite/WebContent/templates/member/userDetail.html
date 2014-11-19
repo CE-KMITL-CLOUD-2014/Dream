@@ -3,32 +3,38 @@
 		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
 	</md-button>
 	<br>
+	<br>
 	Welcome {{ member.username }}
-	<md-divider></md-divider>
-	<md-list>
-		<md-item>
-		 	<md-item-content>
-				Full Name : {{ member.fname }}  {{ member.lname }} <br>
-			</md-item-content>
-		</md-item>
-		<md-item>
-		 	<md-item-content>
-				Nickname  : {{ member.nickname }} <br>
-			</md-item-content>
-		</md-item>
-		<md-item>
-		 	<md-item-content>
-				Email	  : {{ member.email }} <br>
-			</md-item-content>
-		</md-item>
-		<md-item>
-		 	<md-item-content>
-				Phone     : {{ member.phone }} <br>
-			</md-item-content>
-		</md-item>
-		<md-item>
-		 	<md-item-content>
-				Birth     : {{ member.birth }} <br>
-			</md-item-content>
-		</md-item>
-	</md-list>
+	<br>
+	<table class="table" ng-init="listFinance()">
+		  <tr>
+		  	<td>
+		  	<th>Fullname</th>
+		  	</td>
+		  	<td>{{ member.fname }}  {{ member.lname }}</td>
+		  </tr>
+		  <tr>
+		  	<td>
+		  	<th>Nickname</th>
+		  	</td>
+		  	<td>{{ member.nickname }}</td>
+		  </tr>
+		  <tr>
+		  	<td>
+		  	<th>Email</th>
+		  	</td>
+		  	<td>{{ member.email }}</td>
+		  </tr>
+		  <tr>
+		  	<td>
+		  	<th>Phone</th>
+		  	</td>
+		  	<td>{{ member.phone }}</td>
+		  </tr>
+		  <tr>
+		  	<td>
+		  	<th>Birth</th>
+		  	</td>
+		  	<td>{{ member.birth }}</td>
+		  </tr>
+	</table>

@@ -1,25 +1,27 @@
 <md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
 		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
 </md-button>
-<table class="table table-striped" ng-init="listFinance()">
+<table class="table" ng-init="listFinance()">
+<tr>
   <th>Date</th>
   <th>Amount</th>
   <th>Type</th>
   <th>Description</th>
+  </tr>
   <tr ng-repeat="item in list">
   <td>{{ item.dateTime | date:'yyyy/MM/dd'}}</td>
-  <td><md-text-float ng-if="hasClick" ng-model="item.amount"></md-text-float><span ng-if="hasClick == false">{{ item.amount }}</span></td>
+  <td><md-text-float ng-if="hasClick" type="number" ng-model="item.amount"></md-text-float><span ng-if="hasClick == false">{{ item.amount }}</span></td>
   <td>{{item.type_description}}</td>
   <td><md-text-float ng-if="hasClick" ng-model="item.description"></md-text-float><span ng-if="hasClick == false">{{ item.description }}</span></td>
   <td>
-  <md-button class="md-button-raised md-button-colored" ng-click="editFinance(item.type_description, item.dateTime, item.amount, item.description)" ng-if="hasClick == true">edit</md-button>
+  <md-button class="md-button-raised md-button-colored" ng-click="editFinance(item.type_description, item.dateTime, item.amount, item.description, item.eventId, item.budgetId, item.saveId)" ng-if="hasClick == true">edit</md-button>
   </td>
   <td>
   <md-button class="md-button-raised md-button-colored" ng-click="deleteFinance(item.dateTime)" ng-if="hasClick == true">delete</md-button>
   </td>
   </tr>
   <tr>
-  	<td><md-button class="md-button-raised md-button-colored" ng-click="hasClick=true">Edit</md-button></td>
+  	<td ng-show="hasClick==false"><md-button class="md-button-raised md-button-colored" ng-click="hasClick=true">Edit</md-button></td>
   	<td ng-show="hasClick==true"><md-button class="md-button-raised md-button-colored" ng-click="hasClick=false">Cancle</md-button></td>
   </tr>
 </table>

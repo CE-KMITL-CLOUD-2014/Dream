@@ -1,0 +1,27 @@
+<div ng-controller="chartCtrl">
+	Select Chart Type : <select ng-model="myChart" ng-init="myChart='pie'">
+      <option value="pie">pie</option>
+      <option value="bar">bar</option>
+      <option value="line">line</option>
+      <option value="point">point</option>
+      <option value="area">area</option>
+    </select>
+    <br><br>
+    <form name="timeForm">
+    <div class="form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
+	<input type="text" data-autoclose="1" ng-model="start" name="dateField1" bs-datepicker
+	placeholder="Start Date" required>
+	<input type="text" data-min-date="{{budget.start}}" data-autoclose="1" ng-model="end" name="dateField2" bs-datepicker
+	placeholder="End Date" required>
+	
+	<md-button ng-show="timeForm.$valid" class="md-button-raised md-button-colored" ng-click="getData(start, end)">Show</md-button>
+	</div>
+	</form>
+
+<div
+    data-ac-chart="myChart" 
+    data-ac-data="data" 
+    data-ac-config="config" 
+    class="chart">
+</div>
+</div>

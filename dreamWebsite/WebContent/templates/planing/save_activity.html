@@ -1,7 +1,7 @@
 <md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
 		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
 </md-button>
-<table class="table table-striped" ng-init="listSaving()">
+<table class="table" ng-init="listSaving()">
 <tr>
   <th>End Date</th>
   <th>Amount</th>
@@ -17,10 +17,13 @@
 		</div>
 		<span ng-if="hasClick == false">{{ item.end }}</span>
 	</td>
-  <td><md-text-float ng-if="hasClick" ng-model="item.startAmount"></md-text-float><span ng-if="hasClick == false">{{ item.startAmount }}</span></td>
-  <td><md-text-float ng-if="hasClick" ng-model="item.goal"></md-text-float><span ng-if="hasClick == false">{{ item.goal }}</span></td>
+  <td><span>{{ item.startAmount }}</span></td>
+  <td><md-text-float ng-if="hasClick" type="number" ng-model="item.goal"></md-text-float><span ng-if="hasClick == false">{{ item.goal }}</span></td>
   <td><md-text-float ng-if="hasClick" ng-model="item.description"></md-text-float><span ng-if="hasClick == false">{{ item.description }}</span></td>
-  <td><span>{{ item.goal - item.startAmount }}</span></td><td><img src="images/like_24.png" ng-show="item.goal - item.startAmount == 0"><img src="images/dislike_24.png" ng-show="item.goal - item.startAmount > 0"></td>
+  <td>
+  		<span ng-if="item.goal - item.startAmount <= 0"> +{{ -(item.goal - item.startAmount) }}</span>
+  		<span ng-if="item.goal - item.startAmount > 0"> -{{ item.goal - item.startAmount }}</span>
+  </td><td><img src="images/like_24.png" ng-show="item.goal - item.startAmount <= 0"><img src="images/dislike_24.png" ng-show="item.goal - item.startAmount > 0"></td>
   <td>
   <md-button class="md-button-raised md-button-colored" ng-click="editSaving(item.saveID, item.end, item.startAmount, item.goal, item.description)" ng-if="hasClick == true">edit</md-button>
   </td>
@@ -29,7 +32,7 @@
   </td>
   </tr>
   <tr>
-  	<td><md-button class="md-button-raised md-button-colored" ng-click="hasClick=true">Edit</md-button></td>
+  	<td ng-show="hasClick==false"><md-button class="md-button-raised md-button-colored" ng-click="hasClick=true">Edit</md-button></td>
   	<td ng-show="hasClick==true"><md-button class="md-button-raised md-button-colored" ng-click="hasClick=false">Cancle</md-button></td>
   </tr>
 </table>

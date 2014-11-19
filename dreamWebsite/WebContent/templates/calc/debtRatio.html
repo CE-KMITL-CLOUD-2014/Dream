@@ -1,0 +1,14 @@
+<div layout-align="start start">
+	<md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
+		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
+	</md-button>
+</div>
+<form name="formDebtRatio" ng-submit="getDebtRatio(debtRatio.debt, debtRatio.totalAsset)" novalidate>
+	<md-text-float label="Type"       ng-model="debtRatio.type" class="labelText" disabled > </md-text-float>
+	<div layout-sm="horizontal" layout-align="center">
+		<md-text-float type="number" label="Total Debt" 			ng-model="debtRatio.debt" inline-block-sm inline-block required> </md-text-float>
+		<md-text-float type="number" label="Total Asset"  		ng-model="debtRatio.totalAsset" inline-block-sm inline-block required></md-text-float>
+	</div>
+		<md-button class="md-button-raised md-button-colored" ng-show="formDebtRatio.$valid">Calculate</md-button>
+</form>
+<md-text-float label="Debt Ratio" ng-model="debtRatio.ratio" disabled></md-text-float>
