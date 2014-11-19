@@ -53,6 +53,11 @@ public class MemberControllerTest {
 
 	@Test
 	public void testList() throws Exception {
+		userDetailsService = webApplicationContext.getBean(JdbcDaoImpl.class);
+		userDetails = userDetailsService.loadUserByUsername("admin2");
+		authToken = new UsernamePasswordAuthenticationToken(userDetails,
+				"admin2");
+		SecurityContextHolder.getContext().setAuthentication(authToken);
 		mockMvc.perform(get("/member/list")).andExpect(status().isOk());
 	}
 
@@ -74,15 +79,15 @@ public class MemberControllerTest {
 	@Test
 	public void can_add_user_and_delete_user() throws Exception {
 		mockMvc.perform(
-				post("/member/insert").param("username", "test11")
-						.param("password", "test")
+				post("/member/insert").param("username", "fortest0")
+						.param("password", "fortest0")
 						.param("email", "test@test.com")
 						.param("phone", "1234567890").param("fname", "test")
 						.param("lname", "test").param("nickname", "test")
 						.param("birth", "1992-12-25")).andExpect(
 				status().isOk());
-		userDetails = userDetailsService.loadUserByUsername("test11");
-		authToken = new UsernamePasswordAuthenticationToken(userDetails, "test");
+		userDetails = userDetailsService.loadUserByUsername("fortest0");
+		authToken = new UsernamePasswordAuthenticationToken(userDetails, "fortest0");
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 		mockMvc.perform(delete("/member/delete")).andExpect(status().isOk());
 	}

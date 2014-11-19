@@ -39,8 +39,9 @@ public class FinanceExtractor implements ResultSetExtractor<Finance> {
 				resultSet.getDouble(4), resultSet.getString("description"),
 				resultSet.getTimestamp("date_time"),
 				resultSet.getString("username"), resultSet.getInt("#budget"),
-				resultSet.getInt("#save"), resultSet.getInt("#event"),
-				resultSet.getInt("type"), resultSet.getString(11));
+				resultSet.getInt("#save"), resultSet.getString("saving_description"),
+				resultSet.getInt("#event"), resultSet.getString("event_description"),
+				resultSet.getInt("type"), resultSet.getString("type_description"));
 		return finance;
 	}
 

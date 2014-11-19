@@ -73,7 +73,7 @@ public class JdbcFinanceDAO implements FinanceDAO {
 
 	@Override
 	public List<Finance> list(String username) {
-		String sql = "SELECT * FROM finance,finance_type WHERE username=? and finance.#finance_type = finance_type.#finance_type";
+		String sql = "SELECT finance.*,finance_type.type,finance_type.description as type_description ,savings.description as saving_description,events.description as event_description FROM finance,finance_type,savings,events WHERE finance.username=? and finance.#finance_type = finance_type.#finance_type and finance.#save=savings.#save and finance.#event=events.#event";
 		return (List<Finance>) jdbcTemplate.query(sql,
 				new Object[] { username }, new FinanaceRowMapper());
 	}
@@ -89,7 +89,7 @@ public class JdbcFinanceDAO implements FinanceDAO {
 	@Override
 	public List<Finance> listFromDateToDate(String username, Timestamp start,
 			Timestamp end) {
-		String sql = "SELECT * FROM finance,finance_type WHERE date_time BETWEEN ? AND ? and username = ? and finance.#finance_type = finance_type.#finance_type";
+		String sql = "SELECT finance.*,finance_type.type,finance_type.description as type_description ,savings.description as saving_description,events.description as event_description FROM finance,finance_type,savings,events WHERE date_time between ? and ? and finance.username=? and finance.#finance_type = finance_type.#finance_type and finance.#save=savings.#save and finance.#event=events.#event";
 		Object[] params = new Object[] { start, end, username };
 		int[] types = new int[] { Types.TIMESTAMP, Types.TIMESTAMP,
 				Types.VARCHAR };

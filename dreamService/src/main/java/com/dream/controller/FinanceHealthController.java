@@ -40,7 +40,7 @@ import com.dream.util.FinanceHealth;
 /**
  * Controller for FinanceHealth Service
  * 
- * @author Peerawit Praphanwittaya
+ * @author Apirat Puttaraksa
  *
  */
 @RestController

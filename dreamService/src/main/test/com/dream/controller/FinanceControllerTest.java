@@ -14,6 +14,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,9 @@ public class FinanceControllerTest {
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
 				.build();
 		userDetailsService = webApplicationContext.getBean(JdbcDaoImpl.class);
-		userDetails = userDetailsService.loadUserByUsername("fortest");
+		userDetails = userDetailsService.loadUserByUsername("fortest2");
 		authToken = new UsernamePasswordAuthenticationToken(userDetails,
-				"fortest");
+				"fortest2");
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 	}
 
@@ -80,7 +81,7 @@ public class FinanceControllerTest {
 		// update
 		mockMvc.perform(
 				put("/finance/update").param("finance", "Stock")
-						.param("amount", "1000").param("description", "test")
+						.param("amount", "1000").param("description", "eiei")
 						.param("dateTime", String.valueOf(time))).andExpect(
 				status().isOk());
 		// Delete
@@ -92,13 +93,13 @@ public class FinanceControllerTest {
 	@Test
 	public void can_list_from_date_to_date() throws Exception {
 		userDetailsService = webApplicationContext.getBean(JdbcDaoImpl.class);
-		userDetails = userDetailsService.loadUserByUsername("fortest2");
+		userDetails = userDetailsService.loadUserByUsername("fortest");
 		authToken = new UsernamePasswordAuthenticationToken(userDetails,
-				"fortest2");
+				"fortest");
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 		mockMvc.perform(
 				get("/finance/listdatetodate").param("start", "2014-11-1")
-						.param("end", "2014-11-30")).andExpect(jsonPath("$", hasSize(4))).andExpect(status().isOk());
+						.param("end", "2014-12-30")).andExpect(jsonPath("$", hasSize(3))).andExpect(status().isOk());
 	}
 
 	@After

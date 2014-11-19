@@ -54,9 +54,9 @@ public class FinanceHealthControllerTest {
 	@Test
 	public void can_get_liquidity_correctly_when_login() throws Exception {
 		userDetailsService = webApplicationContext.getBean(JdbcDaoImpl.class);
-		userDetails = userDetailsService.loadUserByUsername("fortest2");
+		userDetails = userDetailsService.loadUserByUsername("fortest");
 		authToken = new UsernamePasswordAuthenticationToken(userDetails,
-				"fortest2");
+				"fortest");
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 		mockMvc.perform(get("/financehealth/getliquidity"))
 				.andExpect(status().isOk()).andExpect(jsonPath("$liquidtyValue", is(3.0)));
