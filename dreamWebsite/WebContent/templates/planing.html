@@ -1,9 +1,9 @@
-	<div ng-controller="planCtrl" layout="vertical" layout-sm="horizontal">
+	<div ng-controller="planCtrl" layout="vertical" layout-sm="horizontal" style="background-color: #fcf5e3">
 		<section style="min-width:15%">
 			<md-sidenav class="md-sidenav-left md-whiteframe-z5" component-id="leftPlan" is-locked-open="$media('md')">
 				<md-toolbar class="md-theme-indigo">
 				 <div layout="horizontal">
-		        	<h1 class="md-toolbar-tools" layout-align="center">Planing Menu</h1>
+		        	<h1 class="md-toolbar-tools" style="background-color: #009999" layout-align="center">Planing Menu</h1>
 		        	<md-button ng-click="close()" class="md-button-fab" aria-label="close" hide-md>
 			        	<div layout-align="end start">
 			        		<md-icon icon="images/close_32.png" style="width: 32px; height: 32px;"></md-icon>
@@ -13,17 +13,17 @@
 		     	</md-toolbar>
 		     	<md-content layout="vertical">
 		     			<md-divider></md-divider>
-		        		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/planing/event.html'; close()">Event</md-button>
+		        		<md-button style="background-color: #00c0c0" class="md-button-raised" ng-click="close(); template='templates/planing/event.html'; close()">Event</md-button>
 		          		<md-divider></md-divider>
-		          		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/planing/save.html'; close()">Save</md-button>
+		          		<md-button style="background-color: #00c0c0" class="md-button-raised" ng-click="close(); template='templates/planing/save.html'; close()">Save</md-button>
 		          		<md-divider></md-divider>
-		          		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/planing/budget.html'; close()">Budget</md-button>
+		          		<md-button style="background-color: #00c0c0" class="md-button-raised" ng-click="close(); template='templates/planing/budget.html'; close()">Budget</md-button>
 		          		<md-divider></md-divider>
-		          		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/planing/event_activity.html'; close()">Event Activities</md-button>
+		          		<md-button style="background-color: #00c0c0" class="md-button-raised" ng-click="close(); template='templates/planing/event_activity.html'; close()">Event Activities</md-button>
 		          		<md-divider></md-divider>
-		          		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/planing/save_activity.html'; close()">Save Activities</md-button>
+		          		<md-button style="background-color: #00c0c0" class="md-button-raised" ng-click="close(); template='templates/planing/save_activity.html'; close()">Save Activities</md-button>
 		          		<md-divider></md-divider>
-		          		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/planing/budget_activity.html'; close()">Budget Activities</md-button>
+		          		<md-button style="background-color: #00c0c0" class="md-button-raised" ng-click="close(); template='templates/planing/budget_activity.html'; close()">Budget Activities</md-button>
 		          		<md-divider></md-divider>
 		     	</md-content>
 		    </md-sidenav>

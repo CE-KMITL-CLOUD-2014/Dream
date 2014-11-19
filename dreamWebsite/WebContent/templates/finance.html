@@ -1,9 +1,9 @@
-	<div ng-controller="financeCtrl" layout="vertical" layout-sm="horizontal">
+	<div ng-controller="financeCtrl" layout="vertical" layout-sm="horizontal" style="background-color: #fcf5e3">
 		<section style="min-width:15%">
 			<md-sidenav class="md-sidenav-left md-whiteframe-z5" component-id="leftFinance" is-locked-open="$media('md')">
 				<md-toolbar class="md-theme-indigo">
 				 <div layout="horizontal">
-		        	<h1 class="md-toolbar-tools" layout-align="center">Finance Menu</h1>
+		        	<h1 class="md-toolbar-tools" style="background-color: #009999" layout-align="center">Finance Menu</h1>
 		        	<md-button ng-click="close()" class="md-button-fab" aria-label="close" hide-md>
 			        	<div layout-align="end start">
 			        		<md-icon icon="images/close_32.png" style="width: 32px; height: 32px;"></md-icon>
@@ -13,13 +13,13 @@
 		     	</md-toolbar>
 		     	<md-content layout="vertical">
 		     			<md-divider></md-divider>
-		        		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/finance/income.html'; close()">Income</md-button>
+		        		<md-button style="background-color: #00c0c0" class="md-button-raised" ng-click="close(); template='templates/finance/income.html'; close()">Income</md-button>
 		        		<md-divider></md-divider>
-		          		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/finance/outcome.html'; close()">Outcome</md-button>
+		          		<md-button style="background-color: #00c0c0" class="md-button-raised" ng-click="close(); template='templates/finance/outcome.html'; close()">Outcome</md-button>
 		          		<md-divider></md-divider>
-		          		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/finance/activity.html'; close()">All Activities</md-button>
+		          		<md-button style="background-color: #00c0c0" class="md-button-raised" ng-click="close(); template='templates/finance/activity.html'; close()">All Activities</md-button>
 		          		<md-divider></md-divider>
-		          		<md-button class="md-button-raised md-button-colored" ng-click="close(); template='templates/finance/result.html'; close()">Finance Result</md-button>
+		          		<md-button style="background-color: #00c0c0" class="md-button-raised" ng-click="close(); template='templates/finance/result.html'; close()">Finance Result</md-button>
 		          		<md-divider></md-divider>
 		     	</md-content>
 		    </md-sidenav>
