@@ -1,9 +1,9 @@
 <md-bottom-sheet class="grid bottomSheet">
   <md-list>
-    <md-item ng-repeat="item in items" ng-click="listItemClick($index)">
-      <div class="md-item-content">
+    <md-item ng-repeat="item in items">
+      <div class="md-item-content" ng-click="listItemClick($index)">
         <div class="md-icon-container">
-            <img ng-src="{{item.icon}}" />
+            <img ng-src="{{item.icon}}"/>
         </div>
         <p class="grid-text"> {{ item.name }} </p>
       </div>

@@ -1,0 +1,19 @@
+<md-dialog aria-label="Event List">
+
+	<md-radio-group ng-model="select">
+	  <div ng-repeat="event in eventList">
+      <md-radio-button value="{{event.eventID}}" aria-label="Label 1">{{event.description}}</md-radio-button>
+      </div>
+    </md-radio-group>  
+    
+  <div class="md-actions" layout="row">
+    <span flex></span>
+    <md-button ng-click="answer(select)" class="md-primary">
+      OK
+    </md-button>
+    <md-button ng-click="cancel()" class="md-primary">
+      Cancel
+    </md-button>
+  </div>
+
+</md-dialog>

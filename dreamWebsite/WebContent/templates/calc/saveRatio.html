@@ -1,0 +1,14 @@
+<div layout-align="start start">
+	<md-button class="md-button-fab" aria-label="menu" ng-click="toggleLeft()" hide-md>
+		<md-icon icon="images/sidenav_32.png"  style="width: 32px; height: 32px;"></md-icon>
+	</md-button>
+</div>
+<form name="formSaveRatio" ng-submit="getSaveRatio(saveRatio.save, saveRatio.income)" novalidate>
+	<md-text-float label="Type"       ng-model="saveRatio.type" class="labelText" disabled > </md-text-float>
+	<div layout-sm="horizontal" layout-align="center">
+		<md-text-float type="number" label="Saving Per Year" 			ng-model="saveRatio.save" inline-block-sm inline-block required> </md-text-float>
+		<md-text-float type="number" label="Income Per Year"  		ng-model="saveRatio.income" inline-block-sm inline-block required></md-text-float>
+	</div>
+		<md-button class="md-button-raised md-button-colored" ng-show="formSaveRatio.$valid">Calculate</md-button>
+</form>
+<md-text-float label="Save Ratio" ng-model="saveRatio.ratio" disabled></md-text-float>

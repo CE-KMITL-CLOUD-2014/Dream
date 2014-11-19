@@ -1,5 +1,5 @@
 
-var mainApp = angular.module('mainApp',['ngCookies', 'ngRoute', 'mgcrea.ngStrap', 'ngMaterial']);
+var mainApp = angular.module('mainApp',['ngCookies', 'ngRoute', 'mgcrea.ngStrap', 'ngMaterial', 'angularCharts']);
 
 mainApp.config(['$httpProvider', function ($httpProvider) {
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
@@ -17,7 +17,9 @@ mainApp.config(function($datepickerProvider) {
 		var tabs = mainTabSelect($scope, $interpolate);
 	})
 
-	mainApp.controller('debtCtrl', function ($scope, $http, $mdSidenav) {
+	mainApp.controller('calcCtrl', function ($scope, $http, $mdSidenav, $filter, $cookieStore) {
+		$scope.hasLogin = $cookieStore.get('hasLogin');
+		
 		$scope.debtLoan = {
     		type:		"Loan",
     		totalMoney: null,
@@ -25,14 +27,7 @@ mainApp.config(function($datepickerProvider) {
     		time:		null,
     		payMonth:	null
 		}
-		
-		$scope.debtSave = {
-	    		type:		"Save Account",
-	    		totalMoney: null,
-	    		debtRate:	null,
-	    		time:		null,
-	    		moneyDebt:	null
-			}
+
 		
 		$scope.getDebtLoan = function(totalMoney, debtRate, time) {
 			$http.get("http://dreamservice.azurewebsites.net/debt/cal?moneyLoan="+totalMoney+"&debtRate="+debtRate+"&time="+time).
@@ -44,14 +39,75 @@ mainApp.config(function($datepickerProvider) {
 			})
 		}
 		
-		$scope.getDebtSave = function(totalMoney, debtRate, time) {
-			$http.get("http://dreamservice.azurewebsites.net/debt/cal?moneyLoan="+totalMoney+"&debtRate="+debtRate+"&time="+time).
+		$scope.debtRatio = {
+				type: "Debt Ratio",
+				debt: null,
+				totalAsset: null,
+				ratio: null
+			}
+			
+		$scope.getDebtRatio = function(debt, totalAsset) {
+			$http.get("http://dreamservice.azurewebsites.net/financehealth/debtratio?debt="+debt+"&totalAsset="+totalAsset).
 			success(function(data,status){
-				$scope.debtSave.moneyDebt = data.moneyDebt;
+				$scope.debtRatio.ratio = $filter('number')(data.debtRatioValue * 100, 2) + "%";
 			}).
 			error(function(data,status){
 				alert("error");
 			})
+		}
+		
+		$scope.saveRatio = {
+			type: "Save Ratio",
+			save: null,
+			income: null,
+			ratio: null
+		}
+		
+		$scope.getSaveRatio = function(save, income) {
+			$http.get("http://dreamservice.azurewebsites.net/financehealth/savingratio?savingPerYear="+save+"&incomePerYear="+income).
+			success(function(data,status){
+				$scope.saveRatio.ratio = $filter('number')(data.savingRatioValue * 100, 2) + "%";
+			}).
+			error(function(data,status){
+				alert("error");
+			})
+		}
+		
+		$scope.liquidity = {
+			type: "Liquidity",
+			asset: null,
+			expense: null,
+			liquidtyValue: null
+		}
+		
+		$scope.getLiquidity = function(asset, expense) {
+			if(asset == null && expense == null) {
+				$http({
+					   withCredentials: true,
+				       method: 'get',
+				       url: "http://dreamservice.azurewebsites.net/financehealth/getliquidity",
+				       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				 }).
+				success(function(data,status){
+					$scope.liquidity.liquidtyValue = $filter('number')(data.liquidtyValue, 0);
+				}).
+				error(function(data,status){
+					alert("error");
+				})
+			} else if(asset != null && expense != null) {
+				$http({
+					   withCredentials: true,
+				       method: 'get',
+				       url: "http://dreamservice.azurewebsites.net/financehealth/getliquidity?assets="+asset+"&expenses="+expense,
+				       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				 }).
+				success(function(data,status){
+					$scope.liquidity.liquidtyValue = $filter('number')(data.liquidtyValue, 0);
+				}).
+				error(function(data,status){
+					alert("error");
+				})
+			}
 		}
 		
 		$scope.toggleLeft = function() {
@@ -63,7 +119,14 @@ mainApp.config(function($datepickerProvider) {
 		};
 	})
 	
-	mainApp.controller('planCtrl', function ($scope, $http, $mdSidenav, $window, $mdBottomSheet, $filter) {
+	mainApp.controller('planCtrl', function ($scope, $http, $mdSidenav, $window, $mdBottomSheet, $filter, $cookieStore) {
+		$scope.hasLogin = $cookieStore.get('hasLogin');
+		if($scope.hasLogin != true) {
+			alert("Please Login");
+			$window.location.reload();
+			return;
+		}
+		
 		$scope.event = {
 			type: "event",
 			end:   null,
@@ -86,7 +149,7 @@ mainApp.config(function($datepickerProvider) {
 		}
 		
 		$scope.hasClick = false;
-		
+		$scope.budgetCheck = false;
 		$scope.AddBudget = function(finance, amount, start, end) {
 			if(finance == null) {
 				alert("Please select finance type");
@@ -100,15 +163,23 @@ mainApp.config(function($datepickerProvider) {
 				alert("Please select start & end time");
 				return;
 			}
-			var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
+			$scope.budgetCheck = false;
 			$http({
 				   withCredentials: true,
-			       method: 'post',
-			       url: "http://dreamservice.azurewebsites.net/planing/budget/insert?type_id="+finance+"&goal="+amount+"&startTime="+start+"&endTime="+endDate,
+			       method: 'get',
+			       url: "http://dreamservice.azurewebsites.net/planing/budget/list",
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
-				$scope.template = "templates/planing/save.html"
+				var today = $filter('date')(new Date(), "yyyy-MM-dd");
+				data.forEach(function(entry){
+					if($filter('date')(new Date(entry.endTime), "yyyy-MM-dd") >= today) {
+						if(entry.type_description == finance) {
+							$scope.budgetCheck = true;
+						}
+					}
+				});
+				addBudgetToDB($scope, $http, $filter, $window, finance, amount, start, end);
 			}).
 			error(function(data, status) {
 				if(status == 401) {
@@ -119,6 +190,73 @@ mainApp.config(function($datepickerProvider) {
 				}
 			});
 			
+			
+		}
+		
+		$scope.bugetList;
+		$scope.listBudget = function() {
+			$http({
+				   withCredentials: true,
+			       method: 'get',
+			       url: "http://dreamservice.azurewebsites.net/planing/budget/list",
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.bugetList = data;
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+		}
+		
+		$scope.editBudget = function(budgetID, start, end, amount, goal, type_description) {
+			if(goal - amount <= 0) {
+				alert("Your Budget Limit Exceed. Don't use it no more !!");
+			}
+			var startDate = $filter('date')(new Date(start), "yyyy-MM-dd");
+			var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
+			$http({
+				   withCredentials: true,
+			       method: 'put',
+			       url: "http://dreamservice.azurewebsites.net/planing/budget/edit/"+budgetID+"?goal="+goal+"&startTime="+startDate+"&endTime="+endDate+"&type_description="+type_description,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.template = "templates/planing/budget.html"
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+		}
+		
+		$scope.deleteBudget = function(budgetID) {
+			$http({
+				   withCredentials: true,
+			       method: 'delete',
+			       url: "http://dreamservice.azurewebsites.net/planing/budget/delete/"+budgetID,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				$scope.template = "templates/planing/budget.html"
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
 		}
 		
 		$scope.showGridBudget = function($event) {
@@ -130,7 +268,7 @@ mainApp.config(function($datepickerProvider) {
 		      $scope.budget.finance = clickedItem.name;
 		    });
 		};
-		
+		$scope.savingCheck = false;
 		$scope.AddSaving = function(amount, sAmount, description, end) {
 			if(amount == null) {
 				amount = 0;
@@ -152,18 +290,21 @@ mainApp.config(function($datepickerProvider) {
 				alert("Amount is equal with start amount !!");
 				return;
 			}
-			var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
+			$scope.savingCheck = false;
 			$http({
 				   withCredentials: true,
-			       method: 'post',
-			       url: "http://dreamservice.azurewebsites.net/planing/saving/insert?goal="+amount+"&description="+description+"&end_time="+endDate+"&start_amount="+sAmount,
+			       method: 'get',
+			       url: "http://dreamservice.azurewebsites.net/planing/saving/list",
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
-				$scope.template = "templates/planing/save_activity.html";
-				$scope.saving.end = null;
-				$scope.saving.amount = null;
-				$scope.saving.sAmount = null;
+				var today = $filter('date')(new Date(), "yyyy-MM-dd");
+				data.forEach(function(entry){
+					if($filter('date')(new Date(entry.end), "yyyy-MM-dd") >= today) {
+						$scope.savingCheck = true;
+					}
+				});
+				addSavingToDB($scope, $http, $filter, $window, amount, sAmount, description, end);
 			}).
 			error(function(data, status) {
 				if(status == 401) {
@@ -173,7 +314,6 @@ mainApp.config(function($datepickerProvider) {
 					alert("Timeout Server not Responsding. Please try again");
 				}
 			});
-			
 		}
 		
 		$scope.savingList;
@@ -245,6 +385,8 @@ mainApp.config(function($datepickerProvider) {
 			});
 		}
 		
+		$scope.eventCheck = false;
+		
 		$scope.AddEvent = function(endTime, description) {
 			if(endTime == null) {
 				alert("Please Insert Date");
@@ -253,17 +395,21 @@ mainApp.config(function($datepickerProvider) {
 			if(description == null) {
 				description = "";
 			}
-			var endDate = $filter('date')(new Date(endTime), "yyyy-MM-dd");
+			$scope.eventCheck = false;
 			$http({
 				   withCredentials: true,
-			       method: 'post',
-			       url: "http://dreamservice.azurewebsites.net/planing/event/insert?end_time="+endDate+"&description="+description,
+			       method: 'get',
+			       url: "http://dreamservice.azurewebsites.net/planing/event/list",
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
-				$scope.template = "templates/planing/event_activity.html";
-				$scope.event.end = null;
-				$scope.event.description = null;
+				var today = $filter('date')(new Date(), "yyyy-MM-dd");
+				data.forEach(function(entry){
+					if($filter('date')(new Date(entry.end_time), "yyyy-MM-dd") >= today) {
+						$scope.eventCheck = true;
+					}
+				});
+				addEventToDB($scope, $http, $filter, $window, endTime, description);
 			}).
 			error(function(data, status) {
 				if(status == 401) {
@@ -365,8 +511,54 @@ mainApp.config(function($datepickerProvider) {
 		};
 
 	})
+	
+	function DialogController($scope, $mdDialog, $filter, $http) {
+	$scope.eventList = [];
+	$scope.today = $filter('date')(new Date(), "yyyy-MM-dd");
+	
+		$http({
+			   withCredentials: true,
+		       method: 'get',
+		       url: "http://dreamservice.azurewebsites.net/planing/event/list",
+		       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+		 }).
+		success(function(data, status, headers, config) {
+			data.forEach(function(entry) {
+				if($filter('date')(entry.end_time, "yyyy-MM-dd") > $scope.today) {
+					$scope.eventList.push(entry);
+				}
+			})
+		}).
+		error(function(data, status) {
+			if(status == 401) {
+				alert("Please Login");
+				$window.location.reload();
+			} else {
+				alert("Timeout Server not Responsding. Please try again");
+			}
+		});
+	
+	  $scope.hide = function() {
+	    $mdDialog.hide();
+	  };
+	
+	  $scope.cancel = function() {
+	    $mdDialog.cancel();
+	  };
+	
+	  $scope.answer = function(answer) {
+	    $mdDialog.hide(answer);
+	  };
+	}
 
-	mainApp.controller('financeCtrl', function($scope, $http, $mdSidenav, $mdBottomSheet, $window) {
+	mainApp.controller('financeCtrl', function($scope, $http, $mdDialog, $mdSidenav, $mdBottomSheet, $window, $cookieStore, $filter) {
+		$scope.hasLogin = $cookieStore.get('hasLogin');
+		if($scope.hasLogin != true) {
+			alert("Please Login");
+			$window.location.reload();
+			return;
+		}
+		
 		$scope.income = {
 			type: "income",
 			amount: null,
@@ -376,6 +568,20 @@ mainApp.config(function($datepickerProvider) {
 			saveId: null,
 			budgetId: null
 		}
+		$scope.eventID = 1;
+		
+		$scope.showEventDialog = function(ev) {
+		    $mdDialog.show({
+		      controller: DialogController,
+		      templateUrl: 'templates/finance/eventDialog.html',
+		      targetEvent: ev,
+		    })
+		    .then(function(answer) {
+		    	$scope.eventID = answer;
+		    }, function() {
+		    	$scope.eventID = 1;
+		    });
+		};
 		
 		$scope.outcome = {
 				type: "outcome",
@@ -387,7 +593,7 @@ mainApp.config(function($datepickerProvider) {
 				budgetId: null
 		}
 		
-		$scope.list = {};
+		$scope.list;
 		$scope.hasClick = false;
 		
 		$scope.listFinance = function() {
@@ -410,7 +616,7 @@ mainApp.config(function($datepickerProvider) {
 			});
 		}
 		
-		$scope.editFinance = function(finance, dateTime, amount, description) {
+		$scope.editFinance = function(finance, dateTime, amount, description, eventId, budgetId, savingId) {
 			if(description == null) {
 				description = "";
 			}
@@ -420,7 +626,8 @@ mainApp.config(function($datepickerProvider) {
 			$http({
 				   withCredentials: true,
 			       method: 'put',
-			       url: "http://dreamservice.azurewebsites.net/finance/update?finance="+finance+"&dateTime="+dateTime+"&amount="+amount+"&description="+description,
+			       url: "http://dreamservice.azurewebsites.net/finance/update?finance="+finance+"&dateTime="
+			       +dateTime+"&amount="+amount+"&description="+description+"&eventId="+eventId+"&budgetId="+budgetId+"&savingId="+savingId,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
@@ -456,15 +663,25 @@ mainApp.config(function($datepickerProvider) {
 			});
 		}
 		
-		$scope.addFinanceIncome = function(finance, amount, description) {
+
+		$scope.addFinanceIncome = function(finance, amount, description, eventID) {
+			if(description == null) {
+				description = "";
+			}
 			$http({
 				   withCredentials: true,
 			       method: 'post',
-			       url: "http://dreamservice.azurewebsites.net/finance/insert?finance="+finance+"&amount="+amount+"&description="+description,
+			       url: "http://dreamservice.azurewebsites.net/finance/insert?eventId="+eventID+"&finance="+finance+"&amount="+amount+"&description="+description,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
-				$scope.template = "templates/finance/activity.html"
+				$scope.income.amount = null;
+				$scope.income.description = null;
+				$scope.income.finance = null;
+				$scope.income.eventId = null;
+				$scope.income.saveId = null;
+				$scope.income.budgetId = null;
+				$scope.income.template = "templates/finance/activity.html";
 			}).
 			error(function(data, status) {
 				if(status == 401) {
@@ -476,15 +693,24 @@ mainApp.config(function($datepickerProvider) {
 			});
 		};
 
-		$scope.addFinanceOutcome = function(finance, amount, description) {
+		$scope.addFinanceOutcome = function(finance, amount, description, eventID) {
+			if(description == null) {
+				description = "";
+			}
 			$http({
 				   withCredentials: true,
 			       method: 'post',
-			       url: "http://dreamservice.azurewebsites.net/finance/insert?finance="+finance+"&amount="+amount+"&description="+description,
+			       url: "http://dreamservice.azurewebsites.net/finance/insert?finance="+finance+"&amount="+amount+"&description="+description+"&eventId="+eventID,
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
-				$scope.template = "templates/finance/activity.html"
+				$scope.outcome.amount = null;
+				$scope.outcome.description = null;
+				$scope.outcome.finance = null;
+				$scope.outcome.eventId = null;
+				$scope.outcome.saveId = null;
+				$scope.outcome.budgetId = null;
+				$scope.template = "templates/finance/activity.html";
 			}).
 			error(function(data, status) {
 				if(status == 401) {
@@ -635,7 +861,11 @@ mainApp.config(function($datepickerProvider) {
 				}
 			}).
 			error(function(data, status) {
-				alert("Timeout Server not Responsding. Please try again");
+				if(status == 401) {
+					alert("Invalid username or password");
+				}else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
 			});
 		};
 		
@@ -691,7 +921,7 @@ mainApp.config(function($datepickerProvider) {
 	function mainTabSelect ($scope, $interpolate) {
 		var tabs = [
 	      { title: 'Member', active: false, url: "templates/member.html", style:"tab1" },
-	      { title: 'Debt Calulator', active: false, url: "templates/debt.html", style:"tab2" },
+	      { title: 'Calulator', active: false, url: "templates/calculator.html", style:"tab2" },
 	      { title: 'Finance', active: false, disabled: false, url: "templates/finance.html",style:"tab3" },
 	      { title: 'Planing', active: true, url: "templates/planing.html", style:"tab4"},
 	    ];
@@ -724,4 +954,177 @@ mainApp.config(function($datepickerProvider) {
 	      $scope.greeting = $interpolate("Hello {{title}}!")(tab);
 	    }
 	}
+	
+	function addEventToDB($scope, $http, $filter, $window, endTime, description) {
+		if($scope.eventCheck == true) {
+			alert("You can't have more than 1 event");
+			return;
+		}
+		var endDate = $filter('date')(new Date(endTime), "yyyy-MM-dd");
+		$http({
+			   withCredentials: true,
+		       method: 'post',
+		       url: "http://dreamservice.azurewebsites.net/planing/event/insert?end_time="+endDate+"&description="+description,
+		       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+		 }).
+		success(function(data, status, headers, config) {
+			$scope.template = "templates/planing/event_activity.html";
+			$scope.event.end = null;
+			$scope.event.description = null;
+		}).
+		error(function(data, status) {
+			if(status == 401) {
+				alert("Please Login");
+				$window.location.reload();
+			} else {
+				alert("Timeout Server not Responsding. Please try again");
+			}
+		});
+	}
+	
+	function addSavingToDB($scope, $http, $filter, $window, amount, sAmount, description, end) {
+		if($scope.savingCheck == true) {
+			alert("You can't have more than 1 saving");
+			return;
+		}
+		
+		var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
+		$http({
+			   withCredentials: true,
+		       method: 'post',
+		       url: "http://dreamservice.azurewebsites.net/planing/saving/insert?goal="+amount+"&description="+description+"&end_time="+endDate+"&start_amount="+sAmount,
+		       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+		 }).
+		success(function(data, status, headers, config) {
+			$scope.template = "templates/planing/save_activity.html";
+			$scope.saving.end = null;
+			$scope.saving.amount = null;
+			$scope.saving.sAmount = null;
+		}).
+		error(function(data, status) {
+			if(status == 401) {
+				alert("Please Login");
+				$window.location.reload();
+			} else {
+				alert("Timeout Server not Responsding. Please try again");
+			}
+		});
+	}
+	
+	function addBudgetToDB($scope, $http, $filter, $window, finance, amount, start, end) {
+		if($scope.budgetCheck == true) {
+			alert("You can't have more than 1 in same buget");
+			return;
+		}
+		var startDate = $filter('date')(new Date(start), "yyyy-MM-dd");
+		var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
+		$http({
+			   withCredentials: true,
+		       method: 'post',
+		       url: "http://dreamservice.azurewebsites.net/planing/budget/insert?type_description="+finance+"&goal="+amount+"&startTime="+startDate+"&endTime="+endDate,
+		       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+		 }).
+		success(function(data, status, headers, config) {
+			$scope.template = "templates/planing/budget_activity.html";
+			$scope.budget.end = null;
+			$scope.budget.start = null;
+			$scope.budget.amount = null;
+			$scope.budget.finance = null;
+		}).
+		error(function(data, status) {
+			if(status == 401) {
+				alert("Please Login");
+				$window.location.reload();
+			} else {
+				alert("Timeout Server not Responsding. Please try again");
+			}
+		});
+	}
+	
+	
+	mainApp.controller('chartCtrl', function ($scope, $http, $filter) {
+		$scope.start;
+		$scope.end;
+		
+		$scope.config = {
+			    title: 'Finance',
+			    tooltips: true,
+			    labels: false,
+			    mouseover: function() {},
+			    mouseout: function() {},
+			    click: function() {},
+			    legend: {
+			      display: true,
+			      //could be 'left, right'
+			      position: 'right'
+			    }
+			  };
+		
+		$scope.json={};
+		
+		$scope.series = '["Income", "Outcome"]';
+		
+		$scope.jsonResult = [];
+		
+		$scope.jsonIncome = {
+				x: "Income",
+				y: null,
+		}
+		
+		$scope.jsonOutcome = {
+				x: "Outcome",
+				y: null,
+		}
+		
+		$scope.getData = function(start, end) {
+			var startDate = $filter('date')(new Date(start), "yyyy-MM-dd");
+			var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
+			$http({
+				   withCredentials: true,
+			       method: 'get',
+			       url: "http://dreamservice.azurewebsites.net/finance/listdatetodate?start="+startDate+"&end="+endDate,
+			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			 }).
+			success(function(data, status, headers, config) {
+				var tempX = "[";
+				var tempY = "[";
+				data.forEach(function(entry) {
+					if(entry.type == 1) {
+						tempX = tempX.concat(entry.amount).concat(",");
+					}else {
+						tempY = tempY.concat(entry.amount).concat(",");
+					}
+				})
+				tempX = tempX.substr(0,tempX.length-1);
+				tempX = tempX.concat("]");
+				tempY = tempY.substr(0,tempY.length-1);
+				tempY = tempY.concat("]");
+				$scope.jsonIncome.y = tempX;
+				$scope.jsonOutcome.y = tempY;
+				//alert($scope.jsonIncome.x + "\t" + $scope.jsonIncome.y);
+				//alert($scope.jsonOutcome.x + "\t" + $scope.jsonOutcome.y);
+				var strData = '[{ "x": "'+$scope.jsonIncome.x +'", "y": '+$scope.jsonIncome.y+' }, { "x": "'+$scope.jsonOutcome.x+'", "y": '
+							+ $scope.jsonOutcome.y + ' }]';
+				var str = '[{ "x": "'.concat($scope.jsonIncome.x).concat('", "y": ').concat($scope.jsonIncome.y).concat('},{ "x": "')
+							.concat($scope.jsonOutcome.x).concat('", "y": ').concat($scope.jsonOutcome.y).concat('}]');
+				alert(str + "\n" + strData);
+				//$scope.data.series = $scope.series;
+				$scope.data.data = strData;
+				alert($scope.data.series+ "\n" +$scope.data.data);
+			}).
+			error(function(data, status) {
+				if(status == 401) {
+					alert("Please Login");
+					$window.location.reload();
+				} else {
+					alert("Timeout Server not Responsding. Please try again");
+				}
+			});
+		}
+
+			  $scope.data = {
+			    series: ["Income", "Outcome"],
+			    data: [{ "x": "Income", "y": [50000,10000,500,4900,500,500] }, { "x": "Outcome", "y": [1000,15000,500,500,500,500] }]
+			  };
+	})
 
