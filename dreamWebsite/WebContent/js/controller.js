@@ -1060,25 +1060,19 @@ mainApp.config(function($datepickerProvider) {
 			    }
 			  };
 		
-		$scope.json={};
 		
-		$scope.series = '["Income", "Outcome"]';
+		$scope.income = 0;
+		$scope.outcome = 0;
 		
-		$scope.jsonResult = [];
-		
-		$scope.jsonIncome = {
-				x: "Income",
-				y: null,
-		}
-		
-		$scope.jsonOutcome = {
-				x: "Outcome",
-				y: null,
-		}
-		
-		$scope.getData = function(start, end) {
+		$scope.getData = function(start, end, myChart) {
+			$scope.income = 0;
+			$scope.outcome = 0;
+			$scope.graphPie.data[0].y = [];
+			$scope.graphPie.data[1].y = [];
+			var tmpEnd = new Date(end);
+			tmpEnd.setDate(tmpEnd.getDate() + 1);
 			var startDate = $filter('date')(new Date(start), "yyyy-MM-dd");
-			var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
+			var endDate = $filter('date')(new Date(tmpEnd), "yyyy-MM-dd");
 			$http({
 				   withCredentials: true,
 			       method: 'get',
@@ -1086,31 +1080,18 @@ mainApp.config(function($datepickerProvider) {
 			       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			 }).
 			success(function(data, status, headers, config) {
-				var tempX = "[";
-				var tempY = "[";
-				data.forEach(function(entry) {
-					if(entry.type == 1) {
-						tempX = tempX.concat(entry.amount).concat(",");
-					}else {
-						tempY = tempY.concat(entry.amount).concat(",");
-					}
-				})
-				tempX = tempX.substr(0,tempX.length-1);
-				tempX = tempX.concat("]");
-				tempY = tempY.substr(0,tempY.length-1);
-				tempY = tempY.concat("]");
-				$scope.jsonIncome.y = tempX;
-				$scope.jsonOutcome.y = tempY;
-				//alert($scope.jsonIncome.x + "\t" + $scope.jsonIncome.y);
-				//alert($scope.jsonOutcome.x + "\t" + $scope.jsonOutcome.y);
-				var strData = '[{ "x": "'+$scope.jsonIncome.x +'", "y": '+$scope.jsonIncome.y+' }, { "x": "'+$scope.jsonOutcome.x+'", "y": '
-							+ $scope.jsonOutcome.y + ' }]';
-				var str = '[{ "x": "'.concat($scope.jsonIncome.x).concat('", "y": ').concat($scope.jsonIncome.y).concat('},{ "x": "')
-							.concat($scope.jsonOutcome.x).concat('", "y": ').concat($scope.jsonOutcome.y).concat('}]');
-				alert(str + "\n" + strData);
-				//$scope.data.series = $scope.series;
-				$scope.data.data = strData;
-				alert($scope.data.series+ "\n" +$scope.data.data);
+				if(data.length == 0) {
+					alert("You don't have any finance in selected time");
+				} else {
+					data.forEach(function(entry) {
+						if(entry.type == 1) {
+							$scope.income += entry.amount;
+						}else {
+							$scope.outcome += entry.amount;
+						}
+					})
+					$scope.changeChart(myChart);
+				}
 			}).
 			error(function(data, status) {
 				if(status == 401) {
@@ -1121,10 +1102,37 @@ mainApp.config(function($datepickerProvider) {
 				}
 			});
 		}
+			
+			$scope.graphPie = {
+				series: [ 'Income', 'Outcome' ],
+				data: [
+				       { x: "Income", y : []},
+				       { x: "Outcome", y : []}
+			    ]
+			}
+			
+			$scope.graphAll = {
+					series: [ 'Income', 'Outcome' ],
+					data: [
+					       { x: "Finance", y : []}
+				    ]
+			}
 
-			  $scope.data = {
-			    series: ["Income", "Outcome"],
-			    data: [{ "x": "Income", "y": [50000,10000,500,4900,500,500] }, { "x": "Outcome", "y": [1000,15000,500,500,500,500] }]
-			  };
+			$scope.data = {};
+			
+			$scope.changeChart = function(chart) {
+				if(chart == "pie") {
+					$scope.graphPie.data[0].y = [];
+					$scope.graphPie.data[1].y = [];
+					$scope.graphPie.data[0].y.push($scope.income);
+					$scope.graphPie.data[1].y.push($scope.outcome);
+					$scope.data = $scope.graphPie;
+				} else {
+					$scope.graphAll.data[0].y = [];
+					$scope.graphAll.data[0].y.push($scope.income);
+					$scope.graphAll.data[0].y.push($scope.outcome);
+					$scope.data = $scope.graphAll;
+				}
+			}
 	})
 
