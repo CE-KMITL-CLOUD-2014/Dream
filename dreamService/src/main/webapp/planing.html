@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dream Service</title>
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<br>
+	<a href="member.html" class="btn btn-primary btn-lg" role="button">Member</a>
+	<a href="cal.html" class="btn btn-primary btn-lg" role="button">Calculator</a>
+	<a href="finance.html" class="btn btn-primary btn-lg" role="button">Finance</a>
+	<a href="planing.html" class="btn btn-primary btn-lg" role="button">Planing</a>
+	<br><br><br>
+	* is required
+	<table class="table table-striped">
+		<tr>
+			<th>URL</th>
+			<th>Method</th>
+			<th>Parameter</th>
+			<th>Return</th>
+			<th>Description</th>
+		</tr>
+		<tr>
+			<td>/planing/saving/insert</td>
+			<td>POST</td>
+			<td>* 1.goal <br>
+				* 2.start_amount <br>
+				* 3.description <br>
+				4. end_time
+			</td>
+			<td>
+				Num row insert
+			</td>
+			<td>
+				Insert saving plan
+			</td>
+		</tr>
+		<tr>
+			<td>/planing/saving/list</td>
+			<td>GET</td>
+			<td>
+			</td>
+			<td>
+				Array of Saving
+			</td>
+			<td>
+				List all saving of this member
+			</td>
+		</tr>
+		<tr>
+			<td>/planing/delete/{saveid}</td>
+			<td>DELETE</td>
+			<td>
+				* 1.saveid
+			</td>
+			<td>
+				Num row delete
+			</td>
+			<td>
+				Delete saving plan
+			</td>
+		</tr>
+		<tr>
+			<td>/planing/edit/{saveid}</td>
+			<td>PUT</td>
+			<td>
+				* 1.saveid <br>
+				* 2.goal <br>
+				* 3.start_amount <br>
+				* 4.description <br>
+				5. end_time
+			</td>
+			<td>
+				Num row update
+			</td>
+			<td>
+				Edit saving plan
+			</td>
+		</tr>
+		<tr>
+			<td>/event/insert</td>
+			<td>POST</td>
+			<td>
+				 1.end_time <br>
+				* 2.description <br>
+			</td>
+			<td>
+				Num row insert
+			</td>
+			<td>
+				Insert event plan
+			</td>
+		</tr>
+		<tr>
+			<td>/event/list</td>
+			<td>GET</td>
+			<td>
+			</td>
+			<td>
+				Array of Event
+			</td>
+			<td>
+				List all event plan of this member
+			</td>
+		</tr>
+		<tr>
+			<td>/event/delete/{eventid}</td>
+			<td>DELETE</td>
+			<td>
+			* 1.eventid
+			</td>
+			<td>
+				Num row delete
+			</td>
+			<td>
+				Delete event planing
+			</td>
+		</tr>
+		<tr>
+			<td>/event/edit/{eventid}</td>
+			<td>PUT</td>
+			<td>
+			* 1.eventid <br>
+			* 2.description <br>
+			3.end_time
+			</td>
+			<td>
+				Num row edit
+			</td>
+			<td>
+				Edit event planing
+			</td>
+		</tr>
+		<tr>
+			<td>/budget/insert</td>
+			<td>POST</td>
+			<td>
+			* 1.type_description <br>
+			* 2.startTime <br>
+			* 3.endTime <br>
+			* 4.goal
+			</td>
+			<td>
+				Num row insert
+			</td>
+			<td>
+				Insert budget planing
+			</td>
+		</tr>
+		<tr>
+			<td>/budget/list</td>
+			<td>GET</td>
+			<td>
+			</td>
+			<td>
+				Array of Budget
+			</td>
+			<td>
+				List all budget planing of this member
+			</td>
+		</tr>
+		<tr>
+			<td>/budget/delete/{budgetid}</td>
+			<td>DELETE</td>
+			<td>
+			* 1.budgetid
+			</td>
+			<td>
+				Num row delete
+			</td>
+			<td>
+				Delete budget event planing
+			</td>
+		</tr>
+		<tr>
+			<td>/budget/edit/{budgetid}</td>
+			<td>PUT</td>
+			<td>
+			* 1.budgetid
+			</td>
+			<td>
+				Num row edit
+			</td>
+			<td>
+				Edit budget event planing
+			</td>
+		</tr>
+	</table>
+
+</body>
+</html>

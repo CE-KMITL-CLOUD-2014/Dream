@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dream Service</title>
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<br>
+	<a href="member.html" class="btn btn-primary btn-lg" role="button">Member</a>
+	<a href="cal.html" class="btn btn-primary btn-lg" role="button">Calculator</a>
+	<a href="finance.html" class="btn btn-primary btn-lg" role="button">Finance</a>
+	<a href="planing.html" class="btn btn-primary btn-lg" role="button">Planing</a>
+	<br><br><br>
+	* is required
+	<table class="table table-striped">
+		<tr>
+			<th>URL</th>
+			<th>Method</th>
+			<th>Parameter</th>
+			<th>Return</th>
+			<th>Description</th>
+		</tr>
+		<tr>
+			<td>/debt/cal</td>
+			<td>GET</td>
+			<td>* 1.moneyLoan <br>
+				* 2.debtRate <br>
+				* 3.time <br>
+			</td>
+			<td>
+				Money per month
+			</td>
+			<td>
+				Debt Rate Calulator
+			</td>
+		</tr>
+		<tr>
+			<td>/financehealth/getliquidity</td>
+			<td>GET</td>
+			<td>
+			1.assets <br>
+			2.expenses
+			</td>
+			<td>
+				Liquidity values
+			</td>
+			<td>
+				Calculate liquidity
+			</td>
+		</tr>
+		<tr>
+			<td>/financehealth/debtratio</td>
+			<td>GET</td>
+			<td>
+			* 1.debt <br>
+			* 2.totalAsset
+			</td>
+			<td>
+				Debt ratio values
+			</td>
+			<td>
+				Calculate debt ratio
+			</td>
+		</tr>
+		<tr>
+			<td>/financehealth/savingratio</td>
+			<td>GET</td>
+			<td>
+			* 1.savingPerYear <br>
+			* 2.incomePerYear
+			</td>
+			<td>
+				Saving ratio values
+			</td>
+			<td>
+				Calculate saving ratio
+			</td>
+		</tr>
+	</table>
+
+</body>
+</html>

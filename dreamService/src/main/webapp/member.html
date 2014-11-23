@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<title>Dream Service</title>
+</head>
+<body>
+	<br>
+	<a href="member.html" class="btn btn-primary btn-lg" role="button">Member</a>
+	<a href="cal.html" class="btn btn-primary btn-lg" role="button">Calculator</a>
+	<a href="finance.html" class="btn btn-primary btn-lg" role="button">Finance</a>
+	<a href="planing.html" class="btn btn-primary btn-lg" role="button">Planing</a>
+	<br>
+	<br>
+	<br>
+	* is required
+	<table class="table table-striped">
+		<tr>
+			<th>URL</th>
+			<th>Method</th>
+			<th>Parameter</th>
+			<th>Return</th>
+			<th>Description</th>
+		</tr>
+		<tr>
+			<td>/j_spring_security_check</td>
+			<td>POST</td>
+			<td>* 1.j_username <br>
+				* 2.j_password
+			</td>
+			<td>
+				JSESSIONID
+			</td>
+			<td>
+				Login
+			</td>
+		</tr>
+		<tr>
+			<td>/j_spring_security_logout</td>
+			<td>POST</td>
+			<td>
+			</td>
+			<td>
+				Clear JSESSIONID
+			</td>
+			<td>
+				Logout
+			</td>
+		</tr>
+		<tr>
+			<td>/member/insert</td>
+			<td>POST</td>
+			<td>* 1.username <br>
+				* 2.password <br>
+				* 3.email <br>
+				* 4.phone <br>
+				* 5.birth <br>
+				* 6.fname <br>
+				* 7.lname <br>
+				  8.nickname
+			</td>
+			<td>
+				Num row insert
+			</td>
+			<td>
+				Adding member
+			</td>
+		</tr>
+		<tr>
+			<td>/member/update</td>
+			<td>PUT</td>
+			<td>* 1.email <br>
+				* 2.phone <br>
+				* 3.fname <br>
+				* 4.lname <br>
+				* 5.birth <br>
+				  6.nickname
+			</td>
+			<td>
+				Num row update
+			</td>
+			<td>
+				Update member information
+			</td>
+		</tr>
+		<tr>
+			<td>/member/delete</td>
+			<td>DELETE</td>
+			<td>
+			</td>
+			<td>
+				Num row delete
+			</td>
+			<td>
+				Delete member
+			</td>
+		</tr>
+		
+		<tr>
+			<td>/member/list</td>
+			<td>GET</td>
+			<td>
+			</td>
+			<td>
+				Array of Member
+			</td>
+			<td>
+				List all member
+			</td>
+		</tr>
+		
+		<tr>
+			<td>/member/findfromuser</td>
+			<td>GET</td>
+			<td>
+			</td>
+			<td>
+				Detail of this member
+			</td>
+			<td>
+				Get all information of this member
+			</td>
+		</tr>
+		
+		
+	</table>
+</body>
+</html>

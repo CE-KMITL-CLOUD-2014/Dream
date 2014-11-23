@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dream Service</title>
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<br>
+	<a href="member.html" class="btn btn-primary btn-lg" role="button">Member</a>
+	<a href="cal.html" class="btn btn-primary btn-lg" role="button">Calculator</a>
+	<a href="finance.html" class="btn btn-primary btn-lg" role="button">Finance</a>
+	<a href="planing.html" class="btn btn-primary btn-lg" role="button">Planing</a>
+	<br><br><br>
+	* is required
+	<table class="table table-striped">
+		<tr>
+			<th>URL</th>
+			<th>Method</th>
+			<th>Parameter</th>
+			<th>Return</th>
+			<th>Description</th>
+		</tr>
+		<tr>
+			<td>/finance/insert</td>
+			<td>POST</td>
+			<td>* 1.finance <br>
+				* 2.amount <br>
+				3.description <br>
+				4.saveId <br>
+				5.budgetId <br>
+				6.eventId <br>
+			</td>
+			<td>
+				Num row insert
+			</td>
+			<td>
+				Insert Transaction finance
+			</td>
+		</tr>
+		<tr>
+			<td>/finance/update</td>
+			<td>PUT</td>
+			<td>* 1.finance <br>
+				* 2.amount <br>
+				* 3.description <br>
+				4.saveId <br>
+				5.budgetId <br>
+				6.eventId <br>
+				* 7.dateTime
+			</td>
+			<td>
+				Num row update
+			</td>
+			<td>
+				Update Transaction finance
+			</td>
+		</tr>
+		<tr>
+			<td>/finance/delete</td>
+			<td>DELETE</td>
+			<td>
+			 * 1.date_time
+			</td>
+			<td>
+				Num row delete
+			</td>
+			<td>
+				Delete transaction finance
+			</td>
+		</tr>
+		<tr>
+			<td>/finance/list</td>
+			<td>GET</td>
+			<td>
+			</td>
+			<td>
+				Array of Finance
+			</td>
+			<td>
+				List all transaction finance of this member
+			</td>
+		</tr>
+		<tr>
+			<td>/finance/listdatetodate</td>
+			<td>GET</td>
+			<td>
+			* 1.start <br>
+			* 2.end
+			</td>
+			<td>
+				Array of Finance
+			</td>
+			<td>
+				List all transaction finance of this member in range time
+			</td>
+		</tr>
+	</table>
+
+
+</body>
+</html>
